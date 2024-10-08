@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.get("/", authControllers.helloWorld)
 
-router.get("/signup", authControllers.signup);
+router.post("/signup", authControllers.signup);
 
 //TODO implement below controllers
 /** router.get("/signup", authControllers.signup);
