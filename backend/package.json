@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "A timetable and alert system for NIT Warangal students.",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "build": "tsc",
     "test": "nodemon dist/index.js",
@@ -16,7 +15,8 @@
     "dotenv": "^16.4.5",
     "express": "^4.21.0",
     "knex": "^3.1.0",
-    "nodemon": "^3.1.7"
+    "nodemon": "^3.1.7",
+    "pg": "^8.13.0"
   },
   "devDependencies": {
     "@types/node": "^22.7.4",
