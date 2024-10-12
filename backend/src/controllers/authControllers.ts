@@ -17,9 +17,20 @@ class authControllers{
                 throw Error("The entered email is already registered!")
             }
 
-            res.send("The Email you have sent is: " + email)
+            const otp = await authServices.generateEmailVerifToken()
+            
+            console.log(otp)
+
+            // TODO Check for Error here too ( though it will guaranteed work if the previous steps are correct)
+            await authServices.createUserPreVerify(email, otp)
+
+            res.send({
+                success: true,
+                message: "The email has been registered, and is awaiting verification"
+            })
+            
         } catch (error) {
-            res.status(400).send(error.message)
+            res.status(400).send({message : error.message})
         }
     }
 }
