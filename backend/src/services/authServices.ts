@@ -1,7 +1,7 @@
 import authDAO from "../dao/authDAO";
 import crypto from "crypto"
 import jwt from "jsonwebtoken"
-
+import transporter from "../utils/nodemailerTransporter";
 class authServices{
 
     isValidEmail(email):boolean{
@@ -18,19 +18,30 @@ class authServices{
         return result;
     }
 
-    async generateEmailVerifToken(){
+    generateEmailVerifToken():number{
         const otp = crypto.randomInt(100000, 999999)
         return otp;
     }
 
-    generateJWT(email){
-        // TODO complete this out or use sessions
-        const token = jwt.sign()
+    generateJWT(userEmail):any{
+        const token = jwt.sign({email: userEmail}, process.env.JWT_SECRET)
+        return token;
     }
 
     async createUserPreVerify(email, otp){
-        // Verification email sending logic
-        await authDAO.createPreVerificationUser(email, otp)
+        try {
+            const info = await transporter.sendMail({
+                from: '"Don Chacko" <dr24csb0b20@student.nitw.ac.in>', // sender address
+                to: email, 
+                subject: "Verify your NITSync Email", // Subject line
+                html: "<p>Your NITSync OTP is: <b>" + otp + "</b></p>", // html body
+              });
+            
+            await authDAO.createPreVerificationUser(email, otp)
+        } catch (error) {
+            throw Error(error.message)
+        }
+        
     }
 }
 

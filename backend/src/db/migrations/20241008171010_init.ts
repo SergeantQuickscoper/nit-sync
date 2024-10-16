@@ -18,7 +18,7 @@ export async function up(knex: Knex): Promise<void> {
 
 
 export async function down(knex: Knex): Promise<void> {
-    return knex.schema.dropTable("userAuth")
+    return knex.schema.dropTable("user_auth")
 }
 
 

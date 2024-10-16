@@ -18,11 +18,11 @@ class authDAO{
             is_verified : false
         }
 
-        console.log("creating user")
         try {
             await db.table("email_verification").insert(entry);
         } catch (error) {
-            console.log(error.message)
+            //untested error catch
+            throw Error(error.message)
         }
         
 
