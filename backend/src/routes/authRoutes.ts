@@ -6,13 +6,6 @@ const router = express.Router();
 router.get("/", authControllers.helloWorld)
 
 router.post("/signup", authControllers.signup);
-
-//TODO implement below controllers
-/** router.get("/signup", authControllers.signup);
-
-router.get("/signup", authControllers.signup);
-
-router.get("/signup", authControllers.signup);
-
-**/
+router.post("/resendOTP", authControllers.resendOTP);
+router.post("/verifyuser", authControllers.verifyOTP);
 export default router;

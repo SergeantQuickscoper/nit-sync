@@ -28,20 +28,55 @@ class authServices{
         return token;
     }
 
-    async createUserPreVerify(email, otp){
+    async sendOTPmail(email, otp){
         try {
             const info = await transporter.sendMail({
-                from: '"Don Chacko" <dr24csb0b20@student.nitw.ac.in>', // sender address
+                from: '"Don Chacko" <dr24csb0b20@student.nitw.ac.in>',
                 to: email, 
-                subject: "Verify your NITSync Email", // Subject line
-                html: "<p>Your NITSync OTP is: <b>" + otp + "</b></p>", // html body
+                subject: "Verify your NITSync Email", 
+                html: "<p>Your NITSync OTP is: <b>" + otp + "</b></p>", 
               });
-            
+        } catch (error) {
+            console.log(error.message)
+        }
+        
+    }
+
+    async createUserPreVerify(email, otp){
+        try {
+            this.sendOTPmail(email, otp)
             await authDAO.createPreVerificationUser(email, otp)
+
         } catch (error) {
             throw Error(error.message)
         }
         
+    }
+
+    async resendOTP(email){
+        try {
+            const {verification_token} = await authDAO.getUserOTP(email)
+            this.sendOTPmail(email, verification_token)
+        } catch (error) {
+            
+        }
+    }
+    async verifyUser(email, otp):Promise<boolean>{
+        try {
+            const {verification_token} = await authDAO.getUserOTP(email)
+            if(otp == verification_token){
+                authDAO.verifyUser(email)
+                return true;
+            }
+            else{
+                return false;
+            }
+
+        } 
+        catch (error) 
+        {
+            throw Error(error.message)
+        }
     }
 }
 
