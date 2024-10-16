@@ -7,9 +7,6 @@ export async function up(knex: Knex): Promise<void> {
         table.string("email").unique().notNullable();
         table.string("password").notNullable();
         table.string("role").defaultTo("student").notNullable();
-        table.integer("verification_token");
-        table.dateTime("verification_expiry");
-        table.boolean("is_verified").defaultTo(false);
         table.integer("pass_reset_token");
         table.dateTime("pass_reset_expiry");
         table.timestamps(true, true, false);

@@ -8,6 +8,11 @@ class authDAO{
         return !(query.length==0);
     }
 
+    async emailAlreadyExistsMain(email):Promise<boolean>{
+        const query = await db.select("email").from("user_auth").where("email", email)
+        return !(query.length==0);
+    }
+
     async createPreVerificationUser(email, otp){
         
         const currentTime = new Date();
@@ -44,7 +49,7 @@ class authDAO{
 
     async checkUserVerified(email):Promise<any>{
         try {
-            const query = db.select("is_verified").from("email_verification").where("new_email", email)
+            const query = await db.select("is_verified").from("email_verification").where("new_email", email)
             return query[0];
         } catch (error) {
             console.log("Database Error")
@@ -61,6 +66,36 @@ class authDAO{
             console.log("Database Error")
             console.log(error.message)
         }
+    }
+
+    async createUser(email, password, firstName, lastName, rollNo, firstYear, branch, educationLevel, classRollNo, section){
+        try {
+
+            const entry = {
+                email: email,
+                password: password,
+                first_name: firstName,
+                last_name: lastName,
+                roll_no: rollNo.toUpperCase(),
+                branch: branch.toUpperCase(),
+                section: section.toUpperCase(),
+                first_year: firstYear,
+                education_level: educationLevel,
+                class_roll_no: classRollNo
+            }
+
+            await db.table("user_auth").insert(entry);
+            
+
+
+        } catch (error) {
+            
+        }
+    }
+
+    async getUser(email){
+        const query = await db.select("*").from("user_auth").where("email", email);
+        return query[0]
     }
 
 }

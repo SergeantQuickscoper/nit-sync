@@ -14,6 +14,12 @@ class authServices{
         return false;
     }
 
+    //bad code quality combine two funcs in future?
+    async alreadyExistsMain(email){
+        const result = await authDAO.emailAlreadyExistsMain(email)
+        return result;
+    }
+
     async alreadyExists(email):Promise<boolean>{
         //TODO call function from DAO to check if email is in data base
         const result = await authDAO.emailAlreadyExists(email)
@@ -89,6 +95,35 @@ class authServices{
             console.log("Error checking verification (user probably doesnt exist)")
         }
           
+    }
+
+    //TODO bcrypt this shit 
+    async createUser(email, password, firstName, lastName){
+        try {
+            const rollNo = (email.split("@")[0]).slice(2);
+            const firstYear = "20" + rollNo.slice(0, 2);
+            const branch = rollNo.slice(2, 4); //branches in roll no sucks so will have to probably maeke a switch case for this at some point 
+            const section = rollNo[6];
+            let educationLevel; //i hate this
+
+            if(rollNo[4].toLowerCase() == "b"){
+                educationLevel = "B. Tech"
+            }
+            else{
+                educationLevel = "Not B. Tech" // Update in future for M. Tech and PhD
+            }
+            const classRollNo = rollNo.slice(-2)
+
+            
+            authDAO.createUser(email, password, firstName, lastName, rollNo, firstYear, branch, educationLevel, classRollNo, section);
+
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async getUser(email){
+        return await authDAO.getUser(email);
     }
 }
 
