@@ -32,15 +32,32 @@ class authControllers{
             })
             
         } catch (error) {
-            res.status(400).send({message : error.message})
+            res.status(400).send({
+                success: false,
+                message : error.message
+            })
         }
     }
     
     async resendOTP(req, res){
         try {
-            
+            const {email} = req.body;
+            if(await authServices.checkUserVerified(email) == undefined){
+                throw Error("User doesn't exist!");
+            }
+            if(await authServices.checkUserVerified(email)){
+                throw Error("User is already verified");
+            }
+            authServices.resendOTP(email)
+            res.send({
+                success: true,
+                message: "OTP has been resent!",
+            })
         } catch (error) {
-            
+            res.status(400).send({
+                success: false,
+                message : error.message
+            })
         }
     }
 
@@ -49,6 +66,10 @@ class authControllers{
         try {
             //use JWT instead??
             const {email, otp} = req.body;
+            if(await authServices.checkUserVerified(email)){
+                throw Error("User is already verified");
+            }
+
             if(await authServices.verifyUser(email, otp)){
                 res.send({
                     success: true,
@@ -61,7 +82,10 @@ class authControllers{
 
             
         } catch (error) {
-            res.status(400).send({message : error.message})
+            res.status(400).send({
+                success: false,
+                message : error.message
+            })
         }
 
     }

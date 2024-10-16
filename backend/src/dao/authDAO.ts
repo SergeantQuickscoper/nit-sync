@@ -1,5 +1,7 @@
 import db from "../db/db";
 
+//TODO Throw all errors to the controller layer the way it is rn is ridiculous
+
 class authDAO{
     async emailAlreadyExists(email):Promise<boolean>{
         const query = await db.select("new_email").from("email_verification").where("new_email", email)
@@ -38,6 +40,16 @@ class authDAO{
             console.log("Database Error")
         }
         
+    }
+
+    async checkUserVerified(email):Promise<any>{
+        try {
+            const query = db.select("is_verified").from("email_verification").where("new_email", email)
+            return query[0];
+        } catch (error) {
+            console.log("Database Error")
+            console.log(error.message)
+        }
     }
 
     async verifyUser(email){

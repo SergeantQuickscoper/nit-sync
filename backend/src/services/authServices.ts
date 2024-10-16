@@ -2,6 +2,8 @@ import authDAO from "../dao/authDAO";
 import crypto from "crypto"
 import jwt from "jsonwebtoken"
 import transporter from "../utils/nodemailerTransporter";
+
+//TODO Throw all errors to the controller layer the way it is rn is ridiculous
 class authServices{
 
     isValidEmail(email):boolean{
@@ -48,7 +50,7 @@ class authServices{
             await authDAO.createPreVerificationUser(email, otp)
 
         } catch (error) {
-            throw Error(error.message)
+            console.log(error.message)
         }
         
     }
@@ -58,7 +60,7 @@ class authServices{
             const {verification_token} = await authDAO.getUserOTP(email)
             this.sendOTPmail(email, verification_token)
         } catch (error) {
-            
+            console.log("Error resending OTP")
         }
     }
     async verifyUser(email, otp):Promise<boolean>{
@@ -75,8 +77,18 @@ class authServices{
         } 
         catch (error) 
         {
-            throw Error(error.message)
+            console.log("Error setting user to verified")
         }
+    }
+
+    async checkUserVerified(email):Promise<boolean>{
+        try {
+          const {is_verified} = await authDAO.checkUserVerified(email);
+          return is_verified;
+        } catch (error) {
+            console.log("Error checking verification (user probably doesnt exist)")
+        }
+          
     }
 }
 
