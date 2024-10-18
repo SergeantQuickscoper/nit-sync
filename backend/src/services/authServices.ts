@@ -125,6 +125,23 @@ class authServices{
     async getUser(email){
         return await authDAO.getUser(email);
     }
+
+    async loginUser(email, enteredPass):Promise<boolean>{
+        try {
+            const {password} = await this.getUser(email);
+
+
+            if(enteredPass != password){
+                return false;
+            }
+
+            return true;
+
+        } catch (error) {
+            throw error;
+        }
+
+    }
 }
 
 const authServicesObj = new authServices ();

@@ -9,4 +9,5 @@ router.post("/signup", authControllers.signup);
 router.post("/resendOTP", authControllers.resendOTP);
 router.post("/verifyuser", authControllers.verifyOTP);
 router.post("/completeaccount", authControllers.completeAccount)
+router.post("/login", authControllers.login)
 export default router;

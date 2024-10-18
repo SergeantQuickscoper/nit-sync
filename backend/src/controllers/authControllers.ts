@@ -101,6 +101,7 @@ class authControllers{
                 throw Error("User isn't verified")
             }
 
+            //TODO implement password conditions like you cant have a space in the password? maybe do a client side check or something like that.
             if(password != confirmPassword){
                 throw Error("Passwords do not match")
             }
@@ -116,7 +117,7 @@ class authControllers{
             let yearOrd = Number(first_year);
             let year;
 
-            //TODO make this better ffs
+            //TODO make this better ffs and move to services!!!
             // lmfao will have to update this every year?????
             if (2024 - yearOrd == 0){
                 year = "1st"
@@ -135,6 +136,35 @@ class authControllers{
                 success: true,
                 message: "That's it you're all set! Your section has been detected as:  " + education_level + " " + year + " Year " + branch + " " + section
             })
+
+
+        } catch (error) {
+            res.status(400).send({
+                success: false, 
+                message: error.message
+            })
+        }
+    }
+
+    async login(req, res){
+        try {
+            const {email, password} = req.body;
+            if(!(await authServices.alreadyExistsMain(email))){
+                throw Error("You haven't registered yet!")
+            }
+
+            if(!(await authServices.loginUser(email, password))){
+                throw Error("Invalid credentials.")
+            }
+
+            const userJWT = await authServices.generateJWT(email)
+
+            res.send({
+                success: true,
+                message: "Your credentials have been verified. Welcome " + email,
+                jwt: userJWT
+            })
+
 
 
         } catch (error) {
