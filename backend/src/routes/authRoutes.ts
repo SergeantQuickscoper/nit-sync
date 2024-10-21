@@ -10,4 +10,5 @@ router.post("/resendOTP", authControllers.resendOTP);
 router.post("/verifyuser", authControllers.verifyOTP);
 router.post("/completeaccount", authControllers.completeAccount)
 router.post("/login", authControllers.login)
+router.post("/reqpassresetOTP", authControllers.reqPasswordResetOTP)
 export default router;

@@ -173,7 +173,33 @@ class authControllers{
                 message: error.message
             })
         }
+
+        
     }
+
+    async reqPasswordResetOTP(req, res){
+        try {
+            const {email} = req.body
+
+            if(!(await authServices.alreadyExistsMain(email))){
+                throw Error("User isn't even registered yet.")
+            }
+    
+            await authServices.handlePassResetToken(email);
+
+            res.send({
+                success: true,
+                message: "A password reset email has been sent to your registered email address"
+            })
+        } catch (error) {
+            res.status(400).send({
+                success: false, 
+                message: error.message
+            })
+        }
+    
+    }
+
 }
 
 const authControllerObj = new authControllers()

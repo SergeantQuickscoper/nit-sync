@@ -94,10 +94,25 @@ class authDAO{
     }
 
     async getUser(email){
-        const query = await db.select("*").from("user_auth").where("email", email);
-        return query[0]
+        try {
+            const query = await db.select("*").from("user_auth").where("email", email);
+            return query[0]
+        } catch (error) {
+            throw error;
+        }
+        
     }
 
+    async storeUserPasswordResetToken(email, token){
+        try {
+            //TODO token expiry??
+            await db.table("user_auth").update({pass_reset_token : token}).where("email", email)
+        } catch (error) {
+            
+        }
+        
+        
+    }
 }
 
 export default new authDAO();

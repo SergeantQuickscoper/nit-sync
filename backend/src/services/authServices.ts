@@ -36,12 +36,12 @@ class authServices{
         return token;
     }
 
-    async sendOTPmail(email, otp){
+    async sendOTPmail(email, otp, subject){
         try {
             const info = await transporter.sendMail({
                 from: '"Don Chacko" <dr24csb0b20@student.nitw.ac.in>',
                 to: email, 
-                subject: "Verify your NITSync Email", 
+                subject: subject, 
                 html: "<p>Your NITSync OTP is: <b>" + otp + "</b></p>", 
               });
         } catch (error) {
@@ -52,7 +52,7 @@ class authServices{
 
     async createUserPreVerify(email, otp){
         try {
-            this.sendOTPmail(email, otp)
+            this.sendOTPmail(email, otp, "Verify your NITSync Email")
             await authDAO.createPreVerificationUser(email, otp)
 
         } catch (error) {
@@ -64,7 +64,7 @@ class authServices{
     async resendOTP(email){
         try {
             const {verification_token} = await authDAO.getUserOTP(email)
-            this.sendOTPmail(email, verification_token)
+            this.sendOTPmail(email, verification_token, "Verify your NITSync Email")
         } catch (error) {
             console.log("Error resending OTP")
         }
@@ -120,6 +120,17 @@ class authServices{
         } catch (error) {
             throw error;
         }
+    }
+
+    async handlePassResetToken(email){
+        try {
+            const token = await this.generateEmailVerifToken();
+            await authDAO.storeUserPasswordResetToken(email, token);
+            await this.sendOTPmail(email, token, "Reset Password OTP");
+        } catch (error) {
+            throw error;
+        }
+        
     }
 
     async getUser(email){
