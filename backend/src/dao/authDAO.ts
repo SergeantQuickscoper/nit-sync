@@ -113,6 +113,31 @@ class authDAO{
         
         
     }
+
+    async getUserPassResetToken(email){
+        try {
+            const query = await db.select("pass_reset_token").from("user_auth").where("email", email)
+            return query[0];
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async setCanChangePass(email, state:boolean){
+        try {
+            await db.table("user_auth").update({can_change_pass : state}).where("email", email)
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async changePass(email, newPass){
+        try {
+            await db.table("user_auth").update({password: newPass, can_change_pass: false, pass_reset_token: null}).where("email", email);
+        } catch (error) {
+            throw error;
+        }
+    }
 }
 
 export default new authDAO();

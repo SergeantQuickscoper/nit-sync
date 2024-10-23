@@ -200,6 +200,61 @@ class authControllers{
     
     }
 
+    async verifyPassToken(req, res){
+        try {
+            const {email, otp} = req.body;
+            
+            if(!(await authServices.alreadyExistsMain(email))){
+                throw Error("User isn't even registered yet.")
+            }
+
+            if(!(await authServices.verifyPassOTP(email, otp))){
+                throw Error("Invalid password reset token")
+            }
+
+            res.send({
+                success: "true", 
+                message: "You are good to go to change the password."
+            })
+
+        } catch (error) {
+            res.status(400).send({
+                success: false, 
+                message: error.message
+            })
+        }
+    }
+
+    async changePass(req, res){
+        try {
+            const {email, newPass, confNewPass} = req.body;
+
+            if(!newPass || !confNewPass || !email){
+                throw Error("Invalid Input, requires an email, newPass and confNewPass")
+            }
+            
+            if(newPass != confNewPass){
+                throw Error("The passwords do not match!")
+            }
+
+            await authServices.changePass(email , newPass);
+
+            res.send({
+                success: true,
+                message: "Your password is changed."
+            })
+
+        } catch (error) {
+
+            res.status(400).send({
+                success: false, 
+                message: error.message
+            })
+
+        }
+    }
+
+
 }
 
 const authControllerObj = new authControllers()

@@ -134,6 +134,13 @@ class authServices{
     }
 
     async getUser(email){
+        try {
+
+            return await authDAO.getUser(email);
+
+        } catch (error) {
+            throw error;
+        }
         return await authDAO.getUser(email);
     }
 
@@ -153,7 +160,49 @@ class authServices{
         }
 
     }
+
+    async verifyPassOTP(email, otp){
+        try {
+            const {pass_reset_token} = await authDAO.getUserPassResetToken(email);
+            //TODO expiry logic 
+            if(!pass_reset_token){
+                throw Error("No password reset token requested!")
+            }
+
+            if(otp == pass_reset_token){
+                authDAO.setCanChangePass(email, true)
+                return true;
+            }
+            else{
+                return false;
+            }
+
+        } catch (error) {
+            throw error;
+        }
+        
+    }
+
+    async changePass(email, pass){
+        try {
+            
+            const {can_change_pass} = await authDAO.getUser(email);
+            
+            if(can_change_pass == false){
+                throw Error("User is not allowed to change pass")
+            }
+
+            await authDAO.changePass(email, pass)
+
+
+        } catch (error) {
+            throw error;
+        }
+    }
+    
 }
+
+
 
 const authServicesObj = new authServices ();
 
