@@ -36,6 +36,7 @@ export default function RootLayout() {
       <Stack>
         <Stack.Screen name="index" options={{headerShown : false}}/>
         <Stack.Screen name="SignUpScreen/index"  options={{headerShown : false}}/>
+        <Stack.Screen name="OTPScreen/index"  options={{headerShown : false}}/>
       </Stack>
     </ThemeProvider>
   );
