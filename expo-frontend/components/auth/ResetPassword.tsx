@@ -3,7 +3,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import {router} from "expo-router"
 import { useRef, useState } from "react";
 
-const OTPInput = () => {
+const ResetPassword = () => {
     const [otp, changeotp] = useState(["", "", "", "", "", ""])
     const inputRefs:any = useRef([])
 
@@ -49,7 +49,7 @@ const OTPInput = () => {
     return(
         <View className='flex-1 items-center mt-28 mt'>
                 
-                <Text className='mt-4 text-[1.33rem] font-bold'>Verify your Email</Text>
+                <Text className='mt-4 text-[1.33rem] font-bold'>Reset Password OTP</Text>
 
                 <SafeAreaView className='flex flex-row items-center justify-center w-[22rem] h-16 mt-5'>
                     {otp.map((input, index) => {
@@ -85,7 +85,7 @@ const OTPInput = () => {
                     <LinearGradient   colors={["#15C020", "#00FF11"]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={{borderRadius: 9999}} >
                     <SafeAreaView className='flex-1 items-center w-[22rem] max-h-11 justify-center'>
                         {/*Add condiitionality for if institute email is valid or not*/}
-                         <Pressable className='flex items-center justify-center h-full w-full' onPress={() => router.replace("/CompleteAccountScreen")}>
+                         <Pressable className='flex items-center justify-center h-full w-full' onPress={() => router.replace("/")}>
                             <Text className='text-white font-bold text-lg'>Verify</Text>
                         </Pressable>
                     </SafeAreaView>
@@ -93,7 +93,7 @@ const OTPInput = () => {
                 </View>
                 
                 <SafeAreaView className='w-80 mt-4 items-center'>
-                    <Pressable className='mr-2' onPress={() => router.replace("/SignUpScreen")}>
+                    <Pressable className='mr-2' onPress={() => router.replace("/EnterEmailForVerificationScreen")}>
                         <Text className='text-[#0000FF] underline text-lg'>Change Email Address?</Text>
                     </Pressable>
                 </SafeAreaView>
@@ -102,4 +102,4 @@ const OTPInput = () => {
     )
 }
 
-export default OTPInput;
+export default ResetPassword;
