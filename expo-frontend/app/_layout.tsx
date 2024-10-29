@@ -27,6 +27,11 @@ export default function RootLayout() {
     }
   }, [loaded]);
 
+  type RootStackParamList = {
+    Default: undefined; // No parameters
+    SignUp: { email: string }; // ScreenB expects an email parameter
+  };
+
   if (!loaded) {
     return null;
   }
@@ -35,7 +40,7 @@ export default function RootLayout() {
     <ThemeProvider value={DefaultTheme}>
       <Stack>
         <Stack.Screen name="index" options={{headerShown : false}}/>
-        <Stack.Screen name="SignUpScreen/index"  options={{headerShown : false}}/>
+        <Stack.Screen name="SignUpScreen/index"  options={{headerShown : false}} />
         <Stack.Screen name="OTPScreen/index"  options={{headerShown : false}}/>
         <Stack.Screen name="CompleteAccountScreen/index"  options={{headerShown : false}}/>
         <Stack.Screen name="NewAccountWelcomeScreen/index"  options={{headerShown : false}}/>

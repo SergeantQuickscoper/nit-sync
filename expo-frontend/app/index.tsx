@@ -6,9 +6,7 @@ import LoginInput from '@/components/auth/LoginInput';
 const LoginScreen = () => {
     return(
         <View className='flex-1 bg-[#F7F7F7]'>
-            
             <LogoAuth />
-
             <LoginInput />
         </View>
     )
