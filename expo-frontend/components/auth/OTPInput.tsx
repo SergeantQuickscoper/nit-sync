@@ -3,9 +3,11 @@ import { LinearGradient } from "expo-linear-gradient";
 import {router} from "expo-router"
 import { useRef, useState } from "react";
 
-const OTPInput = () => {
+const OTPInput = ({recievedParams} : any) => {
+    const email = recievedParams.registeredEmail.toString()
     const [otp, changeotp] = useState(["", "", "", "", "", ""])
     const inputRefs:any = useRef([])
+    console.log(recievedParams)
 
     //Implementation is ass make it better later but it works
     const handleChange = (index:any, value:any) => {
@@ -93,7 +95,7 @@ const OTPInput = () => {
                 </View>
                 
                 <SafeAreaView className='w-80 mt-4 items-center'>
-                    <Pressable className='mr-2' onPress={() => router.replace("/SignUpScreen")}>
+                    <Pressable className='mr-2' onPress={() => router.push({ pathname: "/SignUpScreen", params: { registeredEmail : email } })}>
                         <Text className='text-[#0000FF] underline text-lg'>Change Email Address?</Text>
                     </Pressable>
                 </SafeAreaView>

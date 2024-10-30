@@ -3,11 +3,11 @@ import { LinearGradient } from "expo-linear-gradient";
 import {router, useLocalSearchParams} from "expo-router"
 import { useEffect, useState } from "react";
 
-const SigninInput = () => {
-    const params = useLocalSearchParams<{ query?: string }>();
+const SigninInput = ({recievedParams} : any) => {
+    const params = recievedParams;
     const [isLocked, setIsLocked] = useState(true)
     const [isValidEmail, setIsValidEmail] = useState(true); //ONLY for checking email domain (empty email is considered valid)
-    const [email, setEmail] = useState(""); 
+    const [email, setEmail] = useState((params.registeredEmail ? params.registeredEmail.toString() : "" )); 
 
     useEffect(() => {
         if(isValidEmail == true && email != ""){
@@ -37,7 +37,7 @@ const SigninInput = () => {
         if(isLocked){
             return
         }
-        router.replace("/OTPScreen")
+        router.push({ pathname: "/OTPScreen", params: { registeredEmail : email } });
     }    
 
     return(

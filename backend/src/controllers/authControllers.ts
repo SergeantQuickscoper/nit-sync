@@ -12,6 +12,9 @@ class authControllers{
                 throw Error("An invalid email was entered!")
             }
             
+            if(await authServices.alreadyExistsMain(email)){
+                throw Error("This email has already been registered")
+            }
 
             if(await authServices.alreadyExists(email)){
                 authServices.resendOTP(email)
@@ -19,6 +22,8 @@ class authControllers{
                     success: true,
                     message: "OTP has been resent!",
                 })
+
+                return;
             }
 
             const otp = await authServices.generateEmailVerifToken()
