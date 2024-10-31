@@ -117,6 +117,8 @@ class authControllers{
 
             await authServices.createUser(email, password, firstName, lastName);
 
+            const userJWT = await authServices.generateJWT(email)
+
             const {education_level, first_year, branch, section } = await authServices.getUser(email)
 
             let yearOrd = Number(first_year);
@@ -139,7 +141,8 @@ class authControllers{
 
             res.send({
                 success: true,
-                message: "That's it you're all set! Your section has been detected as:  " + education_level + " " + year + " Year " + branch + " " + section
+                message: "That's it you're all set! Your section has been detected as:  " + education_level + " " + year + " Year " + branch + " " + section,
+                jwt: userJWT
             })
 
 
