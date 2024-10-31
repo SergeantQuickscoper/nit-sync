@@ -185,6 +185,7 @@ class authControllers{
         
     }
 
+    //ts shit takes time why??????????
     async reqPasswordResetOTP(req, res){
         try {
             const {email} = req.body
@@ -208,6 +209,7 @@ class authControllers{
     
     }
 
+    
     async verifyPassToken(req, res){
         try {
             const {email, otp} = req.body;

@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 
 const EmailForReset = ({recievedParams} : any) => {
     const params = recievedParams;
-    const [email, setEmail] = useState(params.email)
+    const [email, setEmail] = useState(params.registeredEmail)
     const [isLocked, setIsLocked] = useState(true)
     const [errorMessage, setErrorMessage] = useState("")
 
@@ -18,10 +18,16 @@ const EmailForReset = ({recievedParams} : any) => {
         }
     }, [email])
 
+    const handleChange = (text:string) => {
+        setEmail(text)
+    }
+
     const handlePress = async() => {
         if(isLocked){
-            return
+            return;
         }
+
+        setIsLocked(true)
 
         await fetch('http://172.30.59.214:8080/reqpassresetOTP', {
             method: 'POST', // Specifies a POST request
@@ -38,6 +44,9 @@ const EmailForReset = ({recievedParams} : any) => {
             else{
                 router.push({ pathname: "/PasswordResetOTPScreen", params: { registeredEmail : email } }); 
             }
+
+            setIsLocked(false)
+
           })
 
     }
@@ -46,15 +55,15 @@ const EmailForReset = ({recievedParams} : any) => {
               <Text className="mt-4 font-bold text-xl">Enter your registered Email</Text> 
 
             <SafeAreaView className='flex-1 items-center w-[22rem] max-h-11 mt-5 rounded-full bg-white shadow-sm justify-center'>
-                <TextInput className='h-full w-11/12 px-2 py-2 text-lg leading-tight' placeholder="Email" placeholderTextColor={"black"} />
+                <TextInput className='h-full w-11/12 px-2 py-2 text-lg leading-tight' placeholder="Email" onChangeText={(text) => handleChange(text)} placeholderTextColor={"black"} />
             </SafeAreaView>
 
-            <Text className=" text-red-500 font-medium text-base">{errorMessage}</Text>
+            <Text className=" text-red-500 font-medium text-base w-[22rem] mt-2">{errorMessage}</Text>
                 
             <View className='mt-8 rounded-full shadow-sm'>
                     <LinearGradient   colors={["#15C020", "#00FF11"]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={{borderRadius: 9999}} >
                     <SafeAreaView className='flex-1 items-center w-[22rem] max-h-11 justify-center'>
-                         <Pressable className='flex items-center justify-center h-full w-full' onPress={() => router.replace("/PasswordResetOTPScreen")}>
+                         <Pressable className='flex items-center justify-center h-full w-full' onPress={() => handlePress()}>
                             <Text className='text-white font-bold text-lg'>Request OTP</Text>
                         </Pressable>
                     </SafeAreaView>
