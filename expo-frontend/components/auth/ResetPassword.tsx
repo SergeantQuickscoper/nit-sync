@@ -3,7 +3,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import {router} from "expo-router"
 import { useRef, useState } from "react";
 
-const ResetPassword = () => {
+const ResetPassword = ({recievedParams} : any) => {
     const [otp, changeotp] = useState(["", "", "", "", "", ""])
     const inputRefs:any = useRef([])
 
