@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 const SigninInput = ({recievedParams} : any) => {
     const params = recievedParams;
     const [isLocked, setIsLocked] = useState(true)
+    const [errorMessage, setErrorMessage] = useState("")
     const [isValidEmail, setIsValidEmail] = useState(true); //ONLY for checking email domain (empty email is considered valid)
     const [email, setEmail] = useState((params.registeredEmail ? params.registeredEmail.toString() : "" )); 
 
@@ -30,14 +31,34 @@ const SigninInput = ({recievedParams} : any) => {
     }
     const handleChange = async(text:any) => {
         setEmail(text);
+        setErrorMessage("")
         checkValidity(text);
     }
 
-    const handlePress = () => {
+    const handlePress = async () => {
         if(isLocked){
-            return
+            return;
         }
-        router.push({ pathname: "/OTPScreen", params: { registeredEmail : email } });
+
+       await fetch('http://172.30.59.214:8080/signup', {
+            method: 'POST', // Specifies a POST request
+            headers: {
+              'Content-Type': 'application/json', // Informs the server about the data format
+            },
+            body: JSON.stringify({email : email})
+          })
+          .then((res) => res.json())
+          .then((data) => {
+            if(data.success == false){
+                setErrorMessage(data.message);
+            }
+            else{
+                router.push({ pathname: "/OTPScreen", params: { registeredEmail : email } });
+            }
+          })
+
+
+        
     }    
 
     return(
@@ -52,7 +73,8 @@ const SigninInput = ({recievedParams} : any) => {
                 </SafeAreaView>
 
                 <View className="w-[22rem] mt-2 h-auto">
-                    {isValidEmail ? <Text > </Text> : <Text className=" text-red-500 ml-3 font-medium">Invalid Institute Student Email</Text>}
+                    {isValidEmail ? <Text className="hidden"> </Text> : <Text className=" text-red-500 ml-3 font-medium">Invalid Institute Student Email</Text>}
+                    <Text className=" text-red-500 ml-3 font-medium">{errorMessage}</Text>
                 </View>
                 
 

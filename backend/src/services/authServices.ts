@@ -115,7 +115,7 @@ class authServices{
             const classRollNo = rollNo.slice(-2)
 
             
-            authDAO.createUser(email, password, firstName, lastName, rollNo, firstYear, branch, educationLevel, classRollNo, section);
+            await authDAO.createUser(email, password, firstName, lastName, rollNo, firstYear, branch, educationLevel, classRollNo, section);
 
         } catch (error) {
             throw error;

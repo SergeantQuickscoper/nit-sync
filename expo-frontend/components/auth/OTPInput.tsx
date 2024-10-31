@@ -5,6 +5,7 @@ import { useRef, useState } from "react";
 
 const OTPInput = ({recievedParams} : any) => {
     const email = recievedParams.registeredEmail.toString()
+    const [errorMessage, setErrorMessage] = useState("")
     const [otp, changeotp] = useState(["", "", "", "", "", ""])
     const inputRefs:any = useRef([])
     console.log(recievedParams)
@@ -47,6 +48,24 @@ const OTPInput = ({recievedParams} : any) => {
 		}
     }
 
+    const handleVerifyPress = async() => {
+        await fetch('http://172.30.59.214:8080/verifyuser', {
+            method: 'POST', // Specifies a POST request
+            headers: {
+              'Content-Type': 'application/json', // Informs the server about the data format
+            },
+            body: JSON.stringify({email : email, otp: otp.join("")})
+          })
+          .then((res) => res.json())
+          .then((data) => {
+            if(data.success == false){
+                setErrorMessage(data.message);
+            }
+            else{
+                router.push({ pathname: "/CompleteAccountScreen", params: { registeredEmail : email } });
+            }
+          })
+    }
 
     return(
         <View className='flex-1 items-center mt-28 mt'>
@@ -71,7 +90,8 @@ const OTPInput = ({recievedParams} : any) => {
                         })}
                 </SafeAreaView>
 
-                <SafeAreaView className='w-[22rem] mt-4 items-end'>
+                <SafeAreaView className='w-[22rem] mt-4 items-end flex-row justify-between'>
+                    <Text className=" text-red-500 font-medium">{errorMessage}</Text>
                     <Pressable className=''>
                         <Text className='text-[#0000FF] underline text-lg'>Resend OTP</Text>
                     </Pressable>
@@ -87,7 +107,7 @@ const OTPInput = ({recievedParams} : any) => {
                     <LinearGradient   colors={["#15C020", "#00FF11"]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={{borderRadius: 9999}} >
                     <SafeAreaView className='flex-1 items-center w-[22rem] max-h-11 justify-center'>
                         {/*Add condiitionality for if institute email is valid or not*/}
-                         <Pressable className='flex items-center justify-center h-full w-full' onPress={() => router.replace("/CompleteAccountScreen")}>
+                         <Pressable className='flex items-center justify-center h-full w-full' onPress={() => handleVerifyPress()}>
                             <Text className='text-white font-bold text-lg'>Verify</Text>
                         </Pressable>
                     </SafeAreaView>
