@@ -7,6 +7,7 @@ export async function up(knex: Knex): Promise<void> {
         table.string("subject_name").notNullable();
         table.string("description");
         table.integer("created_by").notNullable().references("uid").inTable("user_auth")
+        table.timestamps(true, true, false);
     })
 }
 
