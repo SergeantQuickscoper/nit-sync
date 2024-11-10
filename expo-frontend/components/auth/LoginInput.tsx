@@ -1,4 +1,4 @@
-import {View, Text, Image, SafeAreaView, TextInput, Pressable} from "react-native"
+import {View, Text, Image, SafeAreaView, TextInput, Pressable, ScrollView} from "react-native"
 import { LinearGradient } from "expo-linear-gradient";
 import {router} from "expo-router"
 import { useEffect, useState } from "react";
@@ -36,7 +36,7 @@ const LoginInput = () => {
 
         console.log("Pressed")
 
-        await fetch('http://172.30.59.214:8080/login', {
+        await fetch('http://172.30.42.89:8080/login', {
             method: 'POST', // Specifies a POST request
             headers: {
               'Content-Type': 'application/json', // Informs the server about the data format
@@ -61,13 +61,14 @@ const LoginInput = () => {
 
     return(
         <View className='flex-1 items-center mt-32'>
+            
                 <Text className='text-[1.33rem] font-bold'>Login to NITsync</Text>
 
                 <SafeAreaView className='flex-1 items-center w-[22rem] max-h-11 mt-5 rounded-full bg-white shadow-sm justify-center'>
                     <TextInput className='h-full w-11/12 px-2 py-2 text-lg leading-tight' onChangeText={(text) => handleEmailChange(text)} placeholder="Email" placeholderTextColor={"black"} />
                 </SafeAreaView>
 
-                <SafeAreaView className='flex-1 items-center w-[22rem] max-h-12 mt-10 rounded-full p-2 bg-white shadow-sm justify-center'>
+                <SafeAreaView className='flex-1 items-center w-[22rem] min-h-12 max-h-12 mt-10 rounded-full p-2 bg-white shadow-sm justify-center'>
                     <TextInput className='w-11/12 px-2 text-lg leading-tight' onChangeText={(text) => handlePassChange(text)} placeholder="Password" placeholderTextColor={"black"} />
                 </SafeAreaView>
 
@@ -93,7 +94,6 @@ const LoginInput = () => {
                         <Text className='text-[#0000FF] underline text-lg'>New User? Sign up here</Text>
                     </Pressable>
                 </SafeAreaView>
-                
             </View>
     )
 }

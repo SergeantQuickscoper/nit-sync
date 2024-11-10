@@ -46,7 +46,7 @@ const ConfirmChangePass = ({recievedParams} : any) => {
             return;
         }
 
-        await fetch('http://172.30.59.214:8080/changepass', {
+        await fetch('http://172.30.42.89:8080/changepass', {
             method: 'POST', // Specifies a POST request
             headers: {
               'Content-Type': 'application/json', // Informs the server about the data format

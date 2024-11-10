@@ -1,4 +1,5 @@
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { StatusBar } from 'expo-status-bar';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
@@ -37,7 +38,9 @@ export default function RootLayout() {
   }
 
   return (
+    
     <ThemeProvider value={DefaultTheme}>
+      <StatusBar style="dark" />
       <Stack>
         <Stack.Screen name="index" options={{headerShown : false}}/>
         <Stack.Screen name="SignUpScreen/index"  options={{headerShown : false}} />

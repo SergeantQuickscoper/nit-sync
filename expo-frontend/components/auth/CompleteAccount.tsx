@@ -48,7 +48,7 @@ const CompleteAccount = ({recievedParams} : any) => {
             return;
         }
 
-        await fetch('http://172.30.59.214:8080/completeaccount', {
+        await fetch('http://172.30.42.89:8080/completeaccount', {
             method: 'POST', // Specifies a POST request
             headers: {
               'Content-Type': 'application/json', // Informs the server about the data format

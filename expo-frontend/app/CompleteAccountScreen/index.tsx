@@ -1,4 +1,4 @@
-import {View, Text, Image, SafeAreaView, TextInput, Pressable} from "react-native"
+import {View, Text, Image, SafeAreaView, TextInput, Pressable, ScrollView} from "react-native"
 import { LinearGradient } from "expo-linear-gradient";
 import {router, useLocalSearchParams} from "expo-router"
 import LogoAuth from "@/components/auth/LogoAuth";
@@ -9,8 +9,10 @@ const CompleteAccountScreen = () => {
     const params = useLocalSearchParams();    
     return(
         <View className='flex-1 bg-[#F7F7F7]'>
+            <ScrollView>
             <LogoAuth />
             <CompleteAccount recievedParams={params}/>
+            </ScrollView>
         </View>
     )
 }

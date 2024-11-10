@@ -49,7 +49,7 @@ const OTPInput = ({recievedParams} : any) => {
     }
 
     const handleVerifyPress = async() => {
-        await fetch('http://172.30.59.214:8080/verifyuser', {
+        await fetch('http://172.30.42.89:8080/verifyuser', {
             method: 'POST', // Specifies a POST request
             headers: {
               'Content-Type': 'application/json', // Informs the server about the data format

@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView, Pressable, TextInput, Image } from "react-native"
+import { View, Text, SafeAreaView, Pressable, TextInput, Image, ScrollView} from "react-native"
 import { LinearGradient } from "expo-linear-gradient";
 import { router, useLocalSearchParams } from "expo-router";
 import LogoAuth from "@/components/auth/LogoAuth";
@@ -8,10 +8,10 @@ const SignUpScreen = () => {
     const params = useLocalSearchParams();
     return(
         <View className='flex-1 bg-[#F7F7F7]'>
-            
-            <LogoAuth />
-            <SigninInput recievedParams={params} />
-        
+            <ScrollView >
+                <LogoAuth />
+                <SigninInput recievedParams={params} />
+            </ScrollView>
         </View>
     )
 }
