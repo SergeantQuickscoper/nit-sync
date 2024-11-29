@@ -29,7 +29,7 @@ const EmailForReset = ({recievedParams} : any) => {
 
         setIsLocked(true)
 
-        await fetch('http://172.30.42.89:8080/reqpassresetOTP', {
+        await fetch(process.env.EXPO_PUBLIC_AUTH_SERVER + '/reqpassresetOTP', {
             method: 'POST', // Specifies a POST request
             headers: {
               'Content-Type': 'application/json', // Informs the server about the data format
