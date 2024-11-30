@@ -138,6 +138,17 @@ class authDAO{
             throw error;
         }
     }
+
+    async findCRID(userEmail){
+        try {
+            const query = await db.select('*').from('user_auth').where('email', userEmail)
+            const {branch, section, first_year} = query[0];
+            const cr = await db.select('uid').from('user_auth').where('role', 'cr').andWhere('branch', branch).andWhere('section', section).andWhere('first_year', first_year);
+            return cr[0];
+        } catch (error) {
+            
+        }
+    }
 }
 
 export default new authDAO();

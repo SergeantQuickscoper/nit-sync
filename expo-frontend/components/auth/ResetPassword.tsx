@@ -48,7 +48,7 @@ const ResetPassword = ({recievedParams} : any) => {
     }
 
     const handleVerifyPress = async() => {
-        await fetch(process.env.EXPO_PUBLIC_AUTH_SERVER + '/' + 'verifypassOTP', {
+        await fetch(process.env.EXPO_PUBLIC_AUTH_SERVER + 'verifypassOTP', {
             method: 'POST', // Specifies a POST request
             headers: {
               'Content-Type': 'application/json', // Informs the server about the data format

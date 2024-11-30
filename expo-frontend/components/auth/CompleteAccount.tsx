@@ -48,7 +48,7 @@ const CompleteAccount = ({recievedParams} : any) => {
             return;
         }
 
-        await fetch(process.env.EXPO_PUBLIC_AUTH_SERVER + '/completeaccount', {
+        await fetch(process.env.EXPO_PUBLIC_AUTH_SERVER + 'completeaccount', {
             method: 'POST', // Specifies a POST request
             headers: {
               'Content-Type': 'application/json', // Informs the server about the data format
@@ -78,7 +78,7 @@ const CompleteAccount = ({recievedParams} : any) => {
                 </SafeAreaView>
 
                 <SafeAreaView className='flex-1 items-center w-[22rem] max-h-12 mt-10 rounded-full p-2 bg-white shadow-sm justify-center'>
-                    <TextInput secureTextEntry={true} value={confPassword} onChangeText={(text) => handleConfPassChange(text)} className='w-11/12 px-2 text-lg leading-tight' placeholder="Confirm Password" placeholderTextColor={"black"} />
+                    <TextInput secureTextEntry={true} value={confPassword} onChangeText={(text) => handleConfPassChange(text)} className='h-full w-11/12 px-2 text-lg leading-tight' placeholder="Confirm Password" placeholderTextColor={"black"} />
                 </SafeAreaView>
 
                 <View className="w-[22rem] mt-2 h-auto">
@@ -86,11 +86,11 @@ const CompleteAccount = ({recievedParams} : any) => {
                 </View>
 
                 <SafeAreaView className='flex-1 items-center w-[22rem] max-h-12 mt-10 rounded-full p-2 bg-white shadow-sm justify-center'>
-                    <TextInput className='w-11/12 px-2 text-lg leading-tight' placeholder="First Name" onChangeText={(text) => {setFirstName(text)}} placeholderTextColor={"black"} />
+                    <TextInput className='w-11/12 px-2 text-lg leading-tight h-full' placeholder="First Name" onChangeText={(text) => {setFirstName(text)}} placeholderTextColor={"black"} />
                 </SafeAreaView>
 
                 <SafeAreaView className='flex-1 items-center w-[22rem] max-h-12 mt-10 rounded-full p-2 bg-white shadow-sm justify-center'>
-                    <TextInput className='w-11/12 px-2 text-lg leading-tight' placeholder="Last Name" onChangeText={(text) => {setLastName(text)}} placeholderTextColor={"black"} />
+                    <TextInput className='w-11/12 px-2 text-lg leading-tight h-full' placeholder="Last Name" onChangeText={(text) => {setLastName(text)}} placeholderTextColor={"black"} />
                 </SafeAreaView>
 
 
