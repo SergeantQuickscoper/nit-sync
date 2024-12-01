@@ -28,8 +28,39 @@ class timetableDAO{
         }
     }
 
+    //TODO potential security issues??? couldnt theoretically anyone who knows the ids join and delete whatever subject they like? somehow need to ensure that this stays fucking private
+    async joinSubject(uid, subjectID){
+        try {
+            const check = await db.select('*').from('user_subject_selection').where("uid", uid).andWhere('subject_id', subjectID);
+
+            if(!(check.length == 0)){
+                throw Error("You have already joined this subject")
+            }
+
+            await db.table('user_subject_selection').insert({"uid": uid, "subject_id": subjectID})
+
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async attendEvent(uid, event_id){
+        try {
+            const check = await db.select('*').from("user_event_attendance").where('uid', uid).andWhere("event_id", event_id);
+
+            if(!(check.length == 0)){
+                throw Error("You have already joined this event")
+            }
+
+            await db.table("user_event_attendance").insert({"uid": uid, "event_id": event_id})
+
+        } catch (error) {
+            throw error;
+        }
+    }
+
     //TODO some more funcs to fill out here
-    
+
     async deleteSubjectByID(subject_id){
 
     }
@@ -38,7 +69,13 @@ class timetableDAO{
 
     }
 
+    async leaveSubject(){
 
+    }
+
+    async leaveEvent(){
+
+    }
 }
 
 const timetableDAOObj = new timetableDAO();

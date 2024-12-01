@@ -11,8 +11,10 @@ class timetableServices{
             //TODO validate the iat parameter later 
             //TODO check for in past, check for non negative value etc. etc.
 
+
             //check if decoded.email is a CR and get his class
             const {uid, role} = await authDAO.getUser(decoded.email)
+
             if(role != "cr"){
                 throw Error("Unauthorized Subject creation")
             }
@@ -37,8 +39,13 @@ class timetableServices{
         }
     }
 
-    async getSubjectsByClass(user){
+    async getSubjectsByClass(userJWT){
         try {
+
+            const user = await this.validateCRandGetID(userJWT);
+            console.log(user)
+            //if cr doesnt exist for a particular user this will return an error so during
+            //the phase of finding all the crs we need to accomodate for this bug.
             const {uid} = await authDAO.findCRID(user);      
             const query = await timetableDAO.getSubjects(uid)
             // maybe could do some parsing here instead of passing all the info
@@ -52,7 +59,7 @@ class timetableServices{
 
     async createEvent(token, eventName, description, subjectID, eventType, startTime, endTime){
         try {
-            const uid = this.validateCRandGetID(token);
+            const uid = await this.validateCRandGetID(token);
             await timetableDAO.createEvent(uid, eventName, description, startTime, endTime, eventType, subjectID);
         } catch (error) {
             throw error;

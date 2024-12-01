@@ -9,7 +9,6 @@ class timeTableControllers{
             }
 
             await timetableServices.createSubject(jwt, subjectName, description)
-            await timetableServices.getSubjectsByClass("test2@student.nitw.ac.in");
             res.send({
                 sucess: true, 
                 message: subjectName + " has been successfully created"
@@ -22,6 +21,33 @@ class timeTableControllers{
             })
         }
         
+    }
+
+    async getSubjects(req, res){
+        try {
+            const {jwt} = req.body;
+            if(!jwt){
+                throw Error("JWT not provided")
+            }
+
+            const subjectList = await timetableServices.getSubjectsByClass(jwt)
+
+            res.send({
+                sucess: true, 
+                message: "Subject list sucessfully fetched",
+                subjectArray: subjectList
+            })
+
+        } catch (error) {
+            res.status(400).send({
+                success: false,
+                message: error.message
+            })
+        }
+    }
+
+    async getEventsInSubject(req, res){
+
     }
 }
 
