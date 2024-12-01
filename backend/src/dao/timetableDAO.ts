@@ -19,6 +19,8 @@ class timetableDAO{
         return query;
     }
 
+    
+
     //TODO possible vulnerability here technically any cr could change the events of other crs if they know the subjectID??? some validation func shud fix this bs
     async createEvent(author, eventName, description, start_time, end_time, eventType, subjectID){
         try {
@@ -54,6 +56,24 @@ class timetableDAO{
 
             await db.table("user_event_attendance").insert({"uid": uid, "event_id": event_id})
 
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async getSubjectsUserJoined(uid){
+        try {
+            const query = db.select("*").from('user_subject_selection').where("uid", uid);
+            return query;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async getEventsForASubject(subjectID){
+        try {
+            const query = db.select("*").from("events").where("subject_id", subjectID);
+            return query; 
         } catch (error) {
             throw error;
         }

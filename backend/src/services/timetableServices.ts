@@ -65,6 +65,46 @@ class timetableServices{
             throw error;
         }
     }
+
+    async joinSubject(jwt, subjectID){
+        try {
+            const decoded = jwt.verify(jwt, process.env.JWT_SECRET);
+            const {uid} = await authDAO.emailToUID(decoded.email);
+            await timetableDAO.joinSubject(uid, subjectID);
+        } catch (error) {
+            throw error;
+        }
+        
+    }
+
+    async attendEvent(jwt, event_id){
+        try {
+            const decoded = jwt.verify(jwt, process.env.JWT_SECRET);
+            const {uid} = await authDAO.emailToUID(decoded.email);
+            await timetableDAO.attendEvent(uid, event_id);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async getTotalEventsOfSubjectsUserIsPartOf(jwt){
+        try {
+            const decoded = jwt.verify(jwt, process.env.JWT_SECRET);
+            const {uid} = await authDAO.emailToUID(decoded.email);
+            const userSubjectList = await timetableDAO.getSubjectsUserJoined(uid);
+            let subjectEventObj = {};
+            let count  = 0;
+            for(let i of userSubjectList){
+                const subjectName = userSubjectList[count].subject_id;
+                subjectEventObj[subjectName] = await timetableDAO.getEventsForASubject(subjectName)
+            }
+
+            return subjectEventObj;
+
+        } catch (error) {
+            
+        }
+    }
 }
 
 const timetableServicesObj = new timetableServices();

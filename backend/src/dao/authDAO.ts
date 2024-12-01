@@ -150,6 +150,17 @@ class authDAO{
             
         }
     }
+
+    async emailToUID(userEmail){
+        try {
+            const data = db.select('uid').from('user_auth').where('email', userEmail);
+            return data[0];
+        } catch (error) {
+            throw error;
+        }
+    }
 }
+
+
 
 export default new authDAO();

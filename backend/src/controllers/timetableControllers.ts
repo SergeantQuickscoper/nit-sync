@@ -46,8 +46,71 @@ class timeTableControllers{
         }
     }
 
-    async getEventsInSubject(req, res){
+    async getTotalEventsOfSubjectsUserIsPartOf(req, res){
+        try {
+            const {jwt} = req.body;
+            if(!jwt){
+                throw Error("No jwt")
+            }
+            const subjectEventsObj = await timetableServices.getTotalEventsOfSubjectsUserIsPartOf(jwt)
+            res.send({
+                success: true,
+                message: "Successfully fetched available events",
+                subjectEventsObject: subjectEventsObj
+            })
+            
+        } catch (error) {
+            res.status(400).send({
+                success: false,
+                message: error.message
+            })
+        }
+    }
 
+    async joinSubject(req, res){
+        try {
+            const {jwt, subjectID} = req.body;
+
+            if(!jwt || !subjectID){
+                throw Error("Not all parameters have been provided");
+            }
+
+            await timetableServices.joinSubject(jwt, subjectID);
+
+            res.send({
+                sucess: true, 
+                message: "Subject has been joined",
+            })
+
+        } catch (error) {
+            res.status(400).send({
+                success: false,
+                message: error.message
+            })
+        }
+    }
+
+    async attendEvent(req, res){
+        try {
+            const {jwt, eventID} = req.body;
+
+            if(!jwt || !eventID){
+                throw Error("Not all parameters have been provided");
+            }
+
+            await timetableServices.attendEvent(jwt, eventID);
+
+            res.send({
+                sucess: true, 
+                message: "Event has been marked as attended",
+            })
+            
+        } catch (error) {
+            res.status(400).send({
+                success: false,
+                message: error.message
+            })
+        }
     }
 }
 
