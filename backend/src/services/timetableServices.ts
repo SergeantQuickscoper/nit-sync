@@ -3,7 +3,8 @@ import authDAO from "../dao/authDAO";
 import jwt from "jsonwebtoken";
 
 class timetableServices{
-    async createSubject(token, subjectName, description){
+
+    async validateCRandGetID(token){
         try {
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
@@ -16,6 +17,18 @@ class timetableServices{
                 throw Error("Unauthorized Subject creation")
             }
 
+            return uid;
+
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async createSubject(token, subjectName, description){
+        try {
+
+            const uid = await this.validateCRandGetID(token)
+
             //query create the mentioned subject in the afforementioned class
             await timetableDAO.createSubject(uid, subjectName, description);
 
@@ -25,8 +38,25 @@ class timetableServices{
     }
 
     async getSubjectsByClass(user){
-        const {uid} = await authDAO.findCRID(user);      
-        console.log(uid)
+        try {
+            const {uid} = await authDAO.findCRID(user);      
+            const query = await timetableDAO.getSubjects(uid)
+            // maybe could do some parsing here instead of passing all the info
+            return query;
+
+        } catch (error) {
+            throw error;
+        }
+        
+    }
+
+    async createEvent(token, eventName, description, subjectID, eventType, startTime, endTime){
+        try {
+            const uid = this.validateCRandGetID(token);
+            await timetableDAO.createEvent(uid, eventName, description, startTime, endTime, eventType, subjectID);
+        } catch (error) {
+            throw error;
+        }
     }
 }
 
