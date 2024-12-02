@@ -53,6 +53,7 @@ class timeTableControllers{
                 throw Error("No jwt")
             }
             const subjectEventsObj = await timetableServices.getTotalEventsOfSubjectsUserIsPartOf(jwt)
+            console.log(subjectEventsObj)
             res.send({
                 success: true,
                 message: "Successfully fetched available events",
@@ -112,6 +113,98 @@ class timeTableControllers{
             })
         }
     }
+
+    async createEvent(req, res){
+        try {
+            const {jwt, eventName, description, subjectID, eventType, startTime, endTime} = req.body;
+            //check for if all conditions not passed
+
+            await timetableServices.createEvent(jwt, eventName, description, subjectID, eventType, startTime, endTime);
+
+            res.send({
+                success: true,
+                message: "Event succesffully created"
+            })
+        } catch (error) {
+            res.status(400).send({
+                success: false, 
+                message: error
+            })
+        }
+    }
+
+    async deleteSubject(req, res){
+        try {
+            const {jwt, subjectID} = req.body;
+            await timetableServices.deleteSubject(jwt, subjectID)
+
+            res.send({
+                success: true,
+                message: "Subject has been successfully deleted"
+            })
+
+        } catch (error) {
+            res.status(400).send({
+                success: false, 
+                message: error.message
+            })
+        }
+    }
+
+    async deleteEvent(req, res){
+        try {
+            const {jwt, eventID} = req.body;
+            await timetableServices.deleteEvent(jwt, eventID)
+
+            res.send({
+                success: true,
+                message: "Event has been successfully deleted"
+            })
+
+        } catch (error) {
+            res.status(400).send({
+                success: false, 
+                message: error.message
+            })
+        }
+    }
+
+    async leaveSubject(req, res){
+        try {
+            const {jwt, subjectID} = req.body;
+            await timetableServices.leaveSubject(jwt, subjectID)
+
+            res.send({
+                success: true,
+                message: "You have left the subject"
+            })
+
+        } catch (error) {
+            res.status(400).send({
+                success: false, 
+                message: error.message
+            })
+        }
+    }
+
+    async leaveEvent(req, res){
+        try {
+            const {jwt, eventID} = req.body;
+            await timetableServices.leaveEvent(jwt, eventID)
+
+            res.send({
+                success: true,
+                message: "You have left the event"
+            })
+
+        } catch (error) {
+            res.status(400).send({
+                success: false, 
+                message: error.message
+            })
+        }
+    }
+
 }
 
 const timetableControllerObj = new timeTableControllers()

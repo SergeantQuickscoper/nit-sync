@@ -81,20 +81,61 @@ class timetableDAO{
 
     //TODO some more funcs to fill out here
 
-    async deleteSubjectByID(subject_id){
+    //wonder how deleting a subject works when people are part of (ON DELETE CASCADE???)
+    async deleteSubjectByID(uid, subject_id){
+        try {
+            const check = await db.select("*").from('subjects').where('subject_id', subject_id).andWhere('created_by', uid);
+            if(check.length == 0){
+                throw Error("Specified Subject doesnt exist or wasnt created by you")
+            }
 
+            await db.table('subjects').del().where('subject_id', subject_id).andWhere('created_by', uid);
+
+        } catch (error) {
+            throw error;
+        }
     }
 
-    async deleteEventByID(event_id){
+    async deleteEventByID(uid, event_id){
+        try {
+            const check = await db.select("*").from('events').where('event_id', event_id).andWhere('created_by', uid);
+            if(check.length == 0){
+                throw Error("Specified Event doesnt exist or wasnt created by you")
+            }
 
+            await db.table('events').del().where('events', event_id).andWhere('created_by', uid);
+
+        } catch (error) {
+            throw error;
+        }
     }
 
-    async leaveSubject(){
+    async leaveSubject(uid, subject_id){
+        try {
+            const check = await db.select("*").from('user_subject_selection').where('subject_id', subject_id).andWhere('uid', uid);
+            if(check.length == 0){
+                throw Error("You haven't joined this subject")
+            }
 
+            await db.table('user_subject_selection').del().where('subject_id', ).andWhere('uid', uid);
+
+        } catch (error) {
+            throw error;
+        }
     }
 
-    async leaveEvent(){
+    async leaveEvent(uid, event_id){
+        try {
+            const check = await db.select("*").from('user_event_attendance').where('event_id', event_id).andWhere('uid', uid);
+            if(check.length == 0){
+                throw Error("You haven't joined this subject")
+            }
 
+            await db.table('user_event_attendance').del().where('event_id', event_id).andWhere('uid', uid);
+
+        } catch (error) {
+            throw error;
+        }
     }
 }
 

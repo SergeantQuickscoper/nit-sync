@@ -153,7 +153,8 @@ class authDAO{
 
     async emailToUID(userEmail){
         try {
-            const data = db.select('uid').from('user_auth').where('email', userEmail);
+            const data = await db.select('uid').from('user_auth').where('email', userEmail);
+            console.log(data)
             return data[0];
         } catch (error) {
             throw error;

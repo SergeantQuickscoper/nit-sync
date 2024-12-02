@@ -66,9 +66,10 @@ class timetableServices{
         }
     }
 
-    async joinSubject(jwt, subjectID){
+    async joinSubject(token, subjectID){
         try {
-            const decoded = jwt.verify(jwt, process.env.JWT_SECRET);
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            console.log(decoded.email)
             const {uid} = await authDAO.emailToUID(decoded.email);
             await timetableDAO.joinSubject(uid, subjectID);
         } catch (error) {
@@ -77,9 +78,9 @@ class timetableServices{
         
     }
 
-    async attendEvent(jwt, event_id){
+    async attendEvent(token, event_id){
         try {
-            const decoded = jwt.verify(jwt, process.env.JWT_SECRET);
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
             const {uid} = await authDAO.emailToUID(decoded.email);
             await timetableDAO.attendEvent(uid, event_id);
         } catch (error) {
@@ -87,9 +88,9 @@ class timetableServices{
         }
     }
 
-    async getTotalEventsOfSubjectsUserIsPartOf(jwt){
+    async getTotalEventsOfSubjectsUserIsPartOf(token){
         try {
-            const decoded = jwt.verify(jwt, process.env.JWT_SECRET);
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
             const {uid} = await authDAO.emailToUID(decoded.email);
             const userSubjectList = await timetableDAO.getSubjectsUserJoined(uid);
             let subjectEventObj = {};
@@ -102,7 +103,45 @@ class timetableServices{
             return subjectEventObj;
 
         } catch (error) {
+            throw error;
+        }
+    }
+
+    async deleteSubject(token, subjectID){
+        try {
+            const uid = await this.validateCRandGetID(token)
+            await timetableDAO.deleteSubjectByID(uid, subjectID)
+        } catch (error) {
             
+        }
+    }
+
+    async deleteEvent(token, subjectID){
+        try {
+            const uid = await this.validateCRandGetID(token)
+            await timetableDAO.deleteEventByID(uid, subjectID)
+        } catch (error) {
+            
+        }
+    }
+
+    async leaveSubject(token, subject_id){
+        try {
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            const {uid} = await authDAO.emailToUID(decoded.email);
+            await timetableDAO.deleteSubjectByID(uid, subject_id);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async leaveEvent(token, event_id){
+        try {
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            const {uid} = await authDAO.emailToUID(decoded.email);
+            await timetableDAO.deleteEventByID(uid, event_id);
+        } catch (error) {
+            throw error;
         }
     }
 }
