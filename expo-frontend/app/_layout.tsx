@@ -9,8 +9,6 @@ import 'react-native-reanimated';
 // Import your global CSS file
 import "../global.css";
 
-
-
 import { useColorScheme } from '@/hooks/useColorScheme';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -49,7 +47,7 @@ export default function RootLayout() {
         <Stack.Screen name="NewAccountWelcomeScreen/index"  options={{headerShown : false}}/>
         <Stack.Screen name="EnterEmailForVerificationScreen/index"  options={{headerShown : false}}/>
         <Stack.Screen name="PasswordResetOTPScreen/index"  options={{headerShown : false}}/>
-        <Stack.Screen name="DashboardScreen/index"  options={{headerShown : false}}/>
+        <Stack.Screen name="DashboardScreen"  options={{headerShown : false}}/>
         <Stack.Screen name="ConfirmChangePassScreen/index"  options={{headerShown : false}}/>
       </Stack>
     </ThemeProvider>

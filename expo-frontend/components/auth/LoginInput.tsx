@@ -36,7 +36,7 @@ const LoginInput = () => {
 
         
 
-        await fetch(process.env.EXPO_PUBLIC_AUTH_SERVER + 'login', {
+        await fetch(process.env.EXPO_PUBLIC_AUTH_SERVER + '/login', {
             method: 'POST', // Specifies a POST request
             headers: {
               'Content-Type': 'application/json', // Informs the server about the data format
