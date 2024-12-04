@@ -16,6 +16,15 @@ export default function _layout() {
           }}
         />
         <Drawer.Screen
+          name="subjects" 
+          options={{
+            drawerLabel: 'Subjects',
+            title:"Subjects",
+            headerShown: false
+          }}
+        />
+
+        <Drawer.Screen
           name="weekView" 
           options={{
             drawerLabel: 'Week View',

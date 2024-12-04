@@ -82,7 +82,7 @@ const LoginInput = () => {
                 <View className='mt-10 rounded-full shadow-sm'>
                     <LinearGradient   colors={["#15C020", "#00FF11"]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={{borderRadius: 9999}} >
                     <SafeAreaView className='flex-1 items-center w-[22rem] max-h-11 justify-center'>
-                         <Pressable className='flex items-center justify-center h-full w-full' onPress={() => handleLoginPress()}>
+                         <Pressable className='flex items-center justify-center h-full w-full' onPress={() => router.push({ pathname: "/DashboardScreen", params: { registeredEmail : "dr" } })}>
                             <Text className='text-white font-bold text-xl'>Login</Text>
                         </Pressable>
                     </SafeAreaView>
