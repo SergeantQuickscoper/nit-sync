@@ -11,25 +11,26 @@ export default function _layout() {
           name="index" 
           options={{
             drawerLabel: 'Day View',
-            title:"Day View"
+            title:"Day View",
+            headerShown: false
           }}
         />
         <Drawer.Screen
-          name="index1" 
+          name="weekView" 
           options={{
             drawerLabel: 'Week View',
             title:"Week View"
           }}
         />
         <Drawer.Screen
-          name="index2" 
+          name="attendance" 
           options={{
             drawerLabel: 'Attendance',
             title:"Attendance"
           }}
         />
         <Drawer.Screen
-          name="index3" 
+          name="profile" 
           options={{
             drawerLabel: 'Profile',
             title:"Profile"
@@ -37,7 +38,7 @@ export default function _layout() {
         />
 
         <Drawer.Screen
-          name="index4" 
+          name="support" 
           options={{
             drawerLabel: 'Support',
             title:"Support"

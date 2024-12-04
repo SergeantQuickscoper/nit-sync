@@ -4,11 +4,15 @@ import {router, useLocalSearchParams} from "expo-router"
 import LogoAuth from "@/components/auth/LogoAuth";
 import OTPInput from "@/components/auth/OTPInput";
 import CompleteAccount from "@/components/auth/CompleteAccount";
+import { useNavigation } from "expo-router";
 import { useState } from "react";
-
+import { DrawerActions } from "@react-navigation/native";
+import NavigationBar from "@/components/timetable/NavigationBar";
+import ScheduleComponent from "@/components/timetable/ScheduleComponent";
 const DashboardScreen = () => {
     const [date, setDate] = useState(new Date());
     const [paginationOffset, setPaginationOffset] = useState(0)
+    const navigation = useNavigation();
     const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
@@ -40,6 +44,7 @@ const DashboardScreen = () => {
         let dateButtonArray = [];
         for(let i = 0; i < 8; i++){
             let newDate = new Date(date);
+            //TODO fix this fucked up code
             newDate.setDate(date.getDate() + i + paginationOffset)
             if(i == 0 && paginationOffset == 0){
                 dateButtonArray.push(<Pressable className="mx-[0.6rem]  items-center" onPress={() => handelDateButtonPress(newDate)}>
@@ -71,9 +76,7 @@ const DashboardScreen = () => {
     return(
         <View className='flex-1 bg-[#F7F7F7]'>
             <View className="header mb-2 mt-14 flex-row justify-between mx-4 items-center">
-                <Pressable>
-                    <Image source={require("@/assets/images/NavBar.png")}/>
-                </Pressable>
+                <NavigationBar />
                 <Text className="font-bold">
                     {formattedDate}
                 </Text>
@@ -97,10 +100,9 @@ const DashboardScreen = () => {
                 <View className=" w-1/5 pb-7">
                     {printTimes(5, 21)}
                 </View>
-                <View className="border-l w-4/5">
-                    <View className="bg-blue-500 mx-16 mt-[45px] rounded-lg px-4 h-[56px]"> 
-                        <Text>Hello</Text>
-                    </View>
+                <View className="border-l w-4/5 relative">
+                    <ScheduleComponent className="" name="PDS" startTime="10:00" endTime="12:00"/>
+
                 </View>
             </View>
             </ScrollView>
