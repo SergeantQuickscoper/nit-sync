@@ -9,6 +9,7 @@ import { useState } from "react";
 import { DrawerActions } from "@react-navigation/native";
 import NavigationBar from "@/components/timetable/NavigationBar";
 import ScheduleComponent from "@/components/timetable/ScheduleComponent";
+import CreateEventButton from "@/components/timetable/CreateEventButton";
 const DashboardScreen = () => {
     const [date, setDate] = useState(new Date());
     const [paginationOffset, setPaginationOffset] = useState(0)
@@ -80,9 +81,7 @@ const DashboardScreen = () => {
                 <Text className="font-bold">
                     {formattedDate}
                 </Text>
-                <Pressable>
-                    <Image source={require("@/assets/images/CreateButton.png")}/>
-                </Pressable>
+                <CreateEventButton />
             </View>  
             <View className="dateScroll flex-row justify-between mx-8 my-4">
                 <Pressable className="" onPress={handePrevious}>
