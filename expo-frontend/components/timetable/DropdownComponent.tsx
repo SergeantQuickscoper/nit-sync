@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
-import AntDesign from '@expo/vector-icons/AntDesign';
 
 const data = [
   { label: 'Item 1', value: '1' },
@@ -14,7 +13,7 @@ const data = [
   { label: 'Item 8', value: '8' },
 ];
 
-const DropdownComponent = () => {
+const DropdownComponent = ({data} : any) => {
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
 
@@ -75,10 +74,10 @@ const styles = StyleSheet.create({
     fontSize: 10,
   },
   placeholderStyle: {
-    fontSize: 12,
+    fontSize: 16,
   },
   selectedTextStyle: {
-    fontSize: 12,
+    fontSize: 16,
     paddingHorizontal: 8
   },
   iconStyle: {
