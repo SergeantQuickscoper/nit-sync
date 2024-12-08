@@ -7,14 +7,15 @@ class timetableServices{
     async validateCRandGetID(token){
         try {
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
+            
             //TODO validate the iat parameter later 
             //TODO check for in past, check for non negative value etc. etc.
 
 
             //check if decoded.email is a CR and get his class
             const {uid, role} = await authDAO.getUser(decoded.email)
-
+            console.log(decoded.email)
+            
             if(role != "cr"){
                 throw Error("Unauthorized Subject creation")
             }
