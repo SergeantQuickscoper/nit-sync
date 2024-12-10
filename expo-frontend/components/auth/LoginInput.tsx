@@ -2,6 +2,9 @@ import {View, Text, Image, SafeAreaView, TextInput, Pressable, ScrollView} from 
 import { LinearGradient } from "expo-linear-gradient";
 import {router} from "expo-router"
 import { useEffect, useState } from "react";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
 
 const LoginInput = () => {
     const [email, setEmail] = useState("")
@@ -44,18 +47,19 @@ const LoginInput = () => {
             body: JSON.stringify({email : email, password : password})
           })
           .then((res) => res.json())
-          .then((data) => {
+          .then(async(data) => {
             if(data.success == false){
                 setErrorMessage(data.message);
             }
             else{
+                try {
+                    await AsyncStorage.setItem("jwt", data.jwt);
+                  } catch (error) {
+                    console.error('Error saving data:', error);
+                  }
                 router.push({ pathname: "/DashboardScreen", params: { registeredEmail : email } }); //make this jwt
             }
           })
-
-
-
-
     }
 
 
