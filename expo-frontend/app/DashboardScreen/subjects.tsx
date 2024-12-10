@@ -3,6 +3,7 @@ import React from 'react'
 import SubjectComponent from '@/components/timetable/SubjectComponent'
 import { ScrollView } from 'react-native-gesture-handler'
 import NavigationBar from '@/components/timetable/NavigationBar'
+import CreateEventButton from '@/components/timetable/CreateSubjectButton'
 export default function subjects() {
   return (
     <View className='flex-1 bg-[#F7F7F7] border'>
@@ -11,9 +12,7 @@ export default function subjects() {
                 <Text className="font-bold text-lg">
                     Subjects
                 </Text>
-                <Pressable>
-                    <Image source={require("@/assets/images/CreateButton.png")}/>
-                </Pressable>
+                <CreateEventButton />
       </View>
       <ScrollView >
         <View className='flex-1 flex-row flex-wrap mt-4'>

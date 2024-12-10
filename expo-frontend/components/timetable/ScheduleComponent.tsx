@@ -8,10 +8,10 @@ export default function ScheduleComponent({key, name, subjectID, description, st
     const startTimeConvert = startTime;
     const endTimeConvert = endTime;
     const baseMargin = 40;
-    const textFontCorrection = 4; //currently half of the font size 16px
-    const fontsize = 14.5;
-    const requiredMargin = baseMargin * (startTimeConvert.split(":")[0] - 4) + textFontCorrection + fontsize*(startTimeConvert.split(":")[0] - 5)
-    const requiredHeight = ((endTimeConvert.split(":")[0] + endTimeConvert.split(":")[1]/60) - (startTimeConvert.split(":")[0] + startTimeConvert.split(":")[1]/60)) * 54.5/10;
+    const lineHeight = 24; //currently half of the font size 16px
+    const fontsize = 16;
+    const requiredMargin = baseMargin * (startTimeConvert.split(":")[0] - 4) + lineHeight*(2*(startTimeConvert.split(":")[0] - 5) + 1)/2
+    const requiredHeight = ((endTimeConvert.split(":")[0] + endTimeConvert.split(":")[1]/60) - (startTimeConvert.split(":")[0] + startTimeConvert.split(":")[1]/60)) * (baseMargin + lineHeight)/10;
     console.log(requiredHeight)
   return (
     <View>

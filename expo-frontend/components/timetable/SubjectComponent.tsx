@@ -8,7 +8,7 @@ export default function SubjectComponent({subjectID, name, description, joined}:
         <View className='rounded-lg bg-[#E26161] w-32 h-24 px-2 py-2 mx-3 my-2'>
             <Modal visible={modalOpen} className='' transparent={true}>
                 <View className='flex-1 justify-center items-center' style={{backgroundColor: "rgba(0, 0, 0, 0.5)"}}>
-                    <View className='bg-slate-400 w-72 h-56 rounded-lg flex-col items-center justify-between px-4 relative'>
+                    <View className='bg-slate-400 w-72 rounded-lg flex-col items-center justify-between px-4 relative'>
                         <View className='absolute top-2 left-2'>
                             <Pressable onPress={() => setModalOpen(false)}>
                                 <Text>X</Text>

@@ -11,7 +11,7 @@ import NavigationBar from "@/components/timetable/NavigationBar";
 import ScheduleComponent from "@/components/timetable/ScheduleComponent";
 import CreateEventButton from "@/components/timetable/CreateEventButton";
 const DashboardScreen = () => {
-    const [date, setDate] = useState(new Date());
+    const [date, setDate] = useState(new Date())
     const [paginationOffset, setPaginationOffset] = useState(0)
     const navigation = useNavigation();
     const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -24,12 +24,12 @@ const DashboardScreen = () => {
 
     const formattedDate = `${dayOfWeek}, ${month} ${day}, ${year}`;
     const printTimes = (start:number, end:number) => {
-        const baseRem = 16 //one rem is 16 pixels 
+        const baseRem = 16; //one rem is 16 pixels 
         const spacing = 2.5;
         let counter = 1;
         let timeArray = []
         for(let i = start; i <= end; i++){
-            timeArray.push(<Text className={"text-center"} style={{ marginTop: baseRem * spacing }}>{i}:00</Text>)
+            timeArray.push(<Text className={"text-center"} style={{ marginTop: baseRem * spacing,lineHeight: 24 }}>{i}:00</Text>)
             counter++;
         }
 
@@ -100,7 +100,9 @@ const DashboardScreen = () => {
                     {printTimes(5, 21)}
                 </View>
                 <View className="border-l w-4/5 relative">
-                    <ScheduleComponent className="" name="PDS" startTime="10:00" endTime="12:00"/>
+                    <ScheduleComponent className="" name="PDS" startTime="5:00" endTime="6:00"/>
+                    <ScheduleComponent className="" name="PDS" startTime="6:00" endTime="7:00"/>
+                    <ScheduleComponent className="" name="PDS" startTime="20:00" endTime="21:00"/>
 
                 </View>
             </View>
