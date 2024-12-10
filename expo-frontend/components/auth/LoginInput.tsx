@@ -2,8 +2,7 @@ import {View, Text, Image, SafeAreaView, TextInput, Pressable, ScrollView} from 
 import { LinearGradient } from "expo-linear-gradient";
 import {router} from "expo-router"
 import { useEffect, useState } from "react";
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 const LoginInput = () => {
@@ -37,8 +36,6 @@ const LoginInput = () => {
             return;
         }
 
-        
-
         await fetch(process.env.EXPO_PUBLIC_AUTH_SERVER + '/login', {
             method: 'POST', // Specifies a POST request
             headers: {
@@ -57,7 +54,7 @@ const LoginInput = () => {
                   } catch (error) {
                     console.error('Error saving data:', error);
                   }
-                router.push({ pathname: "/DashboardScreen", params: { registeredEmail : email } }); //make this jwt
+                router.push({ pathname: "/DashboardScreen", params: { jwt : data.jwt } }); //make this jwt
             }
           })
     }
@@ -68,11 +65,11 @@ const LoginInput = () => {
             
                 <Text className='text-[1.33rem] font-bold'>Login to NITsync</Text>
 
-                <SafeAreaView className='flex-1 items-center w-[22rem] max-h-11 mt-5 rounded-full bg-white shadow-sm justify-center'>
-                    <TextInput className='h-full w-11/12 px-2 py-2 text-lg leading-tight' onChangeText={(text) => handleEmailChange(text)} placeholder="Email" placeholderTextColor={"black"} />
+                <SafeAreaView className='flex-1 items-center w-[22rem] min-h-11 mt-5 rounded-full p-2 bg-white shadow-sm justify-center'>
+                    <TextInput className='h-full w-11/12 px-2 text-lg leading-tight' onChangeText={(text) => handleEmailChange(text)} placeholder="Email" placeholderTextColor={"black"} />
                 </SafeAreaView>
 
-                <SafeAreaView className='flex-1 items-center w-[22rem] min-h-12 max-h-12 mt-10 rounded-full p-2 bg-white shadow-sm justify-center'>
+                <SafeAreaView className='flex-1 items-center w-[22rem] min-h-11 mt-10 rounded-full p-2 bg-white shadow-sm justify-center'>
                     <TextInput className='w-11/12 px-2 text-lg leading-tight' onChangeText={(text) => handlePassChange(text)} placeholder="Password" placeholderTextColor={"black"} />
                 </SafeAreaView>
 
@@ -83,10 +80,10 @@ const LoginInput = () => {
                     </Pressable>
                 </SafeAreaView>
 
-                <View className='mt-10 rounded-full shadow-sm'>
-                    <LinearGradient   colors={["#15C020", "#00FF11"]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={{borderRadius: 9999}} >
+                <View className='mt-10 rounded-full shadow-sm max-h-11 min-h-11'>
+                    <LinearGradient   colors={["#15C020", "#00FF11"]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={{borderRadius: 9999, height: 44}} >
                     <SafeAreaView className='flex-1 items-center w-[22rem] max-h-11 justify-center'>
-                         <Pressable className='flex items-center justify-center h-full w-full' onPress={() => router.push({ pathname: "/DashboardScreen", params: { registeredEmail : "dr" } })}>
+                         <Pressable className='flex items-center justify-center h-full w-full' onPress={() => handleLoginPress()}>
                             <Text className='text-white font-bold text-xl'>Login</Text>
                         </Pressable>
                     </SafeAreaView>

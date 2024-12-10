@@ -17,6 +17,8 @@ export default function CreateEventButton() {
   const [endTime, setEndTIme] = useState(new Date());
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
+  const [isLocked, setIsLocked] = useState(true);
+  const [errorMessage, setErrorMessage] = useState()
 
   const onChangeDate = (event : any, selectedDate : any) => {
     const currentDate = selectedDate;
