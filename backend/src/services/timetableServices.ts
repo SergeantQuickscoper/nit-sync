@@ -1,7 +1,8 @@
 import timetableDAO from "../dao/timetableDAO";
 import authDAO from "../dao/authDAO";
 import jwt from "jsonwebtoken";
-
+import { connectedUsers } from "../routes/socketRoutes";
+import { io } from "../index";
 class timetableServices{
 
     async validateCRandGetID(token){
@@ -36,7 +37,8 @@ class timetableServices{
             await timetableDAO.createSubject(uid, subjectName, description);
 
             //emit a server-update event to all connectedUsers in the class
-            
+            io.emit("subjectUpdate")
+            console.log("Subject was updated")
 
             //push notifications to all subject users
 

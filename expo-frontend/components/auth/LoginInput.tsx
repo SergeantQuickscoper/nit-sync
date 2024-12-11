@@ -50,7 +50,15 @@ const LoginInput = () => {
             }
             else{
                 try {
+                    let isCR;
+                    if(data.isCR){
+                        isCR = "true"
+                    }
+                    else{
+                        isCR = "false"
+                    }
                     await AsyncStorage.setItem("jwt", data.jwt);
+                    await AsyncStorage.setItem("isCR", isCR); // caveat that AsyncStorage should be strings
                   } catch (error) {
                     console.error('Error saving data:', error);
                   }

@@ -12,6 +12,8 @@ import { io } from 'socket.io-client';
 export default function subjects() {
   const [subjectList, setSubjectList] = useState([])
   const [refetch, setRefetch] = useState(1)
+  const [cr, setCR] = useState(false);
+  
   useFocusEffect(React.useCallback(() => {
     
     const getData = async() => {
@@ -25,7 +27,7 @@ export default function subjects() {
         console.log(error.message)
         return;
     }
-
+      console.log("Refetching")
       await fetch(process.env.EXPO_PUBLIC_AUTH_SERVER + '/getSubjects', {
         method: 'POST', // Specifies a POST request
         headers: {
@@ -44,14 +46,18 @@ export default function subjects() {
       })
     }
 
-    getData()
+    getData();
 
-    return () => {
-  };
   }, [refetch]))
 
   //this guy will look for server updates
   useFocusEffect(React.useCallback(() => {
+    const checkIsCR = async() => {
+      const isCR = await AsyncStorage.getItem("isCR");
+      if(isCR == "true"){
+          setCR(true)
+      }
+  }
     let token :any;
     const socketConnection = async() => {
       token = await AsyncStorage.getItem("jwt")
@@ -72,12 +78,15 @@ export default function subjects() {
 
           // Listen for server updates
         socket.on('subjectUpdate', (data) => {
-            console.log('Update received:', data);
-            setRefetch(refetch * -1);
+            console.log('Update received:', "Subject Added");
+            setRefetch((val) => val * -1);
+            console.log(refetch) // oscillator that keeps the updates coming
           });
         
         return socket;  
     }
+
+    checkIsCR()
 
     let socketObj : any;
 
@@ -104,7 +113,7 @@ export default function subjects() {
                 <Text className="font-bold text-lg">
                     Subjects
                 </Text>
-                <CreateSubjectButton />
+                {cr ? <CreateSubjectButton /> : <View className="w-[16px]"></View>}
       </View>
       <ScrollView >
         <View className='flex-1 flex-row flex-wrap mt-4'>

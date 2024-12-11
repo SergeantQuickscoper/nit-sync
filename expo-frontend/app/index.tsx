@@ -14,14 +14,15 @@ const LoginScreen = () => {
         const checkToken = async() => {
             try {
                 const token = await AsyncStorage.getItem('jwt');
-                if (token) {
+                const isCR = await AsyncStorage.getItem('isCR')
+                if (token && isCR != undefined) {
                   console.log('Token found:', token);
-                  router.push({ pathname: "/DashboardScreen", params: { registeredEmail : token } });
+                  router.push({ pathname: "/DashboardScreen", params: { registeredEmail : token, isCR: isCR} });
                 } else {
                   console.log('No token found');
                 }
               } catch (error) {
-                console.error('Error retrieving token', error);
+                console.error('Error retrieving token', error)
               }
         }
 

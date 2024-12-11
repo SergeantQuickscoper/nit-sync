@@ -14,6 +14,20 @@ class authServices{
         return false;
     }
 
+    async isCR(email){
+        try {
+            const {role} = await authDAO.isCR(email);
+            if(role.toLowerCase() == 'cr'){
+                return true;
+            }
+            else{
+                return false;
+            }
+        } catch (error) {
+            throw error;
+        }
+    }       
+
     //bad code quality combine two funcs in future?
     async alreadyExistsMain(email){
         const result = await authDAO.emailAlreadyExistsMain(email)

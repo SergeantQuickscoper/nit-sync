@@ -16,4 +16,6 @@ app.use(express.json())
 app.use(authRoutes);
 app.use(timetableRoutes);
 
+export { io };
+
 server.listen(process.env.PORT, () => console.log("Server is live on PORT " + process.env.PORT));

@@ -35,6 +35,15 @@ class authDAO{
 
     }
 
+    async isCR(email){
+        try {
+            const query = await db.select('role').from('user_auth').where('email', email);
+            return query[0];
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async getUserOTP(email):Promise<any>{
         try {
             //check for if email doesnt exist???

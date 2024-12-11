@@ -1,18 +1,20 @@
 import {View, Text, Image, SafeAreaView, TextInput, Pressable, ScrollView, ImageBackground } from "react-native"
 import { LinearGradient } from "expo-linear-gradient";
-import {router, useLocalSearchParams} from "expo-router"
+import {router, useFocusEffect, useLocalSearchParams} from "expo-router"
 import LogoAuth from "@/components/auth/LogoAuth";
 import OTPInput from "@/components/auth/OTPInput";
 import CompleteAccount from "@/components/auth/CompleteAccount";
 import { useNavigation } from "expo-router";
-import { useState } from "react";
+import React, { useState } from "react";
 import { DrawerActions } from "@react-navigation/native";
 import NavigationBar from "@/components/timetable/NavigationBar";
 import ScheduleComponent from "@/components/timetable/ScheduleComponent";
 import CreateEventButton from "@/components/timetable/CreateEventButton";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const DashboardScreen = () => {
     const [date, setDate] = useState(new Date())
     const [paginationOffset, setPaginationOffset] = useState(0)
+    const [cr, setCR] = useState(false);
     const navigation = useNavigation();
     const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -21,6 +23,17 @@ const DashboardScreen = () => {
     const month = months[date.getMonth()]; 
     const day = date.getDate(); 
     const year = date.getFullYear(); 
+
+    useFocusEffect(React.useCallback(() => {
+        const checkIsCR = async() => {
+            const isCR = await AsyncStorage.getItem("isCR");
+            if(isCR == "true"){
+                setCR(true)
+            }
+        }
+
+        checkIsCR()
+    }, []))
 
     const formattedDate = `${dayOfWeek}, ${month} ${day}, ${year}`;
     const printTimes = (start:number, end:number) => {
@@ -81,7 +94,7 @@ const DashboardScreen = () => {
                 <Text className="font-bold">
                     {formattedDate}
                 </Text>
-                <CreateEventButton />
+                {cr ? <CreateEventButton /> : <View className="w-[16px]"></View>}
             </View>  
             <View className="dateScroll flex-row justify-between mx-8 my-4">
                 <Pressable className="" onPress={handePrevious}>

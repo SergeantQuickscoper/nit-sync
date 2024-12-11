@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken"
 
-const connectedUsers = {}; //inshallah this one connectedUsers Objects scales
+export const connectedUsers = {}; //inshallah this one connectedUsers Objects scales
 
 export function setupSocketHandlers(io) {
     // authenticate JWTs
@@ -37,3 +37,5 @@ export function setupSocketHandlers(io) {
       });
     });
   }
+
+  

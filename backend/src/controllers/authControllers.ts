@@ -166,11 +166,13 @@ class authControllers{
             }
 
             const userJWT = await authServices.generateJWT(email)
+            const isCR = await authServices.isCR(email);
 
             res.send({
                 success: true,
                 message: "Your credentials have been verified. Welcome " + email,
-                jwt: userJWT
+                jwt: userJWT,
+                isCR: isCR
             })
 
 
