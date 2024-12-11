@@ -2,7 +2,7 @@ import { View, Text, Pressable, Modal } from 'react-native'
 import React, { useState } from 'react'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-export default function SubjectComponent({subjectID, name, description, joined}:any) {
+export default function SubjectComponent({subjectID, name, description, joined, cr}:any) {
   const [modalOpen, setModalOpen] = useState(false);
   return (
         <View className='rounded-lg bg-[#E26161] w-32 h-24 px-2 py-2 mx-3 my-2'>
@@ -18,11 +18,17 @@ export default function SubjectComponent({subjectID, name, description, joined}:
                         
                         <Text className='text-center mt-5 font-bold'>{name}</Text>
                         <Text className='text-center mt-3'>{description}</Text>
-                        <View className='bg-white mb-6 py-1 px-5 mt-4'>
+                        <View className='bg-white py-1 px-5 mt-4'>
                         <Pressable>
                             <Text className=''>Join</Text>
                         </Pressable>
+                        
                     </View>
+                    {cr ? (<View className='bg-white mb-6 py-1 px-5 mt-4'>
+                            <Pressable>
+                                <Text>Delete</Text>
+                            </Pressable>
+                    </View>) : <View className='mb-6'></View>}
                     </View>
                     
                 </View>

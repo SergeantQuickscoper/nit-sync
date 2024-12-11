@@ -6,7 +6,7 @@ export async function up(knex: Knex): Promise<void> {
         table.increments("subject_id").primary();
         table.string("subject_name").notNullable();
         table.string("description");
-        table.integer("created_by").notNullable().references("uid").inTable("user_auth")
+        table.integer("created_by").notNullable().references("uid").inTable("user_auth").onDelete("CASCADE")
         table.timestamps(true, true, false);
     })
 }

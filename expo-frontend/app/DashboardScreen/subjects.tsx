@@ -118,7 +118,7 @@ export default function subjects() {
       <ScrollView >
         <View className='flex-1 flex-row flex-wrap mt-4'>
             {subjectList.map((subject : any) => {
-              return <SubjectComponent name={subject.subject_name} id={subject.subject_id} description={subject.description}/>
+              return <SubjectComponent name={subject.subject_name} id={subject.subject_id} description={subject.description} cr={cr}/>
             })}
         </View>
       </ScrollView>
