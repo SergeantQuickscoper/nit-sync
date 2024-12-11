@@ -1,10 +1,102 @@
 import { View, Text, Pressable, Image } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import SubjectComponent from '@/components/timetable/SubjectComponent'
 import { ScrollView } from 'react-native-gesture-handler'
 import NavigationBar from '@/components/timetable/NavigationBar'
 import CreateSubjectButton from '@/components/timetable/CreateSubjectButton'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useFocusEffect } from '@react-navigation/native'
+import { io } from 'socket.io-client';
+
+
 export default function subjects() {
+  const [subjectList, setSubjectList] = useState([])
+  const [refetch, setRefetch] = useState(1)
+  useFocusEffect(React.useCallback(() => {
+    
+    const getData = async() => {
+      let token;
+      try {
+        token = await AsyncStorage.getItem('jwt');
+        if(!token){
+            throw Error("Token not found")
+        }
+    } catch (error : any) {
+        console.log(error.message)
+        return;
+    }
+
+      await fetch(process.env.EXPO_PUBLIC_AUTH_SERVER + '/getSubjects', {
+        method: 'POST', // Specifies a POST request
+        headers: {
+          'Content-Type': 'application/json', // Informs the server about the data format
+        },
+        body: JSON.stringify({jwt: token})
+      })
+      .then((res) => res.json())
+      .then(async(data) => {
+        if(data.success == false){
+            console.log(data.message)
+        }
+        else{
+            setSubjectList(data.subjectArray)
+        }
+      })
+    }
+
+    getData()
+
+    return () => {
+  };
+  }, [refetch]))
+
+  //this guy will look for server updates
+  useFocusEffect(React.useCallback(() => {
+    let token :any;
+    const socketConnection = async() => {
+      token = await AsyncStorage.getItem("jwt")
+      const socket = io(process.env.EXPO_PUBLIC_AUTH_SERVER, {
+        auth: {
+            jwt: token
+        }
+    });
+    
+    socket.on('connect', () => {
+        console.log('Connected to server');
+        socket.emit('message', 'Hello from client!');
+      })
+    
+    socket.on('connect_error', (error) => {
+    console.error('Connection error:', error.message);
+  });
+
+          // Listen for server updates
+        socket.on('subjectUpdate', (data) => {
+            console.log('Update received:', data);
+            setRefetch(refetch * -1);
+          });
+        
+        return socket;  
+    }
+
+    let socketObj : any;
+
+    (async() => {
+      socketObj = await socketConnection();
+    })();
+
+    return () => {
+      socketObj.disconnect();
+      console.log("Disconnected from the server")
+    }
+    
+
+    // this fucked up code needs fixing bad who knows how expensive this would be at scale
+
+
+  }, []))
+
+
   return (
     <View className='flex-1 bg-[#F7F7F7] border'>
       <View className="header mb-2 mt-14 flex-row justify-between mx-4 items-center">
@@ -16,10 +108,9 @@ export default function subjects() {
       </View>
       <ScrollView >
         <View className='flex-1 flex-row flex-wrap mt-4'>
-            <SubjectComponent name="PDS"/>
-            <SubjectComponent name="Engineering Physics"/>
-            <SubjectComponent name="PDS"/>
-            <SubjectComponent name="PDS"/>
+            {subjectList.map((subject : any) => {
+              return <SubjectComponent name={subject.subject_name} id={subject.subject_id} description={subject.description}/>
+            })}
         </View>
       </ScrollView>
       

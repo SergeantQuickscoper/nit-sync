@@ -17,7 +17,7 @@ export default function SubjectComponent({subjectID, name, description, joined}:
                         </View>
                         
                         <Text className='text-center mt-5 font-bold'>{name}</Text>
-                        <Text className='text-center mt-3'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam adipisci fuga, maiores veritatis tempora nesciunt eligendi, quo quibusdam molestias itaque ex, libero necessitatibus quod. Molestias ex fuga beatae laudantium voluptates.</Text>
+                        <Text className='text-center mt-3'>{description}</Text>
                         <View className='bg-white mb-6 py-1 px-5 mt-4'>
                         <Pressable>
                             <Text className=''>Join</Text>
