@@ -144,7 +144,7 @@ class timetableServices{
         try {
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
             const {uid} = await authDAO.emailToUID(decoded.email);
-            await timetableDAO.deleteSubjectByID(uid, subject_id);
+            await timetableDAO.leaveSubject(uid, subject_id);
         } catch (error) {
             throw error;
         }
@@ -155,6 +155,26 @@ class timetableServices{
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
             const {uid} = await authDAO.emailToUID(decoded.email);
             await timetableDAO.deleteEventByID(uid, event_id);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async getJoinedSubjects(token){
+        try {
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            const {uid} = await authDAO.emailToUID(decoded.email);
+            return await timetableDAO.getJoinedSubjects(uid);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async getAttendedEvents(token){
+        try {
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            const {uid} = await authDAO.emailToUID(decoded.email);
+            return await timetableDAO.getAttendedEvents(uid);
         } catch (error) {
             throw error;
         }

@@ -98,7 +98,7 @@ class authDAO{
 
 
         } catch (error) {
-            
+            throw error;
         }
     }
 

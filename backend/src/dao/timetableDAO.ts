@@ -137,6 +137,25 @@ class timetableDAO{
             throw error;
         }
     }
+
+    async getJoinedSubjects(uid){
+        try {
+            const query = await db.select("*").from("user_subject_selection").where("uid", uid)
+            console.log(query)
+            return query;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async getAttendedEvents(uid){
+        try {
+            const query = await db.select("*").from("user_event_attendance").where("uid", uid)
+            return query;
+        } catch (error) {
+            throw error;
+        }
+    }
 }
 
 const timetableDAOObj = new timetableDAO();

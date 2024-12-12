@@ -13,6 +13,8 @@ export default function subjects() {
   const [subjectList, setSubjectList] = useState([])
   const [refetch, setRefetch] = useState(1)
   const [cr, setCR] = useState(false);
+  const [joinedSubList, setJoinedSubList] = useState([])
+  
   
   useFocusEffect(React.useCallback(() => {
     
@@ -44,7 +46,29 @@ export default function subjects() {
             setSubjectList(data.subjectArray)
         }
       })
+
+      await fetch(process.env.EXPO_PUBLIC_AUTH_SERVER + '/getJoinedSubjects', {
+        method: 'POST', // Specifies a POST request
+        headers: {
+          'Content-Type': 'application/json', // Informs the server about the data format
+        },
+        body: JSON.stringify({jwt: token})
+      })
+      .then((res) => res.json())
+      .then(async(data) => {
+        if(data.success == false){
+            console.log(data.message)
+        }
+        else{
+            console.log("fetching joined wor")
+            console.log("Joined subjects: " +  data.joinedSubjectList)
+            setJoinedSubList(data.joinedSubjectList)
+        }
+      })
     }
+
+    
+    
 
     getData();
 
@@ -118,7 +142,16 @@ export default function subjects() {
       <ScrollView >
         <View className='flex-1 flex-row flex-wrap mt-4'>
             {subjectList.map((subject : any) => {
-              return <SubjectComponent name={subject.subject_name} id={subject.subject_id} description={subject.description} cr={cr}/>
+              console.log(subject)
+              let joined = false
+              let i : any;
+              //linear search
+              for(i of joinedSubList){
+                if(subject.subject_id == i.subject_id){
+                  joined = true;
+                }
+              }
+              return <SubjectComponent name={subject.subject_name} subjectID={subject.subject_id} description={subject.description} cr={cr} refresher={setRefetch} joined={joined}/>
             })}
         </View>
       </ScrollView>

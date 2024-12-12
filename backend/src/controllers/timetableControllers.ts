@@ -205,6 +205,43 @@ class timeTableControllers{
         }
     }
 
+    async getJoinedSubjects(req, res){
+        try {
+            const {jwt} = req.body
+            const joinedSubjectList = await timetableServices.getJoinedSubjects(jwt)
+            console.log("I am the final joined Subject list", joinedSubjectList)
+            res.send({
+                success: true,
+                message: "Fetched joined subjects",
+                joinedSubjectList: joinedSubjectList
+            })
+
+        } catch (error) {
+            res.status(400).send({
+                success: false, 
+                message: error.message
+            })
+        }
+    }
+
+    async getAttenededEvents(req, res){
+        try {
+            const {jwt} = req.body
+            const attendedEvents = await timetableServices.getAttendedEvents(jwt)
+            res.send({
+                success: true,
+                message: "Fetched joined events",
+                attendedEvents: attendedEvents
+            })
+
+        } catch (error) {
+            res.status(400).send({
+                success: false, 
+                message: error.message
+            })
+        }
+    }
+
 }
 
 const timetableControllerObj = new timeTableControllers()
