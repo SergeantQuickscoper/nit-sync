@@ -117,7 +117,7 @@ class timetableDAO{
                 throw Error("You haven't joined this subject")
             }
 
-            await db.table('user_subject_selection').del().where('subject_id', ).andWhere('uid', uid);
+            await db.table('user_subject_selection').del().where('subject_id', subject_id ).andWhere('uid', uid);
 
         } catch (error) {
             throw error;

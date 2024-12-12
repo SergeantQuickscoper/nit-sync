@@ -60,10 +60,9 @@ export default function subjects() {
             console.log(data.message)
         }
         else{
-            console.log("fetching joined wor")
             console.log("Joined subjects: " +  data.joinedSubjectList)
             setJoinedSubList(data.joinedSubjectList)
-        }
+;        }
       })
     }
 
