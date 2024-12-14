@@ -16,5 +16,7 @@ router.post("/deleteSubject", timeTableControllers.deleteSubject)
 router.post("/leaveSubject", timeTableControllers.leaveSubject)
 router.post("/deleteEvent", timeTableControllers.deleteEvent)
 router.post("/leaveEvent", timeTableControllers.leaveEvent)
+router.post("/createReoccuringEvent", timeTableControllers.createReoccuringEvent)
+router.post("/deleteReoccuringEvent", timeTableControllers.deleteReoccuringEvent)
 
 export default router;

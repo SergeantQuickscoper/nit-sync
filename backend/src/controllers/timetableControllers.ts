@@ -252,7 +252,7 @@ class timeTableControllers{
                 success: true,
                 message: "Weekly event succesfully created!"
             })
-            
+
         } catch (error) {
             res.status(400).send({
                 success: false, 
@@ -261,6 +261,25 @@ class timeTableControllers{
         }
         
 
+    }
+
+    async deleteReoccuringEvent(req, res){
+        try {
+            const {jwt, reoccuring_event_id} = req.body;
+            
+            await timetableServices.deleteReoccuringEvent(jwt, reoccuring_event_id);
+
+            res.send({
+                success: true,
+                message: "Weekly event succesfully deleted!"
+            })
+
+        } catch (error) {
+            res.status(400).send({
+                success: false, 
+                message: error.message
+            })
+        }
     }
 
 }

@@ -188,6 +188,15 @@ class timetableServices{
             throw error;
         }
     }
+
+    async deleteReoccuringEvent(token, reoccuring_event_id){
+        try {
+            const uid = await this.validateCRandGetID(token);
+            await timetableDAO.deleteReoccuringEvent(uid, reoccuring_event_id)
+        } catch (error) {
+            throw error;
+        }
+    }
 }
 
 const timetableServicesObj = new timetableServices();
