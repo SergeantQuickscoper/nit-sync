@@ -11,10 +11,12 @@ import NavigationBar from "@/components/timetable/NavigationBar";
 import ScheduleComponent from "@/components/timetable/ScheduleComponent";
 import CreateEventButton from "@/components/timetable/CreateEventButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+
 const DashboardScreen = () => {
     const [date, setDate] = useState(new Date())
     const [paginationOffset, setPaginationOffset] = useState(0)
     const [cr, setCR] = useState(false);
+    const [refresher, setRefresher] = useState(1); //refresher oscillator
     const navigation = useNavigation();
     const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -33,6 +35,10 @@ const DashboardScreen = () => {
         }
 
         checkIsCR()
+        
+        //establish a socket connection too
+
+
     }, []))
 
     const formattedDate = `${dayOfWeek}, ${month} ${day}, ${year}`;
@@ -77,6 +83,13 @@ const DashboardScreen = () => {
 
         return dateButtonArray;
     }
+
+    useFocusEffect(React.useCallback(() => {
+        //fetch events for the current date. 
+
+
+    }, [date, refresher]))
+
 
     //TODO in the future these guys should be handling animations
     const handeNext = () => {
