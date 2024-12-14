@@ -35,7 +35,7 @@ const DashboardScreen = () => {
         }
 
         checkIsCR()
-        
+
         //establish a socket connection too
 
 
@@ -85,7 +85,7 @@ const DashboardScreen = () => {
     }
 
     useFocusEffect(React.useCallback(() => {
-        //fetch events for the current date. 
+        //fetch events for the current date. //figure out (convert to ISOString)
 
 
     }, [date, refresher]))

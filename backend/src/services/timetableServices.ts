@@ -179,6 +179,15 @@ class timetableServices{
             throw error;
         }
     }
+
+    async createReoccuringEvent(token, eventName, description, subjectID, eventType, startTime, endTime, day){
+        try {
+            const uid = await this.validateCRandGetID(token);
+            await timetableDAO.createReoccuringEvent(uid, eventName, description, startTime, endTime, eventType, subjectID, day);
+        } catch (error) {
+            throw error;
+        }
+    }
 }
 
 const timetableServicesObj = new timetableServices();

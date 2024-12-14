@@ -242,6 +242,27 @@ class timeTableControllers{
         }
     }
 
+    async createReoccuringEvent(req, res){
+        try {
+            const {jwt, eventName, description, subjectID, eventType, startTime, endTime, day} = req.body;
+            
+            await timetableServices.createReoccuringEvent(jwt, eventName, description, subjectID, eventType, startTime, endTime, day);
+
+            res.send({
+                success: true,
+                message: "Weekly event succesfully created!"
+            })
+            
+        } catch (error) {
+            res.status(400).send({
+                success: false, 
+                message: error.message
+            })
+        }
+        
+
+    }
+
 }
 
 const timetableControllerObj = new timeTableControllers()

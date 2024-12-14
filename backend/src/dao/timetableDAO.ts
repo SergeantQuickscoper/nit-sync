@@ -156,6 +156,32 @@ class timetableDAO{
             throw error;
         }
     }
+
+    async createReoccuringEvent(author, eventName, description, start_time, end_time, eventType, subjectID, day){
+        day = day.toLowerCase();
+        try {
+            await db.table('reoccuring_events').insert({"reoccuring_event_name" : eventName, "subject_id" : subjectID, "reoccuring_event_desc" : description, "reoccuring_event_type" : eventType, "start_time" : start_time, "end_time" : end_time, "created_by" : author, "reoccuring_day": day})
+
+            //side effect which calculates every day the event occurs and adds it to (loop through every day in the semester???????? could be useful to calculate attendance)
+
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async deleteReoccuringEvent(author, reoccuringEventID){
+        //inshallah a cascade delete kills all the orphan events
+        try {
+            const check = await db.select("*").from("reoccuring_events").where("created_by", author).andWhere("reoccuring_event_id", reoccuringEventID);
+            if(check.length == 0){
+                throw Error("Specified Event doesnt exist or wasnt created by you");
+            }
+            await db.table("reoccuring_events").del().where("created_by", author).andWhere("reoccuring_event_id", reoccuringEventID);
+        } catch (error) {
+            throw error;
+        }   
+    }
+
 }
 
 const timetableDAOObj = new timetableDAO();
