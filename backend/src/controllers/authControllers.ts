@@ -1,9 +1,6 @@
 import authServices from "../services/authServices";
 
 class authControllers{
-    helloWorld(req, res){
-        res.send("Hello World!")
-    }
 
     async signup(req, res){
         try {

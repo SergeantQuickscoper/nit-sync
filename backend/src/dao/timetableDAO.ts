@@ -169,17 +169,50 @@ class timetableDAO{
         }
     }
 
+    //trust 
+    async updateEventsWithReoccuringEvents(author, eventName, description, start_time, end_time, event_Type, subjectID, day){
+        const daysOfWeek = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
+
+        
+        // need a sem start, and need a classwork end date, and list of public holidays (set in stone)
+        const semStart = new Date("2024-12-16"); //mark manually
+        const lastWorkingDay = new Date("2025-04-15") // mark manually
+
+        // loop through each day, excluding set holidays, this probably requires alot of manual handling (set job?) AND GIVE USER an OPTION TO update every event from the sem beginning to the end
+        for(let i = new Date(); i < lastWorkingDay; i.setDate(i.getDate() + 1))
+            //insert into events table the required event
+            if(day.toLowerCase() == daysOfWeek[i.getDay()]){
+
+                const currentDatePart = i.toISOString().split("T")[0];
+                const startTimePart = start_time.split("T")[1]; 
+                const endTimePart = end_time.split("T")[1];
+
+                const newStartTime = currentDatePart + "T" + startTimePart;
+                const newEndTime = currentDatePart + "T" + endTimePart;
+
+                this.createEvent(author, eventName, description, newStartTime, newEndTime, event_Type, subjectID)
+            }
+        
+        //
+        
+    }   
+
     async deleteReoccuringEvent(author, reoccuringEventID){
-        //inshallah a cascade delete kills all the orphan events
+        // so a new table 
+        //delete the view on the weekly timetable
         try {
-            const check = await db.select("*").from("reoccuring_events").where("created_by", author).andWhere("reoccuring_event_id", reoccuringEventID);
+            const check = await db.select("*").from("reoccuring_events_view").where("created_by", author).andWhere("reoccuring_event_id", reoccuringEventID);
             if(check.length == 0){
                 throw Error("Specified Event doesnt exist or wasnt created by you");
             }
-            await db.table("reoccuring_events").del().where("created_by", author).andWhere("reoccuring_event_id", reoccuringEventID);
+            await db.table("reoccuring_events_view").del().where("created_by", author).andWhere("reoccuring_event_id", reoccuringEventID);
         } catch (error) {
             throw error;
         }   
+
+        //side effect delete every event AFTER the current date..
+
+
     }
 
 }
