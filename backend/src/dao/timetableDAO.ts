@@ -79,6 +79,21 @@ class timetableDAO{
         }
     }
 
+    async getEventsForASubjectOnDay(subjectID, day){
+        try {
+            console.log(day)
+            const currDay = new Date(day)
+            let nextDay = new Date(day)
+            nextDay.setTime(nextDay.getTime() + 24 * 60 * 60 * 1000)
+            console.log(nextDay)
+            const query = await db.select("*").from("events").where("subject_id", subjectID).andWhereBetween("start_time", [currDay.toISOString(), nextDay.toISOString()]);
+            console.log("I work!")
+            return query; 
+        } catch (error) {
+            throw error;
+        }
+    }
+
     //TODO some more funcs to fill out here
 
     //wonder how deleting a subject works when people are part of (ON DELETE CASCADE???)

@@ -90,7 +90,7 @@ const LoginInput = () => {
 
                 <View className='mt-10 rounded-full shadow-sm max-h-11 min-h-11'>
                     <LinearGradient   colors={["#15C020", "#00FF11"]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={{borderRadius: 9999, height: 44}} >
-                    <SafeAreaView className='flex-1 items-center w-[22rem] max-h-11 justify-center'>
+                    <SafeAreaView className='flex-1 items-center w-[22rem] justify-center'>
                          <Pressable className='flex items-center justify-center h-full w-full' onPress={() => handleLoginPress()}>
                             <Text className='text-white font-bold text-xl'>Login</Text>
                         </Pressable>

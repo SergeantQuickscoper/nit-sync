@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.post("/createSubject", timeTableControllers.createSubject);
 router.post("/getSubjects", timeTableControllers.getSubjects);
+router.post("/getEventsOnDay", timeTableControllers.getTotalEventsOfSubjectOnDay)
 router.post("/getTotalEventsOfSubjectsUserIsPartOf", timeTableControllers.getTotalEventsOfSubjectsUserIsPartOf)
 router.post("/getJoinedSubjects", timeTableControllers.getJoinedSubjects)
 router.post('/getAttendedEvents', timeTableControllers.getAttenededEvents)

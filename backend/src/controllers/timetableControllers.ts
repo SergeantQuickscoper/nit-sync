@@ -46,6 +46,28 @@ class timeTableControllers{
         }
     }
 
+    async getTotalEventsOfSubjectOnDay(req, res){
+        try {
+            const {jwt, day} = req.body; // day is a JS date object
+            if(!jwt){
+                throw Error("No jwt")
+            }
+            const subjectEventsObj = await timetableServices.getEventsOnDay(jwt, day)
+            console.log(subjectEventsObj)
+            res.send({
+                success: true,
+                message: "Successfully fetched available events",
+                subjectEventsObject: subjectEventsObj
+            })
+            
+        } catch (error) {
+            res.status(400).send({
+                success: false,
+                message: error.message
+            })
+        }
+    }
+
     async getTotalEventsOfSubjectsUserIsPartOf(req, res){
         try {
             const {jwt} = req.body;
@@ -128,7 +150,7 @@ class timeTableControllers{
         } catch (error) {
             res.status(400).send({
                 success: false, 
-                message: error
+                message: error.message
             })
         }
     }

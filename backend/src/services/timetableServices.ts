@@ -103,6 +103,26 @@ class timetableServices{
         }
     }
 
+    async getEventsOnDay(token, day){
+        try {
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            const {uid} = await authDAO.emailToUID(decoded.email);
+            const userSubjectList = await timetableDAO.getSubjectsUserJoined(uid);
+            let subjectEventObj = {};
+            let count  = 0;
+            for(let i of userSubjectList){
+                const subjectName = userSubjectList[count].subject_id;
+                subjectEventObj[subjectName] = await timetableDAO.getEventsForASubjectOnDay(subjectName, day)
+            }
+
+            return subjectEventObj;
+
+        } catch (error) {
+            throw error;
+        }
+        
+    }
+
     async getTotalEventsOfSubjectsUserIsPartOf(token){
         try {
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -126,6 +146,11 @@ class timetableServices{
         try {
             const uid = await this.validateCRandGetID(token)
             await timetableDAO.deleteSubjectByID(uid, subjectID)
+
+            //emit a server-update event to all connectedUsers in the class
+            io.emit("subjectUpdate")
+            console.log("Subject was updated")
+
         } catch (error) {
             
         }

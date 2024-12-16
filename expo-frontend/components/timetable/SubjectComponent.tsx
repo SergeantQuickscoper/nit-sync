@@ -100,7 +100,7 @@ export default function SubjectComponent({subjectID, name, description, joined, 
 
   return (
         <View className='rounded-lg w-32 h-24 px-2 py-2 mx-3 my-2' style={{backgroundColor: joined ? "#00FF11":"#E26161"}}>
-            <Modal visible={modalOpen} className='' transparent={true}>
+            <Modal visible={modalOpen} className='' transparent={true} animationType="fade">
                 <View className='flex-1 justify-center items-center' style={{backgroundColor: "rgba(0, 0, 0, 0.5)"}}>
                     <View className='bg-slate-400 w-72 rounded-lg flex-col items-center justify-between px-4 relative'>
                         <View className='absolute top-2 left-2'>
