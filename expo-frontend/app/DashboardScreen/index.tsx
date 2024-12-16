@@ -13,6 +13,7 @@ import CreateEventButton from "@/components/timetable/CreateEventButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const DashboardScreen = () => {
+
     const [date, setDate] = useState(new Date())
     const [paginationOffset, setPaginationOffset] = useState(0)
     const [cr, setCR] = useState(false);
@@ -57,16 +58,16 @@ const DashboardScreen = () => {
 
     const handelDateButtonPress = (newDate:Date) => {
         setDate(newDate)
-        setPaginationOffset(0)
     }
 
     const printDateButtons = () => {
         let dateButtonArray = [];
         for(let i = 0; i < 8; i++){
-            let newDate = new Date(date);
+            let currDate = new Date()
+            let newDate = new Date();
             //TODO fix this fucked up code
-            newDate.setDate(date.getDate() + i + paginationOffset)
-            if(i == 0 && paginationOffset == 0){
+            newDate.setDate(currDate.getDate() + i + paginationOffset)
+            if(newDate.toDateString() == date.toDateString()){
                 dateButtonArray.push(<Pressable className="mx-[0.6rem]  items-center" onPress={() => handelDateButtonPress(newDate)}>
                         <ImageBackground source={require("@/assets/images/currentDateBG.png")} resizeMode="contain"> 
                         <Text className="text-white font-bold p-1 w-7 items-center text-center">{newDate.getDate()}</Text>
