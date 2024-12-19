@@ -19,7 +19,7 @@ const DashboardScreen = () => {
     const [paginationOffset, setPaginationOffset] = useState(0)
     const [eventsList, setEventsList] = useState([])
     const [cr, setCR] = useState(false);
-    const [eventsJoinList, setEventsJoinList] = useState([])
+    const [eventsJoinList, setEventsJoinList] = useState()
     const [refetch, setRefetch] = useState(1); //refresher oscillator
     const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -59,7 +59,37 @@ const DashboardScreen = () => {
                 console.log(data.message)
               }
               else {
-                  console.log(data.subjectEventsObject)
+                  const object = data.subjectEventsObject
+                  let dayEvents : any = []
+                  for(let i in object){
+                    if (object.hasOwnProperty(i)) {
+                        for(let j of object[i]){
+                            // convert incoming utc time to ist (add 5 and a half hours to it)
+                            const startTime = new Date(j.start_time);
+                            const endTime = new Date(j.end_time);
+                            startTime.setTime(startTime.getTime() + 5.5 * 60 * 60 * 1000)
+                            endTime.setTime(endTime.getTime() + 5.5 * 60 * 60 * 1000)
+                            let startISO = startTime.toISOString().split("T")[1]
+                            let endISO  = endTime.toISOString().split("T")[1]
+                            if(startISO[0] == '0'){
+                                startISO = startISO.slice(1, 5)
+                            }
+                            else{
+                                startISO = startISO.slice(0, 5)
+                            }
+                            if(endISO[0] == '0'){
+                                endISO = endISO.slice(1, 5)
+                            }
+                            else{
+                                endISO = endISO.slice(0, 5)
+                            }
+
+                            dayEvents.push(<ScheduleComponent name={j.event_name} startTime={startISO} endTime={endISO} subjectID={j.subject_id} description={j.event_desc}/>)
+                        }
+                      }
+                  }
+
+                  setEventsList(dayEvents)
               }
             })
       
@@ -223,9 +253,7 @@ const DashboardScreen = () => {
                     {printTimes(5, 21)}
                 </View>
                 <View className="border-l w-4/5 relative">
-                    <ScheduleComponent className="" name="PDS" startTime="5:00" endTime="6:00"/>
-                    <ScheduleComponent className="" name="PDS" startTime="6:00" endTime="7:00"/>
-                    <ScheduleComponent className="" name="PDS" startTime="20:00" endTime="21:00"/>
+                    {eventsList}
                 </View>
             </View>
             </ScrollView>

@@ -81,10 +81,11 @@ class timetableDAO{
 
     async getEventsForASubjectOnDay(subjectID, day){
         try {
-            console.log(day)
             const currDay = new Date(day)
+            currDay.setHours(0, 0, 0, 0)
             let nextDay = new Date(day)
             nextDay.setTime(nextDay.getTime() + 24 * 60 * 60 * 1000)
+            nextDay.setHours(0, 0, 0, 0)
             console.log(nextDay)
             const query = await db.select("*").from("events").where("subject_id", subjectID).andWhereBetween("start_time", [currDay.toISOString(), nextDay.toISOString()]);
             console.log("I work!")
