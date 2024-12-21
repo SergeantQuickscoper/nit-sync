@@ -28,7 +28,8 @@ export default function _layout() {
           name="weekView" 
           options={{
             drawerLabel: 'Week View',
-            title:"Week View"
+            title:"Week View",
+            headerShown: false
           }}
         />
         <Drawer.Screen
