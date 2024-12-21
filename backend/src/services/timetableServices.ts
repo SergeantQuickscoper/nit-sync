@@ -161,8 +161,10 @@ class timetableServices{
         try {
             const uid = await this.validateCRandGetID(token)
             await timetableDAO.deleteEventByID(uid, subjectID)
+            io.emit("eventUpdate")
+            console.log("Event was updated")
         } catch (error) {
-            
+            throw error;
         }
     }
 

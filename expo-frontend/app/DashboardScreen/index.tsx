@@ -16,7 +16,7 @@ import { io } from "socket.io-client";
 const DashboardScreen = () => {
     const [subArrProp, setsubArrProp] = useState([])
     const [date, setDate] = useState(new Date())
-    const [paginationOffset, setPaginationOffset] = useState(0)
+    const [paginationOffset, setPaginationOffset] = useState(0);
     const [eventsList, setEventsList] = useState([])
     const [cr, setCR] = useState(false);
     const [eventsJoinList, setEventsJoinList] = useState()
@@ -84,7 +84,7 @@ const DashboardScreen = () => {
                                 endISO = endISO.slice(0, 5)
                             }
 
-                            dayEvents.push(<ScheduleComponent name={j.event_name} startTime={startISO} endTime={endISO} subjectID={j.subject_id} description={j.event_desc}/>)
+                            dayEvents.push(<ScheduleComponent name={j.event_name} startTime={startISO} endTime={endISO} subjectID={j.subject_id} description={j.event_desc} cr={cr} token={token} eventID = {j.event_id} refresher={setRefetch}/>)
                         }
                       }
                   }

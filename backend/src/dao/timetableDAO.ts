@@ -119,7 +119,7 @@ class timetableDAO{
                 throw Error("Specified Event doesnt exist or wasnt created by you")
             }
 
-            await db.table('events').del().where('events', event_id).andWhere('created_by', uid);
+            await db.table('events').del().where('event_id', event_id).andWhere('created_by', uid);
 
         } catch (error) {
             throw error;
