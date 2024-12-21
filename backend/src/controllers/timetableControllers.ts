@@ -140,7 +140,7 @@ class timeTableControllers{
         try {
             const {jwt, eventName, description, subjectID, eventType, startTime, endTime} = req.body;
             //check for if all conditions not passed
-
+            console.log(subjectID)
             await timetableServices.createEvent(jwt, eventName, description, subjectID, eventType, startTime, endTime);
 
             res.send({

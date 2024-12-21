@@ -14,7 +14,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { io } from "socket.io-client";
 
 const DashboardScreen = () => {
-
+    const [subArrProp, setsubArrProp] = useState([])
     const [date, setDate] = useState(new Date())
     const [paginationOffset, setPaginationOffset] = useState(0)
     const [eventsList, setEventsList] = useState([])
@@ -122,11 +122,35 @@ const DashboardScreen = () => {
             if(isCR == "true"){
                 setCR(true)
             }
+
         }
 
         let token :any;
         const socketConnection = async() => {
         token = await AsyncStorage.getItem("jwt")
+        await fetch(process.env.EXPO_PUBLIC_AUTH_SERVER + '/getSubjects', {
+            method: 'POST', // Specifies a POST request
+            headers: {
+              'Content-Type': 'application/json', // Informs the server about the data format
+            },
+            body: JSON.stringify({jwt: token})
+          })
+          .then((res) => res.json())
+          .then(async(data) => {
+            if(data.success == false){
+                console.log(data.message)
+            }
+            else{
+                console.log("I am the create event button")
+                console.log(data.subjectArray)
+                const subjectArrProp : any = []
+                for(let i of data.subjectArray){
+                    subjectArrProp.push({label: i.subject_name, value: i.subject_id})
+                }
+                setsubArrProp(subjectArrProp)
+            }
+          })
+        console.log("useFocusEffect works")
         const socket = io(process.env.EXPO_PUBLIC_AUTH_SERVER, {
             auth: {
                 jwt: token
@@ -145,7 +169,7 @@ const DashboardScreen = () => {
 
           // Listen for server updates
         socket.on('eventUpdate', (data : any) => {
-            console.log('Update received:', "Subject Added");
+            console.log('Update received:', "Event Added");
             setRefetch((val) => val * -1);
             console.log(refetch) // oscillator that keeps the updates coming
           });
@@ -226,7 +250,6 @@ const DashboardScreen = () => {
     const handePrevious = () => {
         setPaginationOffset(paginationOffset - 8)
     }
-    const params = useLocalSearchParams();    
     return(
         <View className='flex-1 bg-[#F7F7F7]'>
             <View className="header mb-2 mt-14 flex-row justify-between mx-4 items-center">
@@ -234,7 +257,7 @@ const DashboardScreen = () => {
                 <Text className="font-bold">
                     {formattedDate}
                 </Text>
-                {cr ? <CreateEventButton /> : <View className="w-[16px]"></View>}
+                {true ? <CreateEventButton subjectDropdown={subArrProp}/> : <View className="w-[16px]"></View>}
             </View>  
             <View className="dateScroll flex-row justify-between mx-8 my-4">
                 <Pressable className="" onPress={handePrevious}>

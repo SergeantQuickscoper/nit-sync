@@ -70,7 +70,8 @@ class timetableServices{
             await timetableDAO.createEvent(uid, eventName, description, startTime, endTime, eventType, subjectID);
 
             //emit a server-update event to all connectedUsers in the subject 
-
+            io.emit("eventUpdate")
+            console.log("Event was updated")
 
             //push notifications to all subject users
 
