@@ -61,13 +61,6 @@ export default function ReooccuringScheduleComponent({key, name, subjectID, desc
                         <Text className='text-center mt-5 font-bold'>{name}</Text>
                         <Text className='text-center mt-3'>{description}</Text>
                         <View className='mb-6 py-1 px-5 mt-4'>
-                        {
-                            !attended ? (<Pressable className='bg-white py-1 px-5' onPress={handleEventAttend}>
-                                <Text className=''>Mark as attended</Text>
-                            </Pressable>) : (<Pressable onPress={handleEventLeave}>
-                                <Text className=''>Mark as unattended</Text>
-                            </Pressable>)
-                        }
 
                         {cr ? (<View className='bg-white mb-6 py-1 px-5 mt-4'>
                                                     <Pressable onPress={handleEventDeletion}>
@@ -80,8 +73,9 @@ export default function ReooccuringScheduleComponent({key, name, subjectID, desc
                 </View>
         </Modal>
         <Pressable onPress={() => setModalOpen(true)}>
-        <View className="bg-[#56A3FA] absolute rounded-lg border overflow-hidden" style={{top: requiredMargin, height: requiredHeight}}> 
-            <Text className='text-white font-bold'>{name} - {startTimeConvert} to {endTimeConvert}</Text>
+        <View className="bg-[#56A3FA] absolute rounded-lg border overflow-hidden flex-col justify-center items-center w-full" style={{top: requiredMargin, height: requiredHeight}}> 
+            <Text className='text-white'>{name}</Text>
+            <Text className='text-white font-bold text-xs'>{startTimeConvert.split(":")[0]} - {endTimeConvert.split(":")[0]}</Text>
         </View>
         </Pressable>
     </View>

@@ -180,7 +180,7 @@ export default function CreateReoccuringEvent({subjectDropdown} : any) {
                                     selectedTextStyle={styles.selectedTextStyle}
                                     inputSearchStyle={styles.inputSearchStyle}
                                     iconStyle={styles.iconStyle}
-                                    data={[{label: "Monday", value: "class"}, {label: "Tuesday", value: "minor"}, {label: "Wednesday", value: "assignment"}, {label: "Wednesday", value: "assignment"}, {label: "Thursday", value: "assignment"}, {label: "Saturday", value: "assignment"}, {label: "Sunday", value: "assignment"}]}
+                                    data={[{label: "Monday", value: "monday"}, {label: "Tuesday", value: "tuesday"}, {label: "Wednesday", value: "wednesday"}, {label: "Thursday", value: "thursday"}, {label: "Saturday", value: "saturday"}, {label: "Sunday", value: "sunday"}]}
                                     search
                                     maxHeight={300}
                                     labelField="label"

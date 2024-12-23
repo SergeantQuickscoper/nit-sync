@@ -22,9 +22,9 @@ class timetableDAO{
     
 
     //TODO possible vulnerability here technically any cr could change the events of other crs if they know the subjectID??? some validation func shud fix this bs
-    async createEvent(author, eventName, description, start_time, end_time, eventType, subjectID){
+    async createEvent(author, eventName, description, start_time, end_time, eventType, subjectID, reoccuring_event_id=null){
         try {
-            await db.table('events').insert({"event_name" : eventName, "subject_id" : subjectID, "event_desc" : description, "event_type" : eventType, "start_time" : start_time, "end_time" : end_time, "created_by" : author})
+            await db.table('events').insert({"event_name" : eventName, "subject_id" : subjectID, "event_desc" : description, "event_type" : eventType, "start_time" : start_time, "end_time" : end_time, "created_by" : author, "reoccuring_event_id": reoccuring_event_id})
         } catch (error) {
             throw error;
         }
@@ -176,17 +176,21 @@ class timetableDAO{
     async createReoccuringEvent(author, eventName, description, start_time, end_time, eventType, subjectID, day){
         day = day.toLowerCase();
         try {
+            //BEFORE INSERTING DO AN OVERLAP CHECK HERE
+
             await db.table('reoccuring_events').insert({"reoccuring_event_name" : eventName, "subject_id" : subjectID, "reoccuring_event_desc" : description, "reoccuring_event_type" : eventType, "start_time" : start_time, "end_time" : end_time, "created_by" : author, "reoccuring_day": day})
-
+            await db.table('reoccuring_event_view').insert({"reoccuring_event_view_name" : eventName, "subject_id" : subjectID, "reoccuring_event_view_desc" : description, "reoccuring_event_view_type" : eventType, "start_time" : start_time, "end_time" : end_time, "created_by" : author, "reoccuring_day": day})
+            const query = await db.select("reoccuring_event_id").from("reoccuring_events").where("start_time", start_time).andWhere("end_time", end_time).andWhere("reoccuring_day", day);
+            const {reoccuring_event_id} = query[0];
             //side effect which calculates every day the event occurs and adds it to (loop through every day in the semester???????? could be useful to calculate attendance)
-
+            this.updateEventsWithReoccuringEvents(author, eventName, description, start_time, end_time, eventType, subjectID, day, reoccuring_event_id)
         } catch (error) {
             throw error;
         }
     }
 
     //trust 
-    async updateEventsWithReoccuringEvents(author, eventName, description, start_time, end_time, event_Type, subjectID, day){
+    async updateEventsWithReoccuringEvents(author, eventName, description, start_time, end_time, event_Type, subjectID, day, reoccuring_event_id){
         const daysOfWeek = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
 
         
@@ -198,7 +202,7 @@ class timetableDAO{
         for(let i = new Date(); i < lastWorkingDay; i.setDate(i.getDate() + 1))
             //insert into events table the required event
             if(day.toLowerCase() == daysOfWeek[i.getDay()]){
-
+                console.log("creating event!!!")
                 const currentDatePart = i.toISOString().split("T")[0];
                 const startTimePart = start_time.split("T")[1]; 
                 const endTimePart = end_time.split("T")[1];
@@ -206,7 +210,7 @@ class timetableDAO{
                 const newStartTime = currentDatePart + "T" + startTimePart;
                 const newEndTime = currentDatePart + "T" + endTimePart;
 
-                this.createEvent(author, eventName, description, newStartTime, newEndTime, event_Type, subjectID)
+                this.createEvent(author, eventName, description, newStartTime, newEndTime, event_Type, subjectID, reoccuring_event_id)
             }
         
         //
@@ -217,11 +221,11 @@ class timetableDAO{
         // so a new table 
         //delete the view on the weekly timetable
         try {
-            const check = await db.select("*").from("reoccuring_events_view").where("created_by", author).andWhere("reoccuring_event_id", reoccuringEventID);
+            const check = await db.select("*").from("reoccuring_events_view").where("created_by", author).andWhere("reoccuring_event_view_id", reoccuringEventID);
             if(check.length == 0){
                 throw Error("Specified Event doesnt exist or wasnt created by you");
             }
-            await db.table("reoccuring_events_view").del().where("created_by", author).andWhere("reoccuring_event_id", reoccuringEventID);
+            await db.table("reoccuring_events_view").del().where("created_by", author).andWhere("reoccuring_event_view_id", reoccuringEventID);
         } catch (error) {
             throw error;
         }   
