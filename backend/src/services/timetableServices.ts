@@ -109,11 +109,13 @@ class timetableServices{
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
             const {uid} = await authDAO.emailToUID(decoded.email);
             const userSubjectList = await timetableDAO.getSubjectsUserJoined(uid);
+            console.log(userSubjectList)
             let subjectEventObj = {};
             let count  = 0;
             for(let i of userSubjectList){
                 const subjectName = userSubjectList[count].subject_id;
                 subjectEventObj[subjectName] = await timetableDAO.getEventsForASubjectOnDay(subjectName, day)
+                count++;
             }
 
             return subjectEventObj;
@@ -134,6 +136,7 @@ class timetableServices{
             for(let i of userSubjectList){
                 const subjectName = userSubjectList[count].subject_id;
                 subjectEventObj[subjectName] = await timetableDAO.getEventsForASubject(subjectName)
+                count++;
             }
 
             return subjectEventObj;

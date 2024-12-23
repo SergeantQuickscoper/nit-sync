@@ -34,6 +34,7 @@ export default function CreateEventButton({subjectDropdown} : any) {
 
   const onChangeDate = (event : any, selectedDate : any) => {
     setDateShowAndroidPicker(false)
+    console.log(selectedDate)
     const currentDate = selectedDate;
     setDate(currentDate);
   };

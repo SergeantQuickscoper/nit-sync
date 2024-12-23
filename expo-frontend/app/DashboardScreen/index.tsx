@@ -60,6 +60,7 @@ const DashboardScreen = () => {
               }
               else {
                   const object = data.subjectEventsObject
+                  console.log(object)
                   let dayEvents : any = []
                   for(let i in object){
                     if (object.hasOwnProperty(i)) {
@@ -257,7 +258,7 @@ const DashboardScreen = () => {
                 <Text className="font-bold">
                     {formattedDate}
                 </Text>
-                {true ? <CreateEventButton subjectDropdown={subArrProp}/> : <View className="w-[16px]"></View>}
+                {cr ? <CreateEventButton subjectDropdown={subArrProp}/> : <View className="w-[16px]"></View>}
             </View>  
             <View className="dateScroll flex-row justify-between mx-8 my-4">
                 <Pressable className="" onPress={handePrevious}>

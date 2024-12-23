@@ -1,6 +1,10 @@
 import db from "../db/db";
 
 class timetableDAO{
+
+    semStart = new Date("2024-12-16"); //mark manually
+    lastWorkingDay = new Date("2025-04-15") // mark manually
+
     async createSubject(author, subjectName, subjectDescription){
         try {
             const check = await db.select('*').from('subjects').where('subject_name', subjectName).andWhere('created_by', author);
@@ -231,7 +235,8 @@ class timetableDAO{
         }   
 
         //side effect delete every event AFTER the current date..
-
+        const currDate = new Date();
+        await db.table("events").del().where("reoccuring_event_id", reoccuringEventID).andWhere("created_by", author).andWhereBetween("start_time", [currDate, this.lastWorkingDay]);
 
     }
 
