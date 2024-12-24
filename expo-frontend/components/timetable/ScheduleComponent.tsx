@@ -1,5 +1,5 @@
 import { View, Text, Pressable, Modal, Platform } from 'react-native'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import React from 'react'
 
 export default function ScheduleComponent({key, name, subjectID, description, startTime, endTime, type, cr, token, refresher, eventID} : any) {
@@ -11,10 +11,14 @@ export default function ScheduleComponent({key, name, subjectID, description, st
     const baseMargin = 40;
     const lineHeight = (Platform.OS == "ios") ? 21.4 : 24; //24 px is set in the other file but IOS is fucking weird and it doesnt work as well?
     const fontsize = 16;
-    const requiredMargin = baseMargin * (startTimeConvert.split(":")[0] - 4) + lineHeight*(2*(startTimeConvert.split(":")[0] - 5) + 1)/2
-    const requiredHeight = ((endTimeConvert.split(":")[0] + endTimeConvert.split(":")[1]/60) - (startTimeConvert.split(":")[0] + startTimeConvert.split(":")[1]/60)) * (baseMargin + lineHeight)/10;
+    const startCoeff = (Number(startTimeConvert.split(":")[0]) + Number(startTimeConvert.split(":")[1])/60)
+    const endCoeff = (Number(endTimeConvert.split(":")[0]) + Number(endTimeConvert.split(":")[1])/60)
+    const requiredMargin = baseMargin * (startCoeff - 4) + lineHeight*(2*(startCoeff - 5) + 1)/2
+    const requiredHeight = (endCoeff - startCoeff) * (baseMargin + lineHeight);
     
-    
+    useEffect(() => {
+        console.log(endCoeff)
+    }, [])
     const handleEventDeletion = async() => {
         //call delete event endpoint here
         await fetch(process.env.EXPO_PUBLIC_AUTH_SERVER + '/deleteEvent', {
@@ -39,7 +43,7 @@ export default function ScheduleComponent({key, name, subjectID, description, st
     }
 
     const handleEventAttend = () => {
-        
+        console.log("Start"  + startTime, " End: " + endTime)
     }
 
     const handleEventLeave = () => {
