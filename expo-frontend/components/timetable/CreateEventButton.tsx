@@ -30,24 +30,30 @@ export default function CreateEventButton({subjectDropdown} : any) {
   const [isLocked, setIsLocked] = useState(false);
   const [errorMessage, setErrorMessage] = useState()
 
-  
-
+  useEffect(() => {
+    console.log("Start " + startTime, " End " + endTime)
+  }, [date, startTime, endTime])
   const onChangeDate = (event : any, selectedDate : any) => {
     setDateShowAndroidPicker(false)
     console.log(selectedDate)
-    const currentDate = selectedDate;
+    let currentDate = new Date(selectedDate);;
+    startTime.setFullYear(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate());
+    endTime.setFullYear(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate());
     setDate(currentDate);
   };
 
   const onChangeStartTime = (event : any, selectedDate : any) => {
     setShowStartTimeAndroidPicker(false)
-    const currentDate = selectedDate;
+    let currentDate = new Date(selectedDate);
+    currentDate.setFullYear(date.getFullYear(), date.getMonth(), date.getDate());
     setStartTime(currentDate);
   };
 
   const onChangeEndTime = (event : any, selectedDate : any) => {
     setShowEndTimeAndroidPicker(false)
-    const currentDate = selectedDate;
+    let currentDate = new Date(selectedDate);
+    currentDate.setFullYear(date.getFullYear(), date.getMonth(), date.getDate());
+    console.log(currentDate)
     setEndTIme(currentDate);
   };
 
