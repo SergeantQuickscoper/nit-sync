@@ -11,6 +11,12 @@ import ScheduleComponent from '@/components/timetable/ScheduleComponent'
 import ReooccuringScheduleComponent from '@/components/timetable/ReoccuringScheduleComponent'
 export default function weekView() {
   const [cr, setCR] = useState(false)
+  const [mondayEvents, setMondayEvents] = useState([])
+  const [tuesdayEvents, setTuesdayEvents] = useState([])
+  const [thursdayEvents, setThursdayEvents] = useState([])
+  const [fridayEvents, setFridayEvents] = useState([])
+  const [saturdayEvents, setSaturdayEvents] = useState([])
+  const [sundayEvents, setSundayEvents] = useState([])
   const [refetch, setRefetch] = useState(1); //refresher oscillator
   const [subArrProp, setsubArrProp] = useState([])
 
@@ -22,38 +28,15 @@ export default function weekView() {
         }
 
     }
-
-    let token :any;
     const socketConnection = async() => {
-    token = await AsyncStorage.getItem("jwt")
-    await fetch(process.env.EXPO_PUBLIC_AUTH_SERVER + '/getSubjects', {
-        method: 'POST', // Specifies a POST request
-        headers: {
-          'Content-Type': 'application/json', // Informs the server about the data format
-        },
-        body: JSON.stringify({jwt: token})
-      })
-      .then((res) => res.json())
-      .then(async(data) => {
-        if(data.success == false){
-            console.log(data.message)
-        }
-        else{
-            console.log("I am the create event button")
-            console.log(data.subjectArray)
-            const subjectArrProp : any = []
-            for(let i of data.subjectArray){
-                subjectArrProp.push({label: i.subject_name, value: i.subject_id})
-            }
-            setsubArrProp(subjectArrProp)
-        }
-      })
-    console.log("useFocusEffect works")
-    const socket = io(process.env.EXPO_PUBLIC_AUTH_SERVER, {
-        auth: {
-            jwt: token
-        }
-    });
+      let token :any;
+      token = await AsyncStorage.getItem("jwt")
+
+      const socket = io(process.env.EXPO_PUBLIC_AUTH_SERVER, {
+          auth: {
+              jwt: token
+          }
+      });
 
     socket.on('connect', () => {
         console.log('Connected to server');
@@ -69,12 +52,11 @@ export default function weekView() {
     socket.on('eventUpdate', (data : any) => {
         console.log('Update received:', "Event Added");
         setRefetch((val) => val * -1);
-        console.log(refetch) // oscillator that keeps the updates coming
+        console.log(refetch)
       });
     
     return socket;  
-}
-
+  }
         checkIsCR()
 
         let socketObj : any;
@@ -83,12 +65,70 @@ export default function weekView() {
         (async() => {
             socketObj = await socketConnection();
           })();
-      
+        
           return () => {
             socketObj.disconnect();
-            console.log("Disconnected from the server")
+            console.log("Disconnected from the serve")
           }
 }, []))
+
+  useFocusEffect(React.useCallback(() => {
+    const getData = async() => {
+      let token :any;
+      token = await AsyncStorage.getItem("jwt")
+      await fetch(process.env.EXPO_PUBLIC_AUTH_SERVER + '/getReoccuringEventView', {
+        method: 'POST', // Specifies a POST request
+        headers: {
+          'Content-Type': 'application/json', // Informs the server about the data format
+        },
+        body: JSON.stringify({jwt: token})
+      })
+      .then((res) => res.json())
+      .then(async(data) => {
+        if(data.success == false){
+            console.log(data.message)
+        }
+        else{
+            console.log(data.reoccuringEvents)
+            const mondayEvents = [];
+            const tuesdayEvents = [];
+            const wednesdayEvents = [];
+            const thursdayEvents = [];
+            const fridayEvents = [];
+            const saturdayEvents = [];
+            const sundayEvents = [];
+
+            for(let i of data.reoccuringEvents){
+              console.log("hey")
+              
+        }
+      }});
+
+      await fetch(process.env.EXPO_PUBLIC_AUTH_SERVER + '/getSubjects', {
+          method: 'POST', // Specifies a POST request
+          headers: {
+            'Content-Type': 'application/json', // Informs the server about the data format
+          },
+          body: JSON.stringify({jwt: token})
+        })
+        .then((res) => res.json())
+        .then(async(data) => {
+          if(data.success == false){
+              console.log(data.message)
+          }
+          else{
+              console.log(data.subjectArray)
+              const subjectArrProp : any = []
+              for(let i of data.subjectArray){
+                  subjectArrProp.push({label: i.subject_name, value: i.subject_id})
+              }
+              setsubArrProp(subjectArrProp)
+          }
+        })
+    }
+
+    getData()
+  }, [refetch]))
 
  const printTimes = (start:number, end:number) => {
         const baseRem = 16; //one rem is 16 pixels 
@@ -124,8 +164,7 @@ export default function weekView() {
                           <View className='flex-row justify-between h-full'>
                             <View className='border w-[12.5%]'>
                                 <Text className='text-center absolute' style={{lineHeight: 24, left: 0, right: 0}}>Mon</Text>
-                                <ReooccuringScheduleComponent name="PDS" startTime="5:00" endTime="7:00"/>
-                                <ReooccuringScheduleComponent name="PDS" startTime="20:00" endTime="21:00"/>
+                                
                             </View>
                             <View className='border w-[12.5%]'>
                                 <Text className='text-center absolute' style={{lineHeight: 24, left: 0, right: 0}}>Tue</Text>

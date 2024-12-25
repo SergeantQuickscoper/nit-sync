@@ -64,6 +64,17 @@ class timetableServices{
         
     }
 
+    async getReoccuringEventView(token){
+        try {
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            const {uid} = await authDAO.findCRID(decoded.email);
+            const query = await timetableDAO.getReoccuringEventView(uid)
+            return query;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async createEvent(token, eventName, description, subjectID, eventType, startTime, endTime){
         try {
             const uid = await this.validateCRandGetID(token);

@@ -240,6 +240,15 @@ class timetableDAO{
 
     }
 
+    async getReoccuringEventView(author){
+        try {
+            const query = await db.select("*").from("reoccuring_event_view").where("created_by", author);
+            return query;
+        } catch (error) {
+            throw error;
+        }
+    }
+
 }
 
 const timetableDAOObj = new timetableDAO();

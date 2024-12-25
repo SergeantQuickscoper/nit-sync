@@ -304,7 +304,30 @@ class timeTableControllers{
         }
     }
 
+    async getReoccuringEventView(req, res){
+        try {
+            const {jwt} = req.body;
+            console.log("Recieved request")
+            const eventsList = await timetableServices.getReoccuringEventView(jwt);
+
+            res.send({
+                success: true,
+                message: "Weekly event list successfully fetched",
+                reoccuringEvents: eventsList
+
+            })
+
+        } catch (error) {
+            res.status(400).send({
+                success: false, 
+                message: error.message
+            })
+        }
+    }
+
 }
+
+
 
 const timetableControllerObj = new timeTableControllers()
 
