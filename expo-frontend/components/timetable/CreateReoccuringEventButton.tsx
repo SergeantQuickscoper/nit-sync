@@ -29,6 +29,7 @@ export default function CreateReoccuringEvent({subjectDropdown} : any) {
   const [show, setShow] = useState(false);
   const [isLocked, setIsLocked] = useState(false);
   const [errorMessage, setErrorMessage] = useState()
+  const [day, setDay] = useState("")
 
   
 
@@ -68,12 +69,12 @@ export default function CreateReoccuringEvent({subjectDropdown} : any) {
 
             
             
-            await fetch(process.env.EXPO_PUBLIC_AUTH_SERVER + '/createEvent', {
+            await fetch(process.env.EXPO_PUBLIC_AUTH_SERVER + '/createReoccuringEvent', {
               method: 'POST', // Specifies a POST request
               headers: {
                 'Content-Type': 'application/json', // Informs the server about the data format
               },
-              body: JSON.stringify({jwt: token, eventName: eventName, description: description, subjectID: subjectID, eventType: eventType, startTime, endTime })
+              body: JSON.stringify({jwt: token, eventName: eventName, description: description, subjectID: subjectID, eventType: eventType, startTime: startTime, endTime: endTime, day: day })
             })
             .then((res) => res.json())
             .then(async(data) => {
@@ -187,11 +188,11 @@ export default function CreateReoccuringEvent({subjectDropdown} : any) {
                                     valueField="value"
                                     placeholder={!isFocusDrop2 ? 'Select item' : '...'}
                                     searchPlaceholder="Search..."
-                                    value={eventType}
+                                    value={day}
                                     onFocus={() => setIsFocusDrop2(true)}
                                     onBlur={() => setIsFocusDrop2(false)}
                                     onChange={(item : any) => {
-                                      setEventType(item.value);
+                                      setDay(item.value);
                                       setIsFocusDrop2(false);
                                     }}
                                   />

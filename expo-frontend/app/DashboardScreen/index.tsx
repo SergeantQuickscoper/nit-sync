@@ -107,7 +107,7 @@ const DashboardScreen = () => {
                   console.log(data.message)
               }
               else{
-                  console.log("Joined events: " +  data.attendedEvents)
+                  //DO JOINED MESSAGE STUFF HERE
               }
             })
             
@@ -142,8 +142,6 @@ const DashboardScreen = () => {
                 console.log(data.message)
             }
             else{
-                console.log("I am the create event button")
-                console.log(data.subjectArray)
                 const subjectArrProp : any = []
                 for(let i of data.subjectArray){
                     subjectArrProp.push({label: i.subject_name, value: i.subject_id})

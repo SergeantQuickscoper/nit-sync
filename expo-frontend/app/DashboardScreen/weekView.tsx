@@ -13,6 +13,7 @@ export default function weekView() {
   const [cr, setCR] = useState(false)
   const [mondayEvents, setMondayEvents] = useState([])
   const [tuesdayEvents, setTuesdayEvents] = useState([])
+  const [wednesdayEvents, setWednesdayEvents] = useState([])
   const [thursdayEvents, setThursdayEvents] = useState([])
   const [fridayEvents, setFridayEvents] = useState([])
   const [saturdayEvents, setSaturdayEvents] = useState([])
@@ -52,7 +53,6 @@ export default function weekView() {
     socket.on('eventUpdate', (data : any) => {
         console.log('Update received:', "Event Added");
         setRefetch((val) => val * -1);
-        console.log(refetch)
       });
     
     return socket;  
@@ -76,6 +76,7 @@ export default function weekView() {
     const getData = async() => {
       let token :any;
       token = await AsyncStorage.getItem("jwt")
+      let tempCRCheck = await AsyncStorage.getItem("isCR");
       await fetch(process.env.EXPO_PUBLIC_AUTH_SERVER + '/getReoccuringEventView', {
         method: 'POST', // Specifies a POST request
         headers: {
@@ -90,18 +91,72 @@ export default function weekView() {
         }
         else{
             console.log(data.reoccuringEvents)
-            const mondayEvents = [];
-            const tuesdayEvents = [];
-            const wednesdayEvents = [];
-            const thursdayEvents = [];
-            const fridayEvents = [];
-            const saturdayEvents = [];
-            const sundayEvents = [];
 
+            //This is so fucking disgusting it makes me want to kms just improve
+            const mondayEventsList : any = [];
+            const tuesdayEventsList : any = [];
+            const wednesdayEventsList : any = [];
+            const thursdayEventsList : any = [];
+            const fridayEventsList : any = [];
+            const saturdayEventsList : any = [];
+            const sundayEventsList : any = [];
+            
             for(let i of data.reoccuringEvents){
-              console.log("hey")
+              console.log("I AM I ", i)
+              const startTime = new Date(i.start_time);
+              const endTime = new Date(i.end_time);
+              startTime.setTime(startTime.getTime() + 5.5 * 60 * 60 * 1000)
+              endTime.setTime(endTime.getTime() + 5.5 * 60 * 60 * 1000)
+              let startISO = startTime.toISOString().split("T")[1]
+              let endISO  = endTime.toISOString().split("T")[1]
+              if(startISO[0] == '0'){
+                  startISO = startISO.slice(1, 5)
+              }
+              else{
+                 startISO = startISO.slice(0, 5)
+              }
+              if(endISO[0] == '0'){
+                 endISO = endISO.slice(1, 5)
+              }
+              else{
+                endISO = endISO.slice(0, 5)
+              }
               
-        }
+              const component = <ReooccuringScheduleComponent name={i.reoccuring_event_view_name} subjectID={i.subject_id} description={i.reoccuring_event_view_desc} startTime={startISO} endTime={endISO} cr={tempCRCheck} token={token} eventID ={i.reoccuring_event_view_id} refresher={setRefetch} />
+              switch(i.reoccuring_day){
+                case "monday":
+                  mondayEventsList.push(component)
+                  break;
+                case "tuesdau":
+                  tuesdayEventsList.push(component);
+                  break;
+                case "wednesday":
+                  wednesdayEventsList.push(component);
+                  break;
+                case "thursday":
+                  thursdayEventsList.push(component);
+                  break;
+                case "friday":
+                  fridayEventsList.push(component);
+                  break;
+                case "saturday":
+                  saturdayEventsList.push(component);
+                  break;
+                case "sunday":
+                  sundayEventsList.push(component);
+                  break;
+              }
+              
+              
+          }
+
+          setMondayEvents(mondayEventsList);
+          setTuesdayEvents(tuesdayEventsList);
+          setWednesdayEvents(wednesdayEventsList);
+          setThursdayEvents(thursdayEventsList);
+          setFridayEvents(fridayEventsList);
+          setSaturdayEvents(saturdayEventsList);
+          setSundayEvents(sundayEventsList);
       }});
 
       await fetch(process.env.EXPO_PUBLIC_AUTH_SERVER + '/getSubjects', {
@@ -117,7 +172,6 @@ export default function weekView() {
               console.log(data.message)
           }
           else{
-              console.log(data.subjectArray)
               const subjectArrProp : any = []
               for(let i of data.subjectArray){
                   subjectArrProp.push({label: i.subject_name, value: i.subject_id})
@@ -128,6 +182,7 @@ export default function weekView() {
     }
 
     getData()
+
   }, [refetch]))
 
  const printTimes = (start:number, end:number) => {
@@ -164,31 +219,33 @@ export default function weekView() {
                           <View className='flex-row justify-between h-full'>
                             <View className='border w-[12.5%]'>
                                 <Text className='text-center absolute' style={{lineHeight: 24, left: 0, right: 0}}>Mon</Text>
-                                
+                                {mondayEvents}
                             </View>
                             <View className='border w-[12.5%]'>
                                 <Text className='text-center absolute' style={{lineHeight: 24, left: 0, right: 0}}>Tue</Text>
-                                
+                                {tuesdayEvents}
                             </View>
                             <View className='border w-[12.5%]'>
                                 <Text className='text-center absolute' style={{lineHeight: 24, left: 0, right: 0}}>Wed</Text>
+                                {wednesdayEvents}
                             </View>
                             <View className='border w-[12.5%]'>
                                 <Text className='text-center absolute' style={{lineHeight: 24, left: 0, right: 0}}>Thu</Text>
-                                <ReooccuringScheduleComponent name="PDS" startTime="20:00" endTime="21:00"/>
+                                {thursdayEvents}
                             </View>
                             <View className='border w-[12.5%]'>
                                 <Text className='text-center absolute' style={{lineHeight: 24, left: 0, right: 0}}>Fri</Text>
+                                {fridayEvents}
                             </View>
                             <View className='border w-[12.5%]'>
                                 <Text className='text-center absolute' style={{lineHeight: 24, left: 0, right: 0}}>Sat</Text>
+                                {saturdayEvents}
                             </View>
                             <View className='border w-[12.5%] '>
                                 <Text className='text-center absolute' style={{lineHeight: 24, left: 0, right: 0}}>Sun</Text>
+                                {sundayEvents}
                             </View>
                           </View>
-                          
-
                       </View>
                   </View>
       </ScrollView>

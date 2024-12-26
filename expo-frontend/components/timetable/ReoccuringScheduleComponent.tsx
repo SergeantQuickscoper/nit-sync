@@ -17,12 +17,12 @@ export default function ReooccuringScheduleComponent({key, name, subjectID, desc
     
     const handleEventDeletion = async() => {
         //call delete event endpoint here
-        await fetch(process.env.EXPO_PUBLIC_AUTH_SERVER + '/deleteEvent', {
+        await fetch(process.env.EXPO_PUBLIC_AUTH_SERVER + '/deleteReoccuringEvent', {
             method: 'POST', // Specifies a POST request
             headers: {
               'Content-Type': 'application/json', // Informs the server about the data format
             },
-            body: JSON.stringify({jwt: token, eventID: eventID})
+            body: JSON.stringify({jwt: token, reoccuring_event_id: eventID})
           })
           .then((res) => res.json())
           .then(async(data) => {

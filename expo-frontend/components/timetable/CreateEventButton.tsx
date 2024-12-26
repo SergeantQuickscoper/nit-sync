@@ -31,7 +31,7 @@ export default function CreateEventButton({subjectDropdown} : any) {
   const [errorMessage, setErrorMessage] = useState()
 
   useEffect(() => {
-    console.log("Start " + startTime, " End " + endTime)
+    
   }, [date, startTime, endTime])
   const onChangeDate = (event : any, selectedDate : any) => {
     setDateShowAndroidPicker(false)
