@@ -226,6 +226,8 @@ class timetableServices{
         try {
             const uid = await this.validateCRandGetID(token);
             await timetableDAO.createReoccuringEvent(uid, eventName, description, startTime, endTime, eventType, subjectID, day);
+            io.emit("reoccuringEventUpdate")
+            console.log("Reoccuring Event was updated")
         } catch (error) {
             throw error;
         }
@@ -235,6 +237,8 @@ class timetableServices{
         try {
             const uid = await this.validateCRandGetID(token);
             await timetableDAO.deleteReoccuringEvent(uid, reoccuring_event_id)
+            io.emit("reoccuringEventUpdate")
+            console.log("Reoccuring Event was updated")
         } catch (error) {
             throw error;
         }

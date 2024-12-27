@@ -225,11 +225,11 @@ class timetableDAO{
         // so a new table 
         //delete the view on the weekly timetable
         try {
-            const check = await db.select("*").from("reoccuring_events_view").where("created_by", author).andWhere("reoccuring_event_view_id", reoccuringEventID);
+            const check = await db.select("*").from("reoccuring_event_view").where("created_by", author).andWhere("reoccuring_event_view_id", reoccuringEventID);
             if(check.length == 0){
                 throw Error("Specified Event doesnt exist or wasnt created by you");
             }
-            await db.table("reoccuring_events_view").del().where("created_by", author).andWhere("reoccuring_event_view_id", reoccuringEventID);
+            await db.table("reoccuring_event_view").del().where("created_by", author).andWhere("reoccuring_event_view_id", reoccuringEventID);
         } catch (error) {
             throw error;
         }   

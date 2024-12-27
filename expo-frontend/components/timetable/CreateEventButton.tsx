@@ -102,7 +102,7 @@ export default function CreateEventButton({subjectDropdown} : any) {
                     <View className='bg-slate-400 w-[25rem] py-5 rounded-lg flex-col items-center justify-between px-4 relative'>
                         <View className='absolute top-2 left-2'>
                             <Pressable onPress={() => setModalOpen(false)}>
-                                <Text>X</Text>
+                              <Image source={require("@/assets/images/CloseButton.png")}/>
                             </Pressable>
                         </View>
                         
@@ -311,7 +311,7 @@ export default function CreateEventButton({subjectDropdown} : any) {
                     
                 </View>
         </Modal>
-        <Pressable onPress={() => setModalOpen(true)}>
+        <Pressable className="p-2" onPress={() => setModalOpen(true)}>
             <Image source={require("@/assets/images/CreateButton.png")}/>
         </Pressable>
     </View>

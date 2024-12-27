@@ -85,7 +85,7 @@ const DashboardScreen = () => {
                                 endISO = endISO.slice(0, 5)
                             }
 
-                            dayEvents.push(<ScheduleComponent name={j.event_name} startTime={startISO} endTime={endISO} subjectID={j.subject_id} description={j.event_desc} cr={cr} token={token} eventID = {j.event_id} refresher={setRefetch}/>)
+                            dayEvents.push(<ScheduleComponent key={j.event_id} name={j.event_name} startTime={startISO} endTime={endISO} subjectID={j.subject_id} description={j.event_desc} cr={cr} token={token} eventID = {j.event_id} refresher={setRefetch}/>)
                         }
                       }
                   }
@@ -200,7 +200,7 @@ const DashboardScreen = () => {
         let counter = 1;
         let timeArray = []
         for(let i = start; i <= end; i++){
-            timeArray.push(<Text className={"text-center"} style={{ marginTop: baseRem * spacing,lineHeight: 24 }}>{i}:00</Text>)
+            timeArray.push(<Text className={"text-center font-bold"} style={{ marginTop: baseRem * spacing,lineHeight: 24 }}>{i}:00</Text>)
             counter++;
         }
 
@@ -221,7 +221,7 @@ const DashboardScreen = () => {
             if(newDate.toDateString() == date.toDateString()){
                 dateButtonArray.push(<Pressable className="mx-[0.6rem]  items-center" onPress={() => handelDateButtonPress(newDate)}>
                         <ImageBackground source={require("@/assets/images/currentDateBG.png")} resizeMode="contain"> 
-                        <Text className="text-white font-bold p-1 w-7 items-center text-center">{newDate.getDate()}</Text>
+                        <Text className="text-white font-bold p-1 w-8 items-center text-center font text-lg ">{newDate.getDate()}</Text>
                     </ImageBackground> 
                 </Pressable>)
             }
@@ -251,26 +251,26 @@ const DashboardScreen = () => {
     }
     return(
         <View className='flex-1 bg-[#F7F7F7]'>
-            <View className="header mb-2 mt-14 flex-row justify-between mx-4 items-center">
+            <View className="header mb-2 mt-14 flex-row justify-between  ml-4 mr-2 items-center">
                 <NavigationBar />
-                <Text className="font-bold">
+                <Text className="font-bold ml-4">
                     {formattedDate}
                 </Text>
                 {cr ? <CreateEventButton subjectDropdown={subArrProp}/> : <View className="w-[16px]"></View>}
             </View>  
-            <View className="dateScroll flex-row justify-between mx-8 my-4">
-                <Pressable className="" onPress={handePrevious}>
+            <View className="dateScroll flex-row justify-between mx-6 my-4">
+                <Pressable className="justify-center p-2" onPress={handePrevious}>
                         <Image source={require("@/assets/images/leftArrow.png")}/>
                 </Pressable>
                 <View className="flex-row justify-between items-center">
                     {printDateButtons()}
                 </View>
-                <Pressable onPress={handeNext}>
+                <Pressable className="justify-center p-2" onPress={handeNext}>
                     <Image source={require("@/assets/images/rightArrow.png")}/>
                 </Pressable>
             </View>
             <ScrollView>
-            <View className="calendar flex-row mb-7">
+            <View className="calendar flex-row mb-7 ">
                 <View className=" w-1/5 pb-7">
                     {printTimes(5, 21)}
                 </View>

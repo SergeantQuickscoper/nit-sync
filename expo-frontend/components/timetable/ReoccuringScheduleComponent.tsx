@@ -1,4 +1,4 @@
-import { View, Text, Pressable, Modal, Platform } from 'react-native'
+import { View, Text, Pressable, Modal, Platform, Image } from 'react-native'
 import { useState } from 'react';
 import React from 'react'
 
@@ -11,9 +11,10 @@ export default function ReooccuringScheduleComponent({key, name, subjectID, desc
     const baseMargin = 40;
     const lineHeight = (Platform.OS == "ios") ? 21.4 : 24; //24 px is set in the other file but IOS is fucking weird and it doesnt work as well?
     const fontsize = 16;
-    const requiredMargin = baseMargin * (startTimeConvert.split(":")[0] - 4) + lineHeight*(2*(startTimeConvert.split(":")[0] - 5) + 1)/2
-    const requiredHeight = ((endTimeConvert.split(":")[0] + endTimeConvert.split(":")[1]/60) - (startTimeConvert.split(":")[0] + startTimeConvert.split(":")[1]/60)) * (baseMargin + lineHeight)/10;
-    
+    const startCoeff = (Number(startTimeConvert.split(":")[0]) + Number(startTimeConvert.split(":")[1])/60)
+    const endCoeff = (Number(endTimeConvert.split(":")[0]) + Number(endTimeConvert.split(":")[1])/60)
+    const requiredMargin = baseMargin * (startCoeff - 4) + lineHeight*(2*(startCoeff - 5) + 1)/2
+    const requiredHeight = (endCoeff - startCoeff) * (baseMargin + lineHeight);
     
     const handleEventDeletion = async() => {
         //call delete event endpoint here
@@ -53,7 +54,7 @@ export default function ReooccuringScheduleComponent({key, name, subjectID, desc
                     <View className='bg-slate-400 w-72 rounded-lg flex-col items-center justify-between px-4 relative'>
                         <View className='absolute top-2 left-2'>
                             <Pressable onPress={() => setModalOpen(false)}>
-                                <Text>X</Text>
+                                <Image source={require("@/assets/images/CloseButton.png")}/>
                             </Pressable>
                             
                         </View>

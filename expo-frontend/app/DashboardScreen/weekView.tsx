@@ -50,7 +50,7 @@ export default function weekView() {
     });
 
       // Listen for server updates
-    socket.on('eventUpdate', (data : any) => {
+    socket.on('reoccuringEventUpdate', (data : any) => {
         console.log('Update received:', "Event Added");
         setRefetch((val) => val * -1);
       });
@@ -127,7 +127,7 @@ export default function weekView() {
                 case "monday":
                   mondayEventsList.push(component)
                   break;
-                case "tuesdau":
+                case "tuesday":
                   tuesdayEventsList.push(component);
                   break;
                 case "wednesday":
@@ -217,32 +217,32 @@ export default function weekView() {
                       </View>
                       <View className="border-l w-[87.75%] px-2">
                           <View className='flex-row justify-between h-full'>
-                            <View className='border w-[12.5%]'>
-                                <Text className='text-center absolute' style={{lineHeight: 24, left: 0, right: 0}}>Mon</Text>
+                            <View className='w-[12.5%]'>
+                                <Text className='text-center absolute font-bold' style={{lineHeight: 24, left: 0, right: 0}}>Mon</Text>
                                 {mondayEvents}
                             </View>
-                            <View className='border w-[12.5%]'>
-                                <Text className='text-center absolute' style={{lineHeight: 24, left: 0, right: 0}}>Tue</Text>
+                            <View className='w-[12.5%]'>
+                                <Text className='text-center absolute font-bold' style={{lineHeight: 24, left: 0, right: 0}}>Tue</Text>
                                 {tuesdayEvents}
                             </View>
-                            <View className='border w-[12.5%]'>
-                                <Text className='text-center absolute' style={{lineHeight: 24, left: 0, right: 0}}>Wed</Text>
+                            <View className='w-[12.5%]'>
+                                <Text className='text-center absolute font-bold' style={{lineHeight: 24, left: 0, right: 0}}>Wed</Text>
                                 {wednesdayEvents}
                             </View>
-                            <View className='border w-[12.5%]'>
-                                <Text className='text-center absolute' style={{lineHeight: 24, left: 0, right: 0}}>Thu</Text>
+                            <View className=' w-[12.5%]'>
+                                <Text className='text-center absolute font-bold' style={{lineHeight: 24, left: 0, right: 0}}>Thu</Text>
                                 {thursdayEvents}
                             </View>
-                            <View className='border w-[12.5%]'>
-                                <Text className='text-center absolute' style={{lineHeight: 24, left: 0, right: 0}}>Fri</Text>
+                            <View className=' w-[12.5%]'>
+                                <Text className='text-center absolute font-bold' style={{lineHeight: 24, left: 0, right: 0}}>Fri</Text>
                                 {fridayEvents}
                             </View>
-                            <View className='border w-[12.5%]'>
-                                <Text className='text-center absolute' style={{lineHeight: 24, left: 0, right: 0}}>Sat</Text>
+                            <View className=' w-[12.5%]'>
+                                <Text className='text-center absolute font-bold' style={{lineHeight: 24, left: 0, right: 0}}>Sat</Text>
                                 {saturdayEvents}
                             </View>
-                            <View className='border w-[12.5%] '>
-                                <Text className='text-center absolute' style={{lineHeight: 24, left: 0, right: 0}}>Sun</Text>
+                            <View className=' w-[12.5%] '>
+                                <Text className='text-center absolute font-bold' style={{lineHeight: 24, left: 0, right: 0}}>Sun</Text>
                                 {sundayEvents}
                             </View>
                           </View>

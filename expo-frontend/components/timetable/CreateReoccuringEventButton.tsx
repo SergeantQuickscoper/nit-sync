@@ -96,7 +96,7 @@ export default function CreateReoccuringEvent({subjectDropdown} : any) {
                     <View className='bg-slate-400 w-[25rem] py-5 rounded-lg flex-col items-center justify-between px-4 relative'>
                         <View className='absolute top-2 left-2'>
                             <Pressable onPress={() => setModalOpen(false)}>
-                                <Text>X</Text>
+                                <Image source={require("@/assets/images/CloseButton.png")}/>
                             </Pressable>
                         </View>
                         
@@ -181,7 +181,7 @@ export default function CreateReoccuringEvent({subjectDropdown} : any) {
                                     selectedTextStyle={styles.selectedTextStyle}
                                     inputSearchStyle={styles.inputSearchStyle}
                                     iconStyle={styles.iconStyle}
-                                    data={[{label: "Monday", value: "monday"}, {label: "Tuesday", value: "tuesday"}, {label: "Wednesday", value: "wednesday"}, {label: "Thursday", value: "thursday"}, {label: "Saturday", value: "saturday"}, {label: "Sunday", value: "sunday"}]}
+                                    data={[{label: "Monday", value: "monday"}, {label: "Tuesday", value: "tuesday"}, {label: "Wednesday", value: "wednesday"}, {label: "Thursday", value: "thursday"}, {label: "Friday", value: "friday"}, {label: "Saturday", value: "saturday"}, {label: "Sunday", value: "sunday"}]}
                                     search
                                     maxHeight={300}
                                     labelField="label"

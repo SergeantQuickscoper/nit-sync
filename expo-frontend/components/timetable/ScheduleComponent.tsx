@@ -1,4 +1,4 @@
-import { View, Text, Pressable, Modal, Platform } from 'react-native'
+import { View, Text, Pressable, Modal, Platform, Image } from 'react-native'
 import { useEffect, useState } from 'react';
 import React from 'react'
 
@@ -57,7 +57,7 @@ export default function ScheduleComponent({key, name, subjectID, description, st
                     <View className='bg-slate-400 w-72 rounded-lg flex-col items-center justify-between px-4 relative'>
                         <View className='absolute top-2 left-2'>
                             <Pressable onPress={() => setModalOpen(false)}>
-                                <Text>X</Text>
+                                <Image source={require("@/assets/images/CloseButton.png")}/>
                             </Pressable>
                             
                         </View>
