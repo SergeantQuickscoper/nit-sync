@@ -19,7 +19,8 @@ export default function CreateReoccuringEvent({subjectDropdown} : any) {
   const [showEndTimeAndroidPicker, setShowEndTimeAndroidPicker] = useState(false)
   const [eventName, setEventName] = useState("")
   const [isFocusDrop1, setIsFocusDrop1] = useState(false);
-  const [isFocusDrop2, setIsFocusDrop2] = useState(false)
+  const [isFocusDrop2, setIsFocusDrop2] = useState(false);
+  const [isFocusDrop3, setIsFocusDrop3] = useState(false)
   const [subjectID, setSubjectID] = useState();
   const [description, setDescription] = useState();
   const [eventType, setEventType] = useState();
@@ -176,7 +177,7 @@ export default function CreateReoccuringEvent({subjectDropdown} : any) {
                             <View style={styles.container}>
                             
                                   <Dropdown
-                                    style={[styles.dropdown, isFocusDrop2 && { borderColor: '#00FF11' }]}
+                                    style={[styles.dropdown, isFocusDrop3 && { borderColor: '#00FF11' }]}
                                     placeholderStyle={styles.placeholderStyle}
                                     selectedTextStyle={styles.selectedTextStyle}
                                     inputSearchStyle={styles.inputSearchStyle}
@@ -186,14 +187,14 @@ export default function CreateReoccuringEvent({subjectDropdown} : any) {
                                     maxHeight={300}
                                     labelField="label"
                                     valueField="value"
-                                    placeholder={!isFocusDrop2 ? 'Select item' : '...'}
+                                    placeholder={!isFocusDrop3 ? 'Select item' : '...'}
                                     searchPlaceholder="Search..."
                                     value={day}
-                                    onFocus={() => setIsFocusDrop2(true)}
-                                    onBlur={() => setIsFocusDrop2(false)}
+                                    onFocus={() => setIsFocusDrop3(true)}
+                                    onBlur={() => setIsFocusDrop3(false)}
                                     onChange={(item : any) => {
                                       setDay(item.value);
-                                      setIsFocusDrop2(false);
+                                      setIsFocusDrop3(false);
                                     }}
                                   />
                                 </View>
@@ -291,16 +292,16 @@ export default function CreateReoccuringEvent({subjectDropdown} : any) {
                         </View>
                         
                         
-                        <View className='bg-white mt-10 py-1 px-5 mb-5'>
-                        <Pressable onPress={onCreateEvent}>
-                            <Text className=''>Create</Text>
+                        <View className='bg-white mt-10 rounded-full mb-5'>
+                        <Pressable className="py-2 px-5" onPress={onCreateEvent}>
+                            <Text className='font-bold'>Create</Text>
                         </Pressable>
                         </View>
                     </View>
                     
                 </View>
         </Modal>
-        <Pressable onPress={() => setModalOpen(true)}>
+        <Pressable className="p-2" onPress={() => setModalOpen(true)}>
             <Image source={require("@/assets/images/CreateButton.png")}/>
         </Pressable>
     </View>

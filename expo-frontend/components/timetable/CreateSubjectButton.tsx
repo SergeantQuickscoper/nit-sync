@@ -61,6 +61,8 @@ export default function CreateSubjectButton() {
         }
         else{
             setModalOpen(false)
+            setDescription("")
+            setsubjectName("");
         }
       }) 
   }
@@ -72,7 +74,7 @@ export default function CreateSubjectButton() {
                     <View className='bg-slate-400 w-[25rem] py-5 rounded-lg flex-col items-center justify-between px-4 relative'>
                         <View className='absolute top-2 left-2'>
                             <Pressable onPress={() => setModalOpen(false)}>
-                                <Text>X</Text>
+                                <Image source={require("@/assets/images/CloseButton.png")}/>
                             </Pressable>
                         </View>
                         
@@ -91,16 +93,16 @@ export default function CreateSubjectButton() {
                         </SafeAreaView>
                         </View>
                                                 
-                        <View className='bg-white mt-10 py-1 px-5 mb-5'>
-                        <Pressable onPress={onCreatePress}>
-                            <Text className=''>Create</Text>
+                        <View className='bg-white mt-10 mb-5 rounded-full'>
+                        <Pressable className="py-2 px-5" onPress={onCreatePress}>
+                            <Text className='font-bold'>Create</Text>
                         </Pressable>
                         </View>
                     </View>
                     
                 </View>
         </Modal>
-        <Pressable onPress={() => setModalOpen(true)}>
+        <Pressable className="p-2" onPress={() => setModalOpen(true)}>
             <Image source={require("@/assets/images/CreateButton.png")}/>
         </Pressable>
     </View>

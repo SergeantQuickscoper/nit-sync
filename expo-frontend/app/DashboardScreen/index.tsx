@@ -256,7 +256,7 @@ const DashboardScreen = () => {
                 <Text className="font-bold ml-4">
                     {formattedDate}
                 </Text>
-                {cr ? <CreateEventButton subjectDropdown={subArrProp}/> : <View className="w-[16px]"></View>}
+                {cr ? <CreateEventButton subjectDropdown={subArrProp}/> : <View className="p-4"><View className="w-[16px]"></View></View>}
             </View>  
             <View className="dateScroll flex-row justify-between mx-6 my-4">
                 <Pressable className="justify-center p-2" onPress={handePrevious}>

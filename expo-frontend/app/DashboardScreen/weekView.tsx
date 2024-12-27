@@ -205,7 +205,7 @@ export default function weekView() {
     <View className='flex-1 bg-[#F7F7F7]'>
       <View className="header mb-2 mt-14 flex-row justify-between mx-4 items-center">
         <NavigationBar />
-         <Text className="font-bold">
+         <Text className="font-bold ml-2">
             Weekly Timetable
           </Text>
           {true ? <CreateReoccuringEvent subjectDropdown={subArrProp}/> : <View className="w-[16px]"></View>}

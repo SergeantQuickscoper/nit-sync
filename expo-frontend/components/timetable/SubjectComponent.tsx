@@ -1,4 +1,4 @@
-import { View, Text, Pressable, Modal } from 'react-native'
+import { View, Text, Pressable, Modal, Image } from 'react-native'
 import React, { useState } from 'react'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -105,27 +105,27 @@ export default function SubjectComponent({subjectID, name, description, joined, 
                     <View className='bg-slate-400 w-72 rounded-lg flex-col items-center justify-between px-4 relative'>
                         <View className='absolute top-2 left-2'>
                             <Pressable onPress={() => setModalOpen(false)}>
-                                <Text>X</Text>
+                                <Image source={require("@/assets/images/CloseButton.png")}/>
                             </Pressable>
                             
                         </View>
                         
                         <Text className='text-center mt-5 font-bold'>{name}</Text>
                         <Text className='text-center mt-3'>{description}</Text>
-                        <View className='bg-white py-1 px-5 mt-4'>
+                        <View className='bg-white mt-8 rounded-full'>
                         {
-                            !joined ? (<Pressable onPress={handleJoinSubject}>
-                                <Text className=''>Join</Text>
-                            </Pressable>) : (<Pressable onPress={handleLeaveSubject}>
-                                <Text className=''>Joined</Text>
+                            !joined ? (<Pressable className="py-2 px-5" onPress={handleJoinSubject}>
+                                <Text className='font-bold'>Join</Text>
+                            </Pressable>) : (<Pressable className="py-2 px-5" onPress={handleLeaveSubject}>
+                                <Text className='font-bold text-green-500'>Joined</Text>
                             </Pressable>)
                         }
                         
                         
                     </View>
-                    {cr ? (<View className='bg-white mb-6 py-1 px-5 mt-4'>
-                            <Pressable onPress={handleSubjectDeletion}>
-                                <Text>Delete</Text>
+                    {cr ? (<View className='bg-white mb-6 mt-4 rounded-full'>
+                            <Pressable className="py-2 px-5" onPress={handleSubjectDeletion}>
+                                <Text className='font-bold text-red-500'>Delete</Text>
                             </Pressable>
                     </View>) : <View className='mb-6'></View>}
                     </View>

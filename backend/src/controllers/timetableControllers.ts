@@ -140,9 +140,14 @@ class timeTableControllers{
         try {
             const {jwt, eventName, description, subjectID, eventType, startTime, endTime} = req.body;
             //check for if all conditions not passed
-            console.log(subjectID)
-            await timetableServices.createEvent(jwt, eventName, description, subjectID, eventType, startTime, endTime);
+            const startTimeObj = new Date(startTime);
+            const endTimeObj = new Date(endTime);
 
+            if(startTime >= endTime){
+                throw Error("Event end time cannot be before event start time.")
+            }
+            
+            await timetableServices.createEvent(jwt, eventName, description, subjectID, eventType, startTime, endTime);
             res.send({
                 success: true,
                 message: "Event succesffully created"
@@ -267,7 +272,9 @@ class timeTableControllers{
     async createReoccuringEvent(req, res){
         try {
             const {jwt, eventName, description, subjectID, eventType, startTime, endTime, day} = req.body;
-            
+            if(startTime >= endTime){
+                throw Error("Event end time cannot be before event start time.")
+            }
             await timetableServices.createReoccuringEvent(jwt, eventName, description, subjectID, eventType, startTime, endTime, day);
 
             res.send({

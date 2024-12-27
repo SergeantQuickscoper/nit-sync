@@ -74,7 +74,7 @@ export default function ReooccuringScheduleComponent({key, name, subjectID, desc
                 </View>
         </Modal>
         <Pressable onPress={() => setModalOpen(true)}>
-        <View className="bg-[#56A3FA] absolute rounded-lg border overflow-hidden flex-col justify-center items-center w-full" style={{top: requiredMargin, height: requiredHeight}}> 
+        <View className="bg-[#56A3FA] absolute rounded-lg border overflow-hidden flex-col justify-center items-center w-full opacity-100" style={{top: requiredMargin, height: requiredHeight}}> 
             <Text className='text-white'>{name}</Text>
             <Text className='text-white font-bold text-xs'>{startTimeConvert.split(":")[0]} - {endTimeConvert.split(":")[0]}</Text>
         </View>
