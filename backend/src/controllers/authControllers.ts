@@ -263,6 +263,23 @@ class authControllers{
         }
     }
 
+    async getUserData(req, res){
+        try {
+            const {jwt} = req.body;
+            const userData = await authServices.getUserData(jwt)
+            res.send({
+                success: true,
+                message: "Fetched User Data",
+                userData: userData
+            })
+        } catch (error) {
+            res.status(400).send({
+                success: false, 
+                message: error.message
+            })
+        }
+    }
+
     
 
 }

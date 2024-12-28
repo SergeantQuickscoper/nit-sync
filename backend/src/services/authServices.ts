@@ -213,6 +213,15 @@ class authServices{
             throw error;
         }
     }
+
+    async getUserData(token){
+        try {
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            return await authDAO.getUser(decoded.email);
+        } catch (error) {
+            throw error;
+        }
+    }
     
 }
 
