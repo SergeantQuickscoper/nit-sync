@@ -15,7 +15,6 @@ class timetableServices{
 
             //check if decoded.email is a CR and get his class
             const {uid, role} = await authDAO.getUser(decoded.email)
-            console.log(decoded.email)
 
             if(role != "cr"){
                 throw Error("Unauthorized Subject creation")
@@ -38,7 +37,6 @@ class timetableServices{
 
             //emit a server-update event to all connectedUsers in the class
             io.emit("subjectUpdate")
-            console.log("Subject was updated")
 
             //push notifications to all subject users
 
@@ -82,7 +80,6 @@ class timetableServices{
 
             //emit a server-update event to all connectedUsers in the subject 
             io.emit("eventUpdate")
-            console.log("Event was updated")
 
             //push notifications to all subject users
 
@@ -96,7 +93,6 @@ class timetableServices{
     async joinSubject(token, subjectID){
         try {
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
-            console.log(decoded.email)
             const {uid} = await authDAO.emailToUID(decoded.email);
             await timetableDAO.joinSubject(uid, subjectID);
         } catch (error) {
@@ -120,7 +116,6 @@ class timetableServices{
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
             const {uid} = await authDAO.emailToUID(decoded.email);
             const userSubjectList = await timetableDAO.getSubjectsUserJoined(uid);
-            console.log(userSubjectList)
             let subjectEventObj = {};
             let count  = 0;
             for(let i of userSubjectList){
@@ -164,7 +159,6 @@ class timetableServices{
 
             //emit a server-update event to all connectedUsers in the class
             io.emit("subjectUpdate")
-            console.log("Subject was updated")
 
         } catch (error) {
             
@@ -176,7 +170,6 @@ class timetableServices{
             const uid = await this.validateCRandGetID(token)
             await timetableDAO.deleteEventByID(uid, subjectID)
             io.emit("eventUpdate")
-            console.log("Event was updated")
         } catch (error) {
             throw error;
         }
@@ -227,7 +220,6 @@ class timetableServices{
             const uid = await this.validateCRandGetID(token);
             await timetableDAO.createReoccuringEvent(uid, eventName, description, startTime, endTime, eventType, subjectID, day);
             io.emit("reoccuringEventUpdate")
-            console.log("Reoccuring Event was updated")
         } catch (error) {
             throw error;
         }
@@ -238,7 +230,6 @@ class timetableServices{
             const uid = await this.validateCRandGetID(token);
             await timetableDAO.deleteReoccuringEvent(uid, reoccuring_event_id)
             io.emit("reoccuringEventUpdate")
-            console.log("Reoccuring Event was updated")
         } catch (error) {
             throw error;
         }

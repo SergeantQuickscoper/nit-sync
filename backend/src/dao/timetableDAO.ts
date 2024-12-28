@@ -90,9 +90,7 @@ class timetableDAO{
             let nextDay = new Date(day)
             nextDay.setTime(nextDay.getTime() + 24 * 60 * 60 * 1000)
             nextDay.setHours(0, 0, 0, 0)
-            console.log(nextDay)
             const query = await db.select("*").from("events").where("subject_id", subjectID).andWhereBetween("start_time", [currDay.toISOString(), nextDay.toISOString()]);
-            console.log("I work!")
             return query; 
         } catch (error) {
             throw error;
@@ -161,7 +159,6 @@ class timetableDAO{
     async getJoinedSubjects(uid){
         try {
             const query = await db.select("*").from("user_subject_selection").where("uid", uid)
-            console.log(query)
             return query;
         } catch (error) {
             throw error;
@@ -206,7 +203,6 @@ class timetableDAO{
         for(let i = new Date(); i < lastWorkingDay; i.setDate(i.getDate() + 1))
             //insert into events table the required event
             if(day.toLowerCase() == daysOfWeek[i.getDay()]){
-                console.log("creating event!!!")
                 const currentDatePart = i.toISOString().split("T")[0];
                 const startTimePart = start_time.split("T")[1]; 
                 const endTimePart = end_time.split("T")[1];

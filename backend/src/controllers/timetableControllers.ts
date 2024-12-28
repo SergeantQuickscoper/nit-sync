@@ -53,7 +53,6 @@ class timeTableControllers{
                 throw Error("No jwt")
             }
             const subjectEventsObj = await timetableServices.getEventsOnDay(jwt, day)
-            console.log(subjectEventsObj)
             res.send({
                 success: true,
                 message: "Successfully fetched available events",
@@ -75,7 +74,6 @@ class timeTableControllers{
                 throw Error("No jwt")
             }
             const subjectEventsObj = await timetableServices.getTotalEventsOfSubjectsUserIsPartOf(jwt)
-            console.log(subjectEventsObj)
             res.send({
                 success: true,
                 message: "Successfully fetched available events",
@@ -236,7 +234,6 @@ class timeTableControllers{
         try {
             const {jwt} = req.body
             const joinedSubjectList = await timetableServices.getJoinedSubjects(jwt)
-            console.log("I am the final joined Subject list", joinedSubjectList)
             res.send({
                 success: true,
                 message: "Fetched joined subjects",
@@ -314,7 +311,6 @@ class timeTableControllers{
     async getReoccuringEventView(req, res){
         try {
             const {jwt} = req.body;
-            console.log("Recieved request")
             const eventsList = await timetableServices.getReoccuringEventView(jwt);
 
             res.send({
