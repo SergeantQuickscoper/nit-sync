@@ -1,5 +1,5 @@
 import { View, Text } from 'react-native'
-import React from 'react'
+import React, { Component, ComponentElement } from 'react'
 import CreateReoccuringEvent from '@/components/timetable/CreateReoccuringEventButton'
 import NavigationBar from '@/components/timetable/NavigationBar'
 import { io } from 'socket.io-client'
@@ -72,6 +72,26 @@ export default function weekView() {
           }
 }, []))
 
+  const checkOverlapAndMark = (eventsList : any) => {
+
+    for(let j = 0; j < eventsList.length; j++){
+      let numericISOstart = Number(eventsList[j].start_time.split(":")[0])*100 + Number(eventsList[j].start_time.split(":")[1]);
+      let numericISOend = Number(eventsList[j].end_time.split(":")[0])*100 + Number(eventsList[j].end_time.split(":")[1]);
+
+      for(let i = j + 1; i < eventsList.length; i++){
+        let numericISOstartCurr = Number(eventsList[i].start_time.split(":")[0])*100 + Number(eventsList[i].start_time.split(":")[1]);
+        let numericISOendCurr = Number(eventsList[i].end_time.split(":")[0])*100 + Number(eventsList[i].end_time.split(":")[1]);
+  
+        if(((numericISOstart < numericISOstartCurr && numericISOend > numericISOstartCurr) || (numericISOstart < numericISOendCurr && numericISOend > numericISOendCurr)) && eventsList[i].reoccuring_day == eventsList[j].reoccuring_day){
+            console.log("MADE IT HERE BITCHHHHHH")
+            eventsList[i].overlap = true;
+            eventsList[j].overlap = true;
+        }
+      }
+      
+    }
+  }
+
   useFocusEffect(React.useCallback(() => {
     const getData = async() => {
       let token :any;
@@ -107,6 +127,7 @@ export default function weekView() {
               const endTime = new Date(i.end_time);
               startTime.setTime(startTime.getTime() + 5.5 * 60 * 60 * 1000)
               endTime.setTime(endTime.getTime() + 5.5 * 60 * 60 * 1000)
+
               let startISO = startTime.toISOString().split("T")[1]
               let endISO  = endTime.toISOString().split("T")[1]
               if(startISO[0] == '0'){
@@ -122,28 +143,40 @@ export default function weekView() {
                 endISO = endISO.slice(0, 5)
               }
               
-              const component = <ReooccuringScheduleComponent name={i.reoccuring_event_view_name} subjectID={i.subject_id} description={i.reoccuring_event_view_desc} startTime={startISO} endTime={endISO} cr={tempCRCheck} token={token} eventID ={i.reoccuring_event_view_id} refresher={setRefetch} />
+              //IK IK THIS MANIPULATES THE FETCHED DATA AND IS BAD TO DO but so idc at this point
+              i.start_time = startISO;
+              i.end_time = endISO;
+            }
+
+            checkOverlapAndMark(data.reoccuringEvents);
+
+            for(let i of data.reoccuringEvents){            
+              
+              let component = <ReooccuringScheduleComponent name={i.reoccuring_event_view_name} subjectID={i.subject_id} description={i.reoccuring_event_view_desc} startTime={i.start_time} endTime={i.end_time} cr={tempCRCheck} token={token} eventID ={i.reoccuring_event_view_id} refresher={setRefetch} overlap={i.overlap} />
+              if(i.overlap){
+                console.log(component)
+              }
               switch(i.reoccuring_day){
                 case "monday":
-                  mondayEventsList.push(component)
+                    mondayEventsList.push(component)
                   break;
                 case "tuesday":
-                  tuesdayEventsList.push(component);
+                    tuesdayEventsList.push(component)
                   break;
                 case "wednesday":
-                  wednesdayEventsList.push(component);
+                    wednesdayEventsList.push(component)
                   break;
                 case "thursday":
-                  thursdayEventsList.push(component);
+                    thursdayEventsList.push(component)
                   break;
                 case "friday":
-                  fridayEventsList.push(component);
+                    fridayEventsList.push(component)
                   break;
                 case "saturday":
-                  saturdayEventsList.push(component);
+                    saturdayEventsList.push(component)
                   break;
                 case "sunday":
-                  sundayEventsList.push(component);
+                    sundayEventsList.push(component)
                   break;
               }
               
@@ -208,7 +241,7 @@ export default function weekView() {
          <Text className="font-bold ml-2">
             Weekly Timetable
           </Text>
-          {true ? <CreateReoccuringEvent subjectDropdown={subArrProp}/> : <View className="w-[16px]"></View>}
+          {cr ? <CreateReoccuringEvent subjectDropdown={subArrProp}/> : <View className="w-[16px]"></View>}
       </View>
       <ScrollView>
                   <View className="calendar flex-row mb-7">

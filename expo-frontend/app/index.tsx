@@ -16,7 +16,23 @@ const LoginScreen = () => {
                 const token = await AsyncStorage.getItem('jwt');
                 const isCR = await AsyncStorage.getItem('isCR')
                 if (token && isCR != undefined) {
-                  router.push({ pathname: "/DashboardScreen", params: { registeredEmail : token, isCR: isCR} });
+                  await fetch(process.env.EXPO_PUBLIC_AUTH_SERVER + '/getSubjects', {
+                    method: 'POST', // Specifies a POST request
+                    headers: {
+                      'Content-Type': 'application/json', // Informs the server about the data format
+                    },
+                    body: JSON.stringify({jwt: token})
+                  })
+                  .then((res) => res.json())
+                  .then(async(data) => {
+                    if(data.success == false && data.message == "invalid signature"){
+                        await AsyncStorage.clear();
+                    }
+                    else{
+                      router.push({ pathname: "/DashboardScreen", params: { registeredEmail : token, isCR: isCR} });
+                    }
+                  })
+                  
                 } else {
                   console.log('No token found');
                 }

@@ -2,7 +2,7 @@ import { View, Text, Pressable, Modal, Platform, Image } from 'react-native'
 import { useState } from 'react';
 import React from 'react'
 
-export default function ReooccuringScheduleComponent({key, name, subjectID, description, startTime, endTime, type, cr, token, refresher, eventID} : any) {
+export default function ReooccuringScheduleComponent({key, name, subjectID, description, startTime, endTime, type, cr, token, refresher, eventID, overlap} : any) {
     const [modalOpen, setModalOpen] = useState(false)
     const [attended, setAtteneded] = useState(false)
     //TODO fix this bullshit "good-enough" code
@@ -73,8 +73,10 @@ export default function ReooccuringScheduleComponent({key, name, subjectID, desc
                     
                 </View>
         </Modal>
-        <Pressable onPress={() => setModalOpen(true)}>
-        <View className="bg-[#56A3FA] absolute rounded-lg border overflow-hidden flex-col justify-center items-center w-full opacity-100" style={{top: requiredMargin, height: requiredHeight}}> 
+        <Pressable onPress={() => {setModalOpen(true)
+            console.log(overlap);
+         } }>
+        <View className="absolute rounded-lg border overflow-hidden flex-col justify-center items-center w-full" style={{top: requiredMargin, height: requiredHeight, opacity: (overlap ? 0.5 : 1), backgroundColor: (overlap ? "#E26161": "#56A3FA")}}> 
             <Text className='text-white'>{name}</Text>
             <Text className='text-white font-bold text-xs'>{startTimeConvert.split(":")[0]} - {endTimeConvert.split(":")[0]}</Text>
         </View>

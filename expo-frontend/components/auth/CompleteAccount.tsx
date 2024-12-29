@@ -2,17 +2,18 @@ import {View, Text, Image, SafeAreaView, TextInput, Pressable} from "react-nativ
 import { LinearGradient } from "expo-linear-gradient";
 import {router} from "expo-router"
 import { useState, useEffect} from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const CompleteAccount = ({recievedParams} : any) => {
 
     const email = recievedParams.registeredEmail.toString();
     const [isLocked, setIsLocked] = useState(true)
     const [errorMessage, setErrorMessage] = useState("")
-    const [passMatch, setPassMatch] = useState(true)
-    const [password, setPass] = useState("")
+    const [passMatch, setPassMatch] = useState(false)
+    const [password, setPass] = useState()
     const [confPassword, setConfPassword] = useState("")
-    const [firstName, setFirstName] = useState("")
-    const [lastName, setLastName] = useState("")
+    const [firstName, setFirstName] = useState()
+    const [lastName, setLastName] = useState()
 
     useEffect(() => {
         if(password != confPassword && password != "" && confPassword != ""){
@@ -34,7 +35,7 @@ const CompleteAccount = ({recievedParams} : any) => {
         }
       }, [passMatch, firstName, lastName]);
 
-    const handlePassChange = async(text:string) => {
+    const handlePassChange = async(text:any) => {
         setPass(text);
     }
 
@@ -56,16 +57,18 @@ const CompleteAccount = ({recievedParams} : any) => {
             body: JSON.stringify({email :email, password : password, confirmPassword : confPassword, firstName : firstName, lastName})
           })
           .then((res) => res.json())
-          .then((data) => {
+          .then(async(data) => {
             if(data.success == false){
                 console.log(data.message)
                 setErrorMessage(data.message);
             }
             else{
                 console.log(data)
+                await AsyncStorage.setItem("jwt", data.jwt)
                 router.push({ pathname: "/NewAccountWelcomeScreen", params: { registeredEmail : email, message: data.message } });
             }
           })
+
 
     }
 
@@ -86,11 +89,11 @@ const CompleteAccount = ({recievedParams} : any) => {
                 </View>
 
                 <SafeAreaView className='flex-1 items-center w-[22rem] max-h-12 mt-10 rounded-full p-2 bg-white shadow-sm justify-center'>
-                    <TextInput className='w-11/12 px-2 text-lg leading-tight h-full' placeholder="First Name" onChangeText={(text) => {setFirstName(text)}} placeholderTextColor={"black"} />
+                    <TextInput className='w-11/12 px-2 text-lg leading-tight h-full' placeholder="First Name" onChangeText={(text : any) => {setFirstName(text)}} placeholderTextColor={"black"} />
                 </SafeAreaView>
 
                 <SafeAreaView className='flex-1 items-center w-[22rem] max-h-12 mt-10 rounded-full p-2 bg-white shadow-sm justify-center'>
-                    <TextInput className='w-11/12 px-2 text-lg leading-tight h-full' placeholder="Last Name" onChangeText={(text) => {setLastName(text)}} placeholderTextColor={"black"} />
+                    <TextInput className='w-11/12 px-2 text-lg leading-tight h-full' placeholder="Last Name" onChangeText={(text : any) => {setLastName(text)}} placeholderTextColor={"black"} />
                 </SafeAreaView>
 
 
