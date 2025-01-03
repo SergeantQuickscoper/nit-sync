@@ -2,7 +2,7 @@ import { View, Text, Pressable, Modal, Platform, Image } from 'react-native'
 import { useEffect, useState } from 'react';
 import React from 'react'
 
-export default function ScheduleComponent({key, name, subjectID, description, startTime, endTime, type, cr, token, refresher, eventID} : any) {
+export default function ScheduleComponent({key, name, subjectID, description, startTime, endTime, type, cr, token, refresher, eventID, overlap} : any) {
     const [modalOpen, setModalOpen] = useState(false)
     const [attended, setAtteneded] = useState(false)
     //TODO fix this bullshit "good-enough" code
@@ -84,7 +84,7 @@ export default function ScheduleComponent({key, name, subjectID, description, st
                 </View>
         </Modal>
         <Pressable onPress={() => setModalOpen(true)}>
-        <View className="bg-[#56A3FA] absolute mx-16 rounded-lg border px-2 py-2 overflow-hidden w-4/6" style={{top: requiredMargin, height: requiredHeight}}> 
+        <View className="absolute mx-16 rounded-lg border px-2 py-2 overflow-hidden w-4/6" style={{top: requiredMargin, height: requiredHeight, opacity: (overlap ? 0.5 : 1), backgroundColor: (overlap ? "#E26161": "#56A3FA")}}> 
             <Text className='text-white font-bold'>{name} - {startTimeConvert} to {endTimeConvert}</Text>
         </View>
         </Pressable>

@@ -85,7 +85,8 @@ const DashboardScreen = () => {
                                 endISO = endISO.slice(0, 5)
                             }
 
-                            dayEvents.push(<ScheduleComponent key={j.event_id} name={j.event_name} startTime={startISO} endTime={endISO} subjectID={j.subject_id} description={j.event_desc} cr={cr} token={token} eventID = {j.event_id} refresher={setRefetch}/>)
+                            let overlap = false;
+                            dayEvents.push(<ScheduleComponent key={j.event_id} name={j.event_name} startTime={startISO} endTime={endISO} subjectID={j.subject_id} description={j.event_desc} cr={cr} token={token} eventID = {j.event_id} refresher={setRefetch} overlap={false}/>)
                         }
                       }
                   }
