@@ -12,6 +12,7 @@ import ScheduleComponent from "@/components/timetable/ScheduleComponent";
 import CreateEventButton from "@/components/timetable/CreateEventButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { io } from "socket.io-client";
+import { dismissAuthSession } from "expo-web-browser";
 
 const DashboardScreen = () => {
     const [subArrProp, setsubArrProp] = useState([])
@@ -28,6 +29,38 @@ const DashboardScreen = () => {
     const month = months[date.getMonth()]; 
     const day = date.getDate(); 
     const year = date.getFullYear(); 
+
+    const checkAndMarkOverlap = (scheduleObj : any) => {
+        let dailyEvents : any = [];
+        for(let i in scheduleObj){
+            for(let j of scheduleObj[i]){
+                const startTime = new Date(j.start_time);
+                const endTime = new Date(j.end_time);
+                startTime.setTime(startTime.getTime() + 5.5 * 60 * 60 * 1000)
+                endTime.setTime(endTime.getTime() + 5.5 * 60 * 60 * 1000)
+                let startISO = startTime.toISOString().split("T")[1]
+                let endISO  = endTime.toISOString().split("T")[1]
+                if(startISO[0] == '0'){
+                    startISO = startISO.slice(1, 5)
+                }
+                else{
+                    startISO = startISO.slice(0, 5)
+                }
+               if(endISO[0] == '0'){
+                       endISO = endISO.slice(1, 5)
+                 }
+                else{
+                  endISO = endISO.slice(0, 5)
+                }
+                j.start_time = startISO;
+                j.end_time = endISO;
+                dailyEvents.push(j);
+            }
+        }
+
+        console.log(dailyEvents)
+        return dailyEvents;
+    }
 
     useFocusEffect(React.useCallback(() => {
         //fetch events for the current date. 
@@ -59,38 +92,30 @@ const DashboardScreen = () => {
                 console.log(data.message)
               }
               else {
-                  const object = data.subjectEventsObject
-                  console.log(object)
+                  let object = data.subjectEventsObject
+                  const dailyEvents = checkAndMarkOverlap(object);
                   let dayEvents : any = []
-                  for(let i in object){
-                    if (object.hasOwnProperty(i)) {
-                        for(let j of object[i]){
-                            // convert incoming utc time to ist (add 5 and a half hours to it)
-                            const startTime = new Date(j.start_time);
-                            const endTime = new Date(j.end_time);
-                            startTime.setTime(startTime.getTime() + 5.5 * 60 * 60 * 1000)
-                            endTime.setTime(endTime.getTime() + 5.5 * 60 * 60 * 1000)
-                            let startISO = startTime.toISOString().split("T")[1]
-                            let endISO  = endTime.toISOString().split("T")[1]
-                            if(startISO[0] == '0'){
-                                startISO = startISO.slice(1, 5)
+                  for(let j = 0; j < dailyEvents.length; j++){
+                        // convert incoming utc time to ist (add 5 and a half hours to it)
+                        
+                            let numericISOstart = Number(dailyEvents[j].start_time.split(":")[0])*100 + Number(dailyEvents[j].start_time.split(":")[1]);
+                            let numericISOend = Number(dailyEvents[j].end_time.split(":")[0])*100 + Number(dailyEvents[j].end_time.split(":")[1]);
+                    
+                            for(let i = j + 1; i < dailyEvents.length; i++){
+                            let numericISOstartCurr = Number(dailyEvents[i].start_time.split(":")[0])*100 + Number(dailyEvents[i].start_time.split(":")[1]);
+                            let numericISOendCurr = Number(dailyEvents[i].end_time.split(":")[0])*100 + Number(dailyEvents[i].end_time.split(":")[1]);
+                            if(dailyEvents[i].event_name == "Overlap!!"){
+                                console.log(numericISOstartCurr, " ", numericISOendCurr)
                             }
-                            else{
-                                startISO = startISO.slice(0, 5)
+                        
+                            if(((numericISOstart < numericISOstartCurr && numericISOend > numericISOstartCurr) || (numericISOstart < numericISOendCurr && numericISOend > numericISOendCurr))){
+                                console.log("MADE IT HERE BITCHHHHHH")
+                                dailyEvents[i].overlap = true;
+                                dailyEvents[j].overlap = true;
                             }
-                            if(endISO[0] == '0'){
-                                endISO = endISO.slice(1, 5)
                             }
-                            else{
-                                endISO = endISO.slice(0, 5)
-                            }
-
-                            let overlap = false;
-                            dayEvents.push(<ScheduleComponent key={j.event_id} name={j.event_name} startTime={startISO} endTime={endISO} subjectID={j.subject_id} description={j.event_desc} cr={cr} token={token} eventID = {j.event_id} refresher={setRefetch} overlap={false}/>)
+                            dayEvents.push(<ScheduleComponent key={dailyEvents[j].event_id} name={dailyEvents[j].event_name} startTime={dailyEvents[j].start_time} endTime={dailyEvents[j].end_time} subjectID={dailyEvents[j].subject_id} description={dailyEvents[j].event_desc} cr={cr} token={token} eventID = {dailyEvents[j].event_id} refresher={setRefetch} overlap={dailyEvents[j].overlap}/>)
                         }
-                      }
-                  }
-
                   setEventsList(dayEvents)
               }
             })

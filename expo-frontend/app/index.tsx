@@ -27,6 +27,7 @@ const LoginScreen = () => {
                   .then(async(data) => {
                     if(data.success == false && data.message == "invalid signature"){
                         await AsyncStorage.clear();
+                        console.log("hi")
                     }
                     else{
                       router.push({ pathname: "/DashboardScreen", params: { registeredEmail : token, isCR: isCR} });
@@ -41,6 +42,7 @@ const LoginScreen = () => {
               }
         }
 
+        console.log("useEffect Works")
         checkToken()
 
       }, []);
