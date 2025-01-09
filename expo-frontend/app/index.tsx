@@ -12,6 +12,8 @@ const LoginScreen = () => {
 
     useEffect(() => {
         const checkToken = async() => {
+            const controller = new AbortController();
+            const timeout = setTimeout(() => controller.abort(), 5000);
             try {
                 const token = await AsyncStorage.getItem('jwt');
                 const isCR = await AsyncStorage.getItem('isCR')
@@ -21,9 +23,16 @@ const LoginScreen = () => {
                     headers: {
                       'Content-Type': 'application/json', // Informs the server about the data format
                     },
-                    body: JSON.stringify({jwt: token})
+                    body: JSON.stringify({jwt: token}),
+                    signal: controller.signal
                   })
-                  .then((res) => res.json())
+                  .then((res) => {
+                    clearTimeout(timeout)
+                    if(!res.ok){
+                      throw new Error("Network error?");
+                    }
+                    return res.json();
+                  })
                   .then(async(data) => {
                     if(data.success == false && data.message == "invalid signature"){
                         await AsyncStorage.clear();
@@ -32,6 +41,9 @@ const LoginScreen = () => {
                     else{
                       router.push({ pathname: "/DashboardScreen", params: { registeredEmail : token, isCR: isCR} });
                     }
+                  })
+                  .catch((error) =>{
+                    console.log("Fetch Error: ", error)
                   })
                   
                 } else {

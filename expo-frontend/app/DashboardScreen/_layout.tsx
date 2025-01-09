@@ -33,13 +33,6 @@ export default function _layout() {
           }}
         />
         <Drawer.Screen
-          name="attendance" 
-          options={{
-            drawerLabel: 'Attendance',
-            title:"Attendance"
-          }}
-        />
-        <Drawer.Screen
           name="profile" 
           options={{
             drawerLabel: 'Profile',

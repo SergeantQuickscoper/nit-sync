@@ -65,17 +65,9 @@ export default function ScheduleComponent({key, name, subjectID, description, st
                         <Text className='text-center mt-5 font-bold'>{name}</Text>
                         <Text className='text-center mt-3'>{description}</Text>
                         <View className='mb-6 py-1 px-5 mt-4'>
-                        {
-                            !attended ? (<Pressable className='bg-white py-1 px-5' onPress={handleEventAttend}>
-                                <Text className=''>Mark as attended</Text>
-                            </Pressable>) : (<Pressable onPress={handleEventLeave}>
-                                <Text className=''>Mark as unattended</Text>
-                            </Pressable>)
-                        }
-
-                        {cr ? (<View className='bg-white mb-6 py-1 px-5 mt-4'>
-                                                    <Pressable onPress={handleEventDeletion}>
-                                                        <Text className='text-center'>Delete</Text>
+                        {cr ? (<View className='bg-white mb-6 mt-4 rounded-full'>
+                                                    <Pressable className="py-2 px-5" onPress={handleEventDeletion}>
+                                                        <Text className='text-center font-bold text-red-500'>Delete</Text>
                                                     </Pressable>
                                             </View>) : <View className=''></View>}
                     </View>

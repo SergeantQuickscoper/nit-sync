@@ -35,15 +35,24 @@ const LoginInput = () => {
         if(isLocked){
             return;
         }
-
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 5000);
         await fetch(process.env.EXPO_PUBLIC_AUTH_SERVER + '/login', {
             method: 'POST', // Specifies a POST request
             headers: {
               'Content-Type': 'application/json', // Informs the server about the data format
             },
-            body: JSON.stringify({email : email, password : password})
+            body: JSON.stringify({email : email, password : password}),
+            signal: controller.signal
           })
-          .then((res) => res.json())
+          .then((res) => {
+            clearTimeout(timeout);
+            console.log(res.status);
+            if(!res.ok){
+                throw new Error("Network error?");
+            }
+            return res.json();
+          })
           .then(async(data) => {
             if(data.success == false){
                 setErrorMessage(data.message);
@@ -64,6 +73,9 @@ const LoginInput = () => {
                   }
                 router.push({ pathname: "/DashboardScreen", params: { jwt : data.jwt } }); //make this jwt
             }
+          })
+          .catch((error) =>{
+            setErrorMessage("Server Error");
           })
     }
 
