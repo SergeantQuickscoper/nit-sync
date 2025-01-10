@@ -30,9 +30,10 @@ export default function CreateEventButton({subjectDropdown} : any) {
   const [isLocked, setIsLocked] = useState(false);
   const [errorMessage, setErrorMessage] = useState()
 
-  useEffect(() => {
-    
-  }, [date, startTime, endTime])
+  useFocusEffect(React.useCallback(() =>{
+      startTime.setHours(9, 0, 0);
+      endTime.setHours(10, 0, 0);
+  }, []))
   const onChangeDate = (event : any, selectedDate : any) => {
     setDateShowAndroidPicker(false)
     console.log(selectedDate)
@@ -73,8 +74,6 @@ export default function CreateEventButton({subjectDropdown} : any) {
                 return;
             }
 
-            
-            
             await fetch(process.env.EXPO_PUBLIC_AUTH_SERVER + '/createEvent', {
               method: 'POST', // Specifies a POST request
               headers: {

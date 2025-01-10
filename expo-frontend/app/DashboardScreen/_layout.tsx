@@ -36,7 +36,8 @@ export default function _layout() {
           name="profile" 
           options={{
             drawerLabel: 'Profile',
-            title:"Profile"
+            title:"Profile",
+            headerShown: false
           }}
         />
 
@@ -44,7 +45,8 @@ export default function _layout() {
           name="support" 
           options={{
             drawerLabel: 'Support',
-            title:"Support"
+            title:"Support",
+            headerShown: false
           }}
         />
       </Drawer>

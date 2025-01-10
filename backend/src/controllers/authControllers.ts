@@ -247,10 +247,11 @@ class authControllers{
             }
 
             await authServices.changePass(email , newPass);
-
+            const userJWT = await authServices.generateJWT(email)
             res.send({
                 success: true,
-                message: "Your password is changed."
+                message: "Your password is changed.",
+                jwt: userJWT
             })
 
         } catch (error) {

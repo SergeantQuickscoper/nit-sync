@@ -63,9 +63,9 @@ export default function ReooccuringScheduleComponent({key, name, subjectID, desc
                         <Text className='text-center mt-3'>{description}</Text>
                         <View className='mb-6 py-1 px-5 mt-4'>
 
-                        {cr ? (<View className='bg-white mb-6 py-1 px-5 mt-4'>
-                                                    <Pressable onPress={handleEventDeletion}>
-                                                        <Text className='text-center'>Delete</Text>
+                        {cr ? (<View className='bg-white mb-6 mt-4 rounded-full'>
+                                                    <Pressable className="py-2 px-5" onPress={handleEventDeletion}>
+                                                        <Text className='text-center font-bold text-red-500'>Delete</Text>
                                                     </Pressable>
                                             </View>) : <View className=''></View>}
                     </View>

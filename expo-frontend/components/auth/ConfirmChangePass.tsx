@@ -2,7 +2,7 @@ import {View, Text, Image, SafeAreaView, TextInput, Pressable} from "react-nativ
 import { LinearGradient } from "expo-linear-gradient";
 import {router} from "expo-router"
 import { useState, useEffect} from "react";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const ConfirmChangePass = ({recievedParams} : any) => {
 
     const email = recievedParams.registeredEmail.toString();
@@ -54,13 +54,14 @@ const ConfirmChangePass = ({recievedParams} : any) => {
             body: JSON.stringify({email :email, newPass : password, confNewPass : confPassword})
           })
           .then((res) => res.json())
-          .then((data) => {
+          .then(async(data) => {
             if(data.success == false){
                 console.log(data.message)
                 setErrorMessage(data.message);
             }
             else{
                 console.log(data)
+                await AsyncStorage.setItem("jwt", data.jwt)
                 router.push({ pathname: "/NewAccountWelcomeScreen", params: { registeredEmail : email, message: data.message } });
             }
           })
