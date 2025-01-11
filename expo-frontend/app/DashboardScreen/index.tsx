@@ -104,12 +104,9 @@ const DashboardScreen = () => {
                             for(let i = j + 1; i < dailyEvents.length; i++){
                             let numericISOstartCurr = Number(dailyEvents[i].start_time.split(":")[0])*100 + Number(dailyEvents[i].start_time.split(":")[1]);
                             let numericISOendCurr = Number(dailyEvents[i].end_time.split(":")[0])*100 + Number(dailyEvents[i].end_time.split(":")[1]);
-                            if(dailyEvents[i].event_name == "Overlap!!"){
-                                console.log(numericISOstartCurr, " ", numericISOendCurr)
-                            }
-                        
+
                             if(((numericISOstart < numericISOstartCurr && numericISOend > numericISOstartCurr) || (numericISOstart < numericISOendCurr && numericISOend > numericISOendCurr))){
-                                console.log("MADE IT HERE BITCHHHHHH")
+ 
                                 dailyEvents[i].overlap = true;
                                 dailyEvents[j].overlap = true;
                             }

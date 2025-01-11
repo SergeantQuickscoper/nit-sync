@@ -41,7 +41,6 @@ const ConfirmChangePass = ({recievedParams} : any) => {
     }
 
     const handleResetPassword = async() => {
-        console.log("it works")
         if(isLocked){
             return;
         }
