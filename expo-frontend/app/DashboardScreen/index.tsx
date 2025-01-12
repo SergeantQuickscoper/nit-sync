@@ -1,18 +1,20 @@
-import {View, Text, Image, SafeAreaView, TextInput, Pressable, ScrollView, ImageBackground } from "react-native"
+import {View, Text, Image, SafeAreaView, TextInput, Pressable, ScrollView, ImageBackground, Alert } from "react-native"
 import { LinearGradient } from "expo-linear-gradient";
 import {router, useFocusEffect, useLocalSearchParams} from "expo-router"
 import LogoAuth from "@/components/auth/LogoAuth";
 import OTPInput from "@/components/auth/OTPInput";
 import CompleteAccount from "@/components/auth/CompleteAccount";
 import { useNavigation } from "expo-router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DrawerActions } from "@react-navigation/native";
 import NavigationBar from "@/components/timetable/NavigationBar";
 import ScheduleComponent from "@/components/timetable/ScheduleComponent";
 import CreateEventButton from "@/components/timetable/CreateEventButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import messaging from '@react-native-firebase/messaging';
 import { io } from "socket.io-client";
 import { dismissAuthSession } from "expo-web-browser";
+import {PermissionsAndroid} from 'react-native';
 
 const DashboardScreen = () => {
     const [subArrProp, setsubArrProp] = useState([])
@@ -30,6 +32,38 @@ const DashboardScreen = () => {
     const day = date.getDate(); 
     const year = date.getFullYear(); 
 
+    useEffect(() => {
+        console.log("Notification work is happenin!!")
+        PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
+        requestUserPermission();
+        messaging().getToken().then(token => console.log(token));
+        
+        messaging().setBackgroundMessageHandler(async remoteMessage => {
+            console.log('Message handled in the background!', remoteMessage);
+        });
+
+        const unsubscribe = messaging().onMessage(async remoteMessage => {
+            Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+        });
+      
+          return unsubscribe;
+
+    }, [])
+
+    //Notification logic
+    const requestUserPermission = async() =>{
+        const authStatus = await messaging().requestPermission();
+        const enabled =
+            authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+            authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+        if (enabled) {
+            console.log('Authorization status:', authStatus);
+    }
+
+    
+
+    }
     const checkAndMarkOverlap = (scheduleObj : any) => {
         let dailyEvents : any = [];
         for(let i in scheduleObj){

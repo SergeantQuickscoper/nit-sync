@@ -49,7 +49,7 @@ const LoginInput = () => {
             clearTimeout(timeout);
             console.log(res.status);
             if(!res.ok){
-                throw new Error("Network error?");
+                throw new Error("Server error");
             }
             return res.json();
           })
@@ -75,7 +75,7 @@ const LoginInput = () => {
             }
           })
           .catch((error) =>{
-            setErrorMessage("Server Error");
+            setErrorMessage(error.message);
           })
     }
 
