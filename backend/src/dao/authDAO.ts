@@ -169,6 +169,18 @@ class authDAO{
             throw error;
         }
     }
+
+    async saveTokenToEmail(email, token){
+        try {
+            const query = db.select('notification_device_token', token).from('user_auth').where("email", email);
+            let notArray = [];
+            //some comparison logic to avoid pushing duplicate tokens into the array.
+            notArray.push(token);
+            await db.table("user_auth").update({notification_device_token: notArray}).where("email", email);
+        } catch (error) {
+            throw error;
+        }
+    }
 }
 
 

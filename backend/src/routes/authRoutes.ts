@@ -12,4 +12,5 @@ router.post("/reqpassresetOTP", authControllers.reqPasswordResetOTP)
 router.post("/verifypassOTP", authControllers.verifyPassToken)
 router.post("/changepass", authControllers.changePass)
 router.post("/getUserData", authControllers.getUserData)
+router.post("/sendNotificationDeviceToken", authControllers.saveToken)
 export default router;

@@ -281,6 +281,22 @@ class authControllers{
         }
     }
 
+    async saveToken(req, res){
+        try {
+            const {jwt, notifDeviceToken} = req.body;
+            await authServices.saveToken(jwt, notifDeviceToken);
+            res.send({
+                success: true,
+                message: "Saved notification token successfully",
+            })
+        } catch (error) {
+            res.status(400).send({
+                success: false, 
+                message: error.message
+            })
+        }
+    }
+
     
 
 }

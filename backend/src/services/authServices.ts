@@ -222,6 +222,15 @@ class authServices{
             throw error;
         }
     }
+
+    async saveToken(token, notifDeviceToken){
+        try {
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            await authDAO.saveTokenToEmail(decoded.email, notifDeviceToken);
+        } catch (error) {
+            throw error;
+        }
+    }
     
 }
 

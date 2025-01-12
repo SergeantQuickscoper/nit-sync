@@ -50,6 +50,26 @@ const DashboardScreen = () => {
 
     }, [])
 
+    const sendTokenDataToServer = async(token : any) => {
+        const jwt = await AsyncStorage.getItem('jwt');
+        await fetch(process.env.EXPO_PUBLIC_AUTH_SERVER + '/sendNotificationDeviceToken', {
+            method: 'POST', 
+            headers: {
+              'Content-Type': 'application/json', 
+            },
+            body: JSON.stringify({jwt: jwt, token: token})
+          })
+          .then((res) => res.json())
+          .then(async(data) => {
+            if(data.success == false) {
+              console.log(data.message)
+            }
+            else {
+                console.log("Sent device token " + token)
+            }
+          })
+    }
+
     //Notification logic
     const requestUserPermission = async() =>{
         const authStatus = await messaging().requestPermission();
@@ -114,9 +134,9 @@ const DashboardScreen = () => {
             
             
             await fetch(process.env.EXPO_PUBLIC_AUTH_SERVER + '/getEventsOnDay', {
-              method: 'POST', // Specifies a POST request
+              method: 'POST', 
               headers: {
-                'Content-Type': 'application/json', // Informs the server about the data format
+                'Content-Type': 'application/json', 
               },
               body: JSON.stringify({jwt: token, day: date})
             })
