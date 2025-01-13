@@ -48,9 +48,6 @@ const LoginInput = () => {
           .then((res) => {
             clearTimeout(timeout);
             console.log(res.status);
-            if(!res.ok){
-                throw new Error("Server error");
-            }
             return res.json();
           })
           .then(async(data) => {

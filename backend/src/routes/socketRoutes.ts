@@ -1,4 +1,4 @@
-import jwt from "jsonwebtoken"
+import jwt, { JwtPayload } from "jsonwebtoken"
 
 export const connectedUsers = {}; //inshallah this one connectedUsers Objects scales
 
@@ -12,7 +12,7 @@ export function setupSocketHandlers(io) {
       }
   
       try {
-        const user = jwt.verify(token, process.env.JWT_SECRET);
+        const user = jwt.verify(token, process.env.JWT_SECRET) as JwtPayload;
         socket.user = user.email; 
         next();
       } catch (err) {

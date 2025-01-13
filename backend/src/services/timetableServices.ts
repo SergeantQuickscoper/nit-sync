@@ -1,13 +1,13 @@
 import timetableDAO from "../dao/timetableDAO";
 import authDAO from "../dao/authDAO";
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import { connectedUsers } from "../routes/socketRoutes";
 import { io } from "../index";
 class timetableServices{
 
     async validateCRandGetID(token){
         try {
-            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            const decoded = jwt.verify(token, process.env.JWT_SECRET) as JwtPayload;
             
             //TODO validate the iat parameter later 
             //TODO check for in past, check for non negative value etc. etc.
@@ -48,7 +48,7 @@ class timetableServices{
 
     async getSubjectsByClass(userJWT){
         try {
-            const decoded = jwt.verify(userJWT, process.env.JWT_SECRET);
+            const decoded = jwt.verify(userJWT, process.env.JWT_SECRET) as JwtPayload; 
             //if cr doesnt exist for a particular user this will return an error so during
             //the phase of finding all the crs we need to accomodate for this bug.
             const {uid} = await authDAO.findCRID(decoded.email);      
@@ -64,7 +64,7 @@ class timetableServices{
 
     async getReoccuringEventView(token){
         try {
-            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            const decoded = jwt.verify(token, process.env.JWT_SECRET) as JwtPayload;
             const {uid} = await authDAO.findCRID(decoded.email);
             const query = await timetableDAO.getReoccuringEventView(uid)
             return query;
@@ -92,8 +92,8 @@ class timetableServices{
 
     async joinSubject(token, subjectID){
         try {
-            const decoded = jwt.verify(token, process.env.JWT_SECRET);
-            const {uid} = await authDAO.emailToUID(decoded.email);
+            const decoded = jwt.verify(token, process.env.JWT_SECRET) as JwtPayload;
+            const {uid} = await authDAO.emailToUID(decoded.email) ;
             await timetableDAO.joinSubject(uid, subjectID);
         } catch (error) {
             throw error;
@@ -103,8 +103,8 @@ class timetableServices{
 
     async attendEvent(token, event_id){
         try {
-            const decoded = jwt.verify(token, process.env.JWT_SECRET);
-            const {uid} = await authDAO.emailToUID(decoded.email);
+            const decoded = jwt.verify(token, process.env.JWT_SECRET) as JwtPayload;
+            const {uid} = await authDAO.emailToUID(decoded.email) ;
             await timetableDAO.attendEvent(uid, event_id);
         } catch (error) {
             throw error;
@@ -113,8 +113,8 @@ class timetableServices{
 
     async getEventsOnDay(token, day){
         try {
-            const decoded = jwt.verify(token, process.env.JWT_SECRET);
-            const {uid} = await authDAO.emailToUID(decoded.email);
+            const decoded = jwt.verify(token, process.env.JWT_SECRET) as JwtPayload;
+            const {uid} = await authDAO.emailToUID(decoded.email) ;
             const userSubjectList = await timetableDAO.getSubjectsUserJoined(uid);
             let subjectEventObj = {};
             let count  = 0;
@@ -134,7 +134,7 @@ class timetableServices{
 
     async getTotalEventsOfSubjectsUserIsPartOf(token){
         try {
-            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            const decoded = jwt.verify(token, process.env.JWT_SECRET) as JwtPayload;
             const {uid} = await authDAO.emailToUID(decoded.email);
             const userSubjectList = await timetableDAO.getSubjectsUserJoined(uid);
             let subjectEventObj = {};
@@ -177,7 +177,7 @@ class timetableServices{
 
     async leaveSubject(token, subject_id){
         try {
-            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            const decoded = jwt.verify(token, process.env.JWT_SECRET) as JwtPayload;
             const {uid} = await authDAO.emailToUID(decoded.email);
             await timetableDAO.leaveSubject(uid, subject_id);
         } catch (error) {
@@ -187,7 +187,7 @@ class timetableServices{
 
     async leaveEvent(token, event_id){
         try {
-            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            const decoded = jwt.verify(token, process.env.JWT_SECRET) as JwtPayload;
             const {uid} = await authDAO.emailToUID(decoded.email);
             await timetableDAO.deleteEventByID(uid, event_id);
         } catch (error) {
@@ -197,7 +197,7 @@ class timetableServices{
 
     async getJoinedSubjects(token){
         try {
-            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            const decoded = jwt.verify(token, process.env.JWT_SECRET) as JwtPayload;
             const {uid} = await authDAO.emailToUID(decoded.email);
             return await timetableDAO.getJoinedSubjects(uid);
         } catch (error) {
@@ -207,7 +207,7 @@ class timetableServices{
 
     async getAttendedEvents(token){
         try {
-            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            const decoded = jwt.verify(token, process.env.JWT_SECRET) as JwtPayload;
             const {uid} = await authDAO.emailToUID(decoded.email);
             return await timetableDAO.getAttendedEvents(uid);
         } catch (error) {
@@ -227,7 +227,7 @@ class timetableServices{
 
     async deleteReoccuringEvent(token, reoccuring_event_id){
         try {
-            const uid = await this.validateCRandGetID(token);
+            const uid= await this.validateCRandGetID(token);
             await timetableDAO.deleteReoccuringEvent(uid, reoccuring_event_id)
             io.emit("reoccuringEventUpdate")
         } catch (error) {

@@ -36,7 +36,7 @@ const DashboardScreen = () => {
         console.log("Notification work is happenin!!")
         PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
         requestUserPermission();
-        messaging().getToken().then(token => console.log(token));
+        messaging().getToken().then(token => sendTokenDataToServer(token));
         
         messaging().setBackgroundMessageHandler(async remoteMessage => {
             console.log('Message handled in the background!', remoteMessage);
@@ -50,6 +50,12 @@ const DashboardScreen = () => {
 
     }, [])
 
+    useEffect(()=>{
+        return messaging().onTokenRefresh(token => {
+            sendTokenDataToServer(token);
+          });
+    }, [])
+
     const sendTokenDataToServer = async(token : any) => {
         const jwt = await AsyncStorage.getItem('jwt');
         await fetch(process.env.EXPO_PUBLIC_AUTH_SERVER + '/sendNotificationDeviceToken', {
@@ -57,7 +63,7 @@ const DashboardScreen = () => {
             headers: {
               'Content-Type': 'application/json', 
             },
-            body: JSON.stringify({jwt: jwt, token: token})
+            body: JSON.stringify({jwt: jwt, notifDeviceToken: token})
           })
           .then((res) => res.json())
           .then(async(data) => {

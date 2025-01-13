@@ -29,7 +29,7 @@ const LoginScreen = () => {
                   .then((res) => {
                     clearTimeout(timeout)
                     if(!res.ok){
-                      throw new Error("Network error?");
+                      throw new Error("Network error ");
                     }
                     return res.json();
                   })
@@ -50,7 +50,7 @@ const LoginScreen = () => {
                   console.log('No token found');
                 }
               } catch (error) {
-                console.error('Error retrieving token', error)
+                console.error('Error retrieving token ', error)
               }
         }
 

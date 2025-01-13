@@ -1,6 +1,6 @@
 import authDAO from "../dao/authDAO";
 import crypto from "crypto"
-import jwt from "jsonwebtoken"
+import jwt, {JwtPayload} from "jsonwebtoken"
 import transporter from "../utils/nodemailerTransporter";
 
 //TODO Throw all errors to the controller layer the way it is rn is ridiculous
@@ -216,7 +216,7 @@ class authServices{
 
     async getUserData(token){
         try {
-            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            const decoded = jwt.verify(token, process.env.JWT_SECRET) as JwtPayload;
             return await authDAO.getUser(decoded.email);
         } catch (error) {
             throw error;
@@ -225,7 +225,7 @@ class authServices{
 
     async saveToken(token, notifDeviceToken){
         try {
-            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            const decoded = jwt.verify(token, process.env.JWT_SECRET) as JwtPayload;
             await authDAO.saveTokenToEmail(decoded.email, notifDeviceToken);
         } catch (error) {
             throw error;
