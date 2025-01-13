@@ -31,6 +31,7 @@ class timetableServices{
     async getCRsStudents(uid){
         //gets information that seemed necessary for notifications
         const studentsList = await authDAO.getStudentsOfCR(uid);
+        console.log(studentsList, "STUDENTS LIST");
         return studentsList;
 
     }
@@ -45,19 +46,22 @@ class timetableServices{
 
             //emit a server-update event to all connectedUsers in the class (CURRENTLY SENDS TO EVERYONE NEEDS FIX BEFORE PROD)
             io.emit("subjectUpdate")
-
+            console.log("MADE IT PAST EMITTING")
             //push notifications to users of the CR
             const studentsList =  await this.getCRsStudents(uid);
             const tokensList = [];
             for(let i of studentsList){
-                for(let j of i.notification_device_token) tokensList.push(j);
+                if(i.notification_device_token){
+                    for(let j of i.notification_device_token) tokensList.push(j);
+                }
             }
 
+            console.log("TOKENS LIST: ", tokensList)
             await admin.messaging().sendEachForMulticast({
                 tokens: tokensList,
                 notification: {
                     title: JSON.stringify("New Subject Added: " + subjectName),
-                    body: JSON.stringify("If you are part of this subject make sure to click join to recieve updates on")
+                    body: JSON.stringify("If you are part of this subject make sure to click join to recieve updates on it")
                 },
                 data: {
                   //foreground payload

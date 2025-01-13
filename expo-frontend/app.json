@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "expo-frontend",
-    "slug": "expo-frontend",
+    "name": "NIT Sync",
+    "slug": "NITSync",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -16,7 +16,6 @@
       "supportsTablet": true
     },
     "android": {
-      "googleServicesFile": ".android/app/google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
