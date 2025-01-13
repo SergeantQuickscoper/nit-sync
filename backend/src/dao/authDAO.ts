@@ -182,6 +182,13 @@ class authDAO{
             throw error;
         }
     }
+
+    async getStudentsOfCR(uid){
+        const query = db.select("*").from("user_auth").where("uid", uid);
+        const {branch, section, first_year,} = query[0];
+        const studentList = await db.select('uid, email, first_name, last_name, roll_no, notification_device_token').from('user_auth').where('role', 'student').andWhere('branch', branch).andWhere('section', section).andWhere('first_year', first_year);
+        return studentList;
+    }
 }
 
 

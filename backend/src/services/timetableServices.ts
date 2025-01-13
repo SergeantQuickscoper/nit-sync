@@ -2,7 +2,8 @@ import timetableDAO from "../dao/timetableDAO";
 import authDAO from "../dao/authDAO";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { connectedUsers } from "../routes/socketRoutes";
-import { io } from "../index";
+import { io } from "../index"; //socketIO object
+import { admin } from "../index"; // firebase admin sdk objedt
 class timetableServices{
 
     async validateCRandGetID(token){
@@ -27,6 +28,13 @@ class timetableServices{
         }
     }
 
+    async getCRsStudents(uid){
+        //gets information that seemed necessary for notifications
+        const studentsList = await authDAO.getStudentsOfCR(uid);
+        return studentsList;
+
+    }
+
     async createSubject(token, subjectName, description){
         try {
 
@@ -35,10 +43,39 @@ class timetableServices{
             //query create the mentioned subject in the afforementioned class
             await timetableDAO.createSubject(uid, subjectName, description);
 
-            //emit a server-update event to all connectedUsers in the class
+            //emit a server-update event to all connectedUsers in the class (CURRENTLY SENDS TO EVERYONE NEEDS FIX BEFORE PROD)
             io.emit("subjectUpdate")
 
-            //push notifications to all subject users
+            //push notifications to users of the CR
+            const studentsList =  await this.getCRsStudents(uid);
+            const tokensList = [];
+            for(let i of studentsList){
+                for(let j of i.notification_device_token) tokensList.push(j);
+            }
+
+            await admin.messaging().sendEachForMulticast({
+                tokens: tokensList,
+                notification: {
+                    title: JSON.stringify("New Subject Added: " + subjectName),
+                    body: JSON.stringify("If you are part of this subject make sure to click join to recieve updates on")
+                },
+                data: {
+                  //foreground payload
+                },
+                apns: {
+                  payload: {
+                    aps: {
+                      // Required for background/quit data-only messages on iOS
+                      // Note: iOS frequently will receive the message but decline to deliver it to your app.
+                      //           This is an Apple design choice to favor user battery life over data-only delivery
+                      //           reliability. It is not under app control, though you may see the behavior in device logs.
+                      'content-available': true,
+                      // Required for background/quit data-only messages on Android
+                      priority: 'high',
+                    },
+                  },
+                },
+              });
 
 
         } catch (error) {
