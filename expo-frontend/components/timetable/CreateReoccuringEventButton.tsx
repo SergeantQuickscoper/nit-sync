@@ -29,7 +29,7 @@ export default function CreateReoccuringEvent({subjectDropdown} : any) {
   const [endTime, setEndTIme] = useState(new Date());
   const [show, setShow] = useState(false);
   const [isLocked, setIsLocked] = useState(false);
-  const [errorMessage, setErrorMessage] = useState()
+  const [errorMessage, setErrorMessage] = useState("");
   const [day, setDay] = useState("")
 
   
@@ -80,14 +80,14 @@ export default function CreateReoccuringEvent({subjectDropdown} : any) {
             .then((res) => res.json())
             .then(async(data) => {
               if(data.success == false) {
-                console.log(data.message)
+                setErrorMessage(data.message)
               }
               else {
-                    console.log(data.message)
+                  setModalOpen(false)
                   }
               })
 
-            setModalOpen(false)
+            
     }
 
   return (
@@ -291,7 +291,7 @@ export default function CreateReoccuringEvent({subjectDropdown} : any) {
                             </Pressable>
                         </View>
                         
-                        
+                        <Text className=" text-red-500 font-medium text-base mt-2">{errorMessage}</Text>
                         <View className='bg-white mt-10 rounded-full mb-5'>
                         <Pressable className="py-2 px-5" onPress={onCreateEvent}>
                             <Text className='font-bold'>Create</Text>

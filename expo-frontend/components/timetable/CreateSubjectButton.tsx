@@ -92,7 +92,7 @@ export default function CreateSubjectButton() {
                             <TextInput value={description} onChangeText={(text : any) => setDescription(text)} className='h-full w-11/12 px-2 py-2 text-lg leading-tight' placeholder="Description" placeholderTextColor={"black"} />
                         </SafeAreaView>
                         </View>
-                                                
+                        <Text className=" text-red-500 font-medium text-base mt-2">{errorMessage}</Text>                                                
                         <View className='bg-white mt-10 mb-5 rounded-full'>
                         <Pressable className="py-2 px-5" onPress={onCreatePress}>
                             <Text className='font-bold'>Create</Text>

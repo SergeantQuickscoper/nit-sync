@@ -84,14 +84,15 @@ export default function CreateEventButton({subjectDropdown} : any) {
             .then((res) => res.json())
             .then(async(data) => {
               if(data.success == false) {
-                console.log(data.message)
+                setErrorMessage(data.message)
               }
               else {
                     console.log(data.message)
+                    setModalOpen(false)
                   }
               })
 
-            setModalOpen(false)
+            
     }
 
   return (
@@ -300,7 +301,7 @@ export default function CreateEventButton({subjectDropdown} : any) {
                             </Pressable>
                         </View>
                         
-                        
+                        <Text className=" text-red-500 font-medium text-base w-[22rem] mt-2">{errorMessage}</Text>
                         <View className='bg-white mt-10 py-1 px-5 mb-5'>
                         <Pressable onPress={onCreateEvent}>
                             <Text className=''>Create</Text>

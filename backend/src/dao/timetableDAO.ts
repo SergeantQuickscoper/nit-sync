@@ -202,7 +202,7 @@ class timetableDAO{
         // loop through each day, excluding set holidays, this probably requires alot of manual handling (set job?) AND GIVE USER an OPTION TO update every event from the sem beginning to the end
         for(let i = new Date(); i < lastWorkingDay; i.setDate(i.getDate() + 1))
             //insert into events table the required event
-            if(day.toLowerCase() == daysOfWeek[i.getDay()]){
+            if(day.toLowerCase() == daysOfWeek[i.getUTCDay()]){
                 const currentDatePart = i.toISOString().split("T")[0];
                 const startTimePart = start_time.split("T")[1]; 
                 const endTimePart = end_time.split("T")[1];
