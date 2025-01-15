@@ -131,12 +131,12 @@ export default function subjects() {
 
   return (
     <View className='flex-1 bg-[#F7F7F7] border'>
-      <View className="header mb-2 mt-14 flex-row justify-between mx-4 items-center">
+      <View className="header mb-2 mt-14 flex-row justify-between  ml-4 mr-2 items-center">
                 <NavigationBar />
-                <Text className="font-bold text-lg">
+                <Text className="font-bold">
                     Subjects
                 </Text>
-                {cr ? <CreateSubjectButton /> : <View className="w-[16px]"></View>}
+                {cr ? <CreateSubjectButton /> : <View className="p-4"><View className="w-[16px]"></View></View>}
       </View>
       <ScrollView >
         <View className='flex-1 flex-row flex-wrap mt-4'>

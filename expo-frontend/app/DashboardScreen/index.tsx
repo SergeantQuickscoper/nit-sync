@@ -336,7 +336,7 @@ const DashboardScreen = () => {
         <View className='flex-1 bg-[#F7F7F7]'>
             <View className="header mb-2 mt-14 flex-row justify-between  ml-4 mr-2 items-center">
                 <NavigationBar />
-                <Text className="font-bold ml-4">
+                <Text className="font-bold">
                     {formattedDate}
                 </Text>
                 {cr ? <CreateEventButton subjectDropdown={subArrProp}/> : <View className="p-4"><View className="w-[16px]"></View></View>}

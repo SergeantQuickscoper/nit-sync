@@ -202,11 +202,11 @@ export default function CreateReoccuringEvent({subjectDropdown} : any) {
 
                         <View className='mt-5'>
                             <Modal visible={show}>
-                                        <View className='flex-1 justify-center items-center px-10'>
+                                        <View className='flex-1 justify-center items-center px-10 bg-[#1f1f1f]'>
                                             <View className='flex-row justify-between w-full'>
                                                 
                                                 <View className='mx-3 flex-col items-start '>
-                                                    <Text className='mb-2 ml-4'>Start Time</Text>
+                                                    <Text className='mb-2 ml-4 text-white font-bold '>Start Time</Text>
                                                     {
                                                         (Platform.OS == "ios") && (<DateTimePicker
                                                             testID="dateTimePicker"
@@ -219,7 +219,7 @@ export default function CreateReoccuringEvent({subjectDropdown} : any) {
                                                     {
                                                         (Platform.OS == "android") && (
                                                             <SafeAreaView className='flex-1 items-center min-h-10 mt-1 rounded-full bg-white shadow-sm mx-3'>
-                                                                <TextInput onPress={() => {setShowStartTimeAndroidPicker(true)}} value={startTime.toTimeString().split(":")[0] + ":" + startTime.toTimeString().split(":")[1]} placeholder="Select Date" placeholderTextColor={"black"} />
+                                                                <TextInput className="text-center p-1" onPress={() => {setShowStartTimeAndroidPicker(true)}} value={startTime.toTimeString().split(":")[0] + ":" + startTime.toTimeString().split(":")[1]} placeholder="Select Date" placeholderTextColor={"black"} />
                                                                 {
                                                                     
                                                                     (showStartTimeAndroidPicker && 
@@ -241,7 +241,7 @@ export default function CreateReoccuringEvent({subjectDropdown} : any) {
                                                     
                                                 </View>
                                                 <View className='mx-2'>
-                                                    <Text className='mb-2 ml-4'>End Time</Text>
+                                                    <Text className='mb-2 ml-4 text-white font-bold'>End Time</Text>
                                                     {(Platform.OS == "ios") && (
                                                             <DateTimePicker
                                                             testID="dateTimePicker"
@@ -255,7 +255,7 @@ export default function CreateReoccuringEvent({subjectDropdown} : any) {
                                                     {
                                                         (Platform.OS == "android") && (
                                                             <SafeAreaView className='flex-1 items-center min-h-10 mt-1 rounded-full bg-white shadow-sm ml-4'>
-                                                                <TextInput onPress={() => {setShowEndTimeAndroidPicker(true)}} value={endTime.toTimeString().split(":")[0] + ":" + endTime.toTimeString().split(":")[1]} placeholder="Select Date" placeholderTextColor={"black"} />
+                                                                <TextInput className="text-center align-middle items-center p-1" style={{textAlignVertical: 'center'}} onPress={() => {setShowEndTimeAndroidPicker(true)}} value={endTime.toTimeString().split(":")[0] + ":" + endTime.toTimeString().split(":")[1]} placeholder="Select Date" placeholderTextColor={"black"} />
                                                                 {
                                                                 (showEndTimeAndroidPicker && 
                                                                     (
@@ -278,8 +278,8 @@ export default function CreateReoccuringEvent({subjectDropdown} : any) {
                                                 </View>
                                             </View>
                                             
-                                        <Pressable onPress={() => setShow(false)} className='mt-10'>
-                                            <Text>Select</Text>
+                                        <Pressable onPress={() => setShow(false)} className='mt-10 py-2 px-5 bg-white rounded-full'>
+                                            <Text className='text-black font-bold'>Select</Text>
                                         </Pressable>
                                         </View>
                                         

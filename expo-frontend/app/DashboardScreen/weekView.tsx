@@ -238,10 +238,10 @@ export default function weekView() {
     <View className='flex-1 bg-[#F7F7F7]'>
       <View className="header mb-2 mt-14 flex-row justify-between mx-4 items-center">
         <NavigationBar />
-         <Text className="font-bold ml-2">
+         <Text className="font-bold ml-4">
             Weekly Timetable
           </Text>
-          {cr ? <CreateReoccuringEvent subjectDropdown={subArrProp}/> : <View className="w-[16px]"></View>}
+          {cr ? <CreateReoccuringEvent subjectDropdown={subArrProp}/> : <View className="p-4"><View className="w-[16px]"></View></View>}
       </View>
       <ScrollView>
                   <View className="calendar flex-row mb-7">
