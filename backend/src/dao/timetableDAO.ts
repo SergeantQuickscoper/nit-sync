@@ -226,13 +226,15 @@ class timetableDAO{
                 throw Error("Specified Event doesnt exist or wasnt created by you");
             }
             await db.table("reoccuring_event_view").del().where("created_by", author).andWhere("reoccuring_event_view_id", reoccuringEventID);
+            const currDate = new Date();
+            await db.table("events").del().where("reoccuring_event_id", reoccuringEventID).andWhere("created_by", author);
+            console.log("Deleting events");
         } catch (error) {
             throw error;
         }   
 
         //side effect delete every event AFTER the current date..
-        const currDate = new Date();
-        await db.table("events").del().where("reoccuring_event_id", reoccuringEventID).andWhere("created_by", author).andWhereBetween("start_time", [currDate, this.lastWorkingDay]);
+        
 
     }
 

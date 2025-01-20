@@ -269,9 +269,16 @@ class timeTableControllers{
     async createReoccuringEvent(req, res){
         try {
             const {jwt, eventName, description, subjectID, eventType, startTime, endTime, day} = req.body;
+
+            if(!jwt || !eventName || !description || !subjectID || !eventType || !startTime || !startTime || !endTime || !day){
+                throw Error("Please fill out all fields.")
+            }
+            
             if(startTime >= endTime){
                 throw Error("Event end time cannot be before event start time.")
             }
+            
+            
             await timetableServices.createReoccuringEvent(jwt, eventName, description, subjectID, eventType, startTime, endTime, day);
 
             res.send({

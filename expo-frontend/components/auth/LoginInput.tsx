@@ -87,7 +87,7 @@ const LoginInput = () => {
                 </SafeAreaView>
 
                 <SafeAreaView className='flex-1 items-center w-[22rem] min-h-11 mt-10 rounded-full p-2 bg-white shadow-sm justify-center'>
-                    <TextInput className='w-11/12 px-2 text-lg leading-tight' onChangeText={(text) => handlePassChange(text)} placeholder="Password" placeholderTextColor={"black"} />
+                    <TextInput secureTextEntry={true} className='w-11/12 px-2 text-lg leading-tight' onChangeText={(text) => handlePassChange(text)} placeholder="Password" placeholderTextColor={"black"} />
                 </SafeAreaView>
 
                 <SafeAreaView className='w-[22rem] mt-3 flex-row justify-between'>
