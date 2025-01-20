@@ -28,7 +28,7 @@ export default function CreateEventButton({subjectDropdown} : any) {
   const [endTime, setEndTIme] = useState(new Date());
   const [show, setShow] = useState(false);
   const [isLocked, setIsLocked] = useState(false);
-  const [errorMessage, setErrorMessage] = useState()
+  const [errorMessage, setErrorMessage] = useState("")
 
   useFocusEffect(React.useCallback(() =>{
       startTime.setHours(9, 0, 0);
@@ -89,6 +89,7 @@ export default function CreateEventButton({subjectDropdown} : any) {
               else {
                     console.log(data.message)
                     setModalOpen(false)
+                    setErrorMessage("")
                   }
               })
 

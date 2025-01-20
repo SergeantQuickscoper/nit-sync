@@ -14,7 +14,7 @@ export default function CreateSubjectButton() {
   const [subjectName, setsubjectName] = useState("")
   const [description, setDescription] = useState("");
   const [isLocked, setIsLocked] = useState(true);
-  const [errorMessage, setErrorMessage] = useState()
+  const [errorMessage, setErrorMessage] = useState("")
   
   useEffect(() => {
     console.log(subjectName, description)
@@ -63,6 +63,7 @@ export default function CreateSubjectButton() {
             setModalOpen(false)
             setDescription("")
             setsubjectName("");
+            setErrorMessage("")
         }
       }) 
   }

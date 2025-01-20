@@ -84,6 +84,7 @@ export default function CreateReoccuringEvent({subjectDropdown} : any) {
               }
               else {
                   setModalOpen(false)
+                  setErrorMessage("")
                   }
               })
 

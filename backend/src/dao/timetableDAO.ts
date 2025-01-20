@@ -179,12 +179,10 @@ class timetableDAO{
         try {
             //BEFORE INSERTING DO AN OVERLAP CHECK HERE
 
-            await db.table('reoccuring_events').insert({"reoccuring_event_name" : eventName, "subject_id" : subjectID, "reoccuring_event_desc" : description, "reoccuring_event_type" : eventType, "start_time" : start_time, "end_time" : end_time, "created_by" : author, "reoccuring_day": day})
-            await db.table('reoccuring_event_view').insert({"reoccuring_event_view_name" : eventName, "subject_id" : subjectID, "reoccuring_event_view_desc" : description, "reoccuring_event_view_type" : eventType, "start_time" : start_time, "end_time" : end_time, "created_by" : author, "reoccuring_day": day})
-            const query = await db.select("reoccuring_event_id").from("reoccuring_events").where("start_time", start_time).andWhere("end_time", end_time).andWhere("reoccuring_day", day);
-            const {reoccuring_event_id} = query[0];
+            const [reoccurID] = await db.table('reoccuring_events').insert({"reoccuring_event_name" : eventName, "subject_id" : subjectID, "reoccuring_event_desc" : description, "reoccuring_event_type" : eventType, "start_time" : start_time, "end_time" : end_time, "created_by" : author, "reoccuring_day": day}).returning('reoccuring_event_id');
+            await db.table('reoccuring_event_view').insert({"reoccuring_event_view_name" : eventName, "subject_id" : subjectID, "reoccuring_event_view_desc" : description, "reoccuring_event_view_type" : eventType, "start_time" : start_time, "end_time" : end_time, "created_by" : author, "reoccuring_day": day, "reoccuring_event_id" : reoccurID.reoccuring_event_id});
             //side effect which calculates every day the event occurs and adds it to (loop through every day in the semester???????? could be useful to calculate attendance)
-            this.updateEventsWithReoccuringEvents(author, eventName, description, start_time, end_time, eventType, subjectID, day, reoccuring_event_id)
+            this.updateEventsWithReoccuringEvents(author, eventName, description, start_time, end_time, eventType, subjectID, day, reoccurID.reoccuring_event_id)
         } catch (error) {
             throw error;
         }
@@ -225,9 +223,10 @@ class timetableDAO{
             if(check.length == 0){
                 throw Error("Specified Event doesnt exist or wasnt created by you");
             }
+            const foreignForEvents = check[0].reoccuring_event_id;
             await db.table("reoccuring_event_view").del().where("created_by", author).andWhere("reoccuring_event_view_id", reoccuringEventID);
             const currDate = new Date();
-            await db.table("events").del().where("reoccuring_event_id", reoccuringEventID).andWhere("created_by", author);
+            await db.table("events").del().where("reoccuring_event_id", foreignForEvents).andWhere("created_by", author).andWhereBetween("start_time", [currDate, this.lastWorkingDay]);
             console.log("Deleting events");
         } catch (error) {
             throw error;
