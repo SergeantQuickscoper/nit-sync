@@ -255,6 +255,18 @@ class timetableDAO{
         }
     }
 
+    async getUpcomingEvents(minutes){
+        try {
+            const currTime = new Date();
+            const rangeTime = new Date();
+            rangeTime.setMinutes(currTime.getMinutes() + minutes)
+            const query = await db.select("*").from("events").whereBetween("start_time", [currTime, rangeTime]);
+            return query;
+        } catch (error) {
+            throw error;
+        }
+    }
+
 }
 
 const timetableDAOObj = new timetableDAO();

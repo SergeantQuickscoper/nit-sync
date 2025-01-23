@@ -1,6 +1,7 @@
 import timetableDAO from "../dao/timetableDAO";
 import authDAO from "../dao/authDAO";
 import jwt, { JwtPayload } from "jsonwebtoken";
+import cron from "node-cron"
 import { connectedUsers } from "../routes/socketRoutes";
 import { io } from "../index"; //socketIO object
 import { admin } from "../index"; // firebase admin sdk objedt
@@ -346,8 +347,48 @@ class timetableServices{
         }
     }
     //call in main
-    async notifCronJob(){
+    notifCronJob(){
+        cron.schedule("*/5 * * * *", async() => {
+            //query events and get events to send notifications for
+            const eventsList = await timetableDAO.getUpcomingEvents(5); //5 minutes for now
 
+            //for each event get users and send required notification
+            for(let k of eventsList){
+                const studentsList =  await this.getCRsStudentsInSubject(k.created_by, k.subject_id);
+                const tokensList = [];
+                for(let i of studentsList){
+                    if(i.notification_device_token){
+                        for(let j of i.notification_device_token) tokensList.push(j);
+                    }
+                }
+                //could do some math here to track how much time left until the class
+                const startDate = new Date(k.startTime)
+                console.log("TOKENS LIST: ", tokensList)
+                await admin.messaging().sendEachForMulticast({
+                    tokens: tokensList,
+                    notification: {
+                        title: "You have an upcoming class",
+                        body: k.event_name + " " + k.event_type +  " " + startDate.toTimeString().split(' ')[0]
+                    },
+                    data: {
+                    //foreground payload
+                    },
+                    apns: {
+                    payload: {
+                        aps: {
+                        // Required for background/quit data-only messages on iOS
+                        // Note: iOS frequently will receive the message but decline to deliver it to your app.
+                        //           This is an Apple design choice to favor user battery life over data-only delivery
+                        //           reliability. It is not under app control, though you may see the behavior in device logs.
+                        'content-available': true,
+                        // Required for background/quit data-only messages on Android
+                        priority: 'high',
+                            },
+                        },
+                        },
+                    });
+                }
+        })
     }
 }
 

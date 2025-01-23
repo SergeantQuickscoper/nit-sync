@@ -3,6 +3,7 @@ import 'dotenv/config';
 import http from 'http';
 import authRoutes from './routes/authRoutes.js';
 import timetableRoutes from './routes/timetableRoutes.js'
+import timetableServices from "./services/timetableServices.js"
 import { Server } from "socket.io";
 import { setupSocketHandlers } from "./routes/socketRoutes.js";
 import admin from 'firebase-admin';
@@ -26,5 +27,7 @@ app.use(timetableRoutes);
 
 export { io };
 export { admin };
+
+timetableServices.notifCronJob(); //start cron job for notification sending for events
 
 server.listen(process.env.PORT, () => console.log("Server is live on PORT " + process.env.PORT));
