@@ -194,6 +194,24 @@ class authDAO{
             throw error;
         }
     }
+
+    async getStudentsOfCRInSubject(uid, subjectID){
+        try {
+            const query = await db.select("*").from("user_auth").where("uid", uid);
+            const {branch, section, first_year} = query[0];
+            const usersInSubject = await db.select("uid").from("user_subject_selection").where("subject_id", subjectID);
+            const studentsList = [];
+            for(let i of usersInSubject){
+                const tempStud = await db.select('uid', 'email', 'first_name', 'last_name', 'roll_no', 'notification_device_token').from('user_auth').where('role', 'student').andWhere('branch', branch).andWhere('section', section).andWhere('first_year', first_year).andWhere('uid', i.uid);
+                studentsList.push(tempStud[0]);
+            }
+
+            return studentsList;
+
+        } catch (error) {
+            throw error;
+        }
+    }
 }
 
 

@@ -237,6 +237,15 @@ class timetableDAO{
 
     }
 
+    async getEventInfo(eventID){
+        try {
+            const info = await db.select("event_name", "event_type", "start_time").from("events").where("event_id", eventID);
+            return info[0];
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async getReoccuringEventView(author){
         try {
             const query = await db.select("*").from("reoccuring_event_view").where("created_by", author);

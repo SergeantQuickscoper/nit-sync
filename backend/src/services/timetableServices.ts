@@ -13,7 +13,6 @@ class timetableServices{
             //TODO validate the iat parameter later 
             //TODO check for in past, check for non negative value etc. etc.
 
-
             //check if decoded.email is a CR and get his class
             const {uid, role} = await authDAO.getUser(decoded.email)
 
@@ -31,7 +30,12 @@ class timetableServices{
     async getCRsStudents(uid){
         //gets information that seemed necessary for notifications
         const studentsList = await authDAO.getStudentsOfCR(uid);
-        console.log(studentsList, "STUDENTS LIST");
+        return studentsList;
+
+    }
+
+    async getCRsStudentsInSubject(uid, subjectID){
+        const studentsList = await authDAO.getStudentsOfCRInSubject(uid, subjectID);
         return studentsList;
 
     }
@@ -46,7 +50,6 @@ class timetableServices{
 
             //emit a server-update event to all connectedUsers in the class (CURRENTLY SENDS TO EVERYONE NEEDS FIX BEFORE PROD)
             io.emit("subjectUpdate")
-            console.log("MADE IT PAST EMITTING")
             //push notifications to users of the CR
             const studentsList =  await this.getCRsStudents(uid);
             const tokensList = [];
@@ -122,7 +125,39 @@ class timetableServices{
             //emit a server-update event to all connectedUsers in the subject 
             io.emit("eventUpdate")
 
-            //push notifications to all subject users
+            //push notifications to all subject users CREATE NEW FUNCTION FOR GETTING CRS STUDENTS WITHIN A SUBJECT
+            const studentsList =  await this.getCRsStudentsInSubject(uid, subjectID);
+            const tokensList = [];
+            for(let i of studentsList){
+                if(i.notification_device_token){
+                    for(let j of i.notification_device_token) tokensList.push(j);
+                }
+            }
+            const startDate = new Date(startTime)
+            console.log("TOKENS LIST: ", tokensList)
+            await admin.messaging().sendEachForMulticast({
+                tokens: tokensList,
+                notification: {
+                    title: "New " + eventType + ": " + eventName,
+                    body: "On" + startDate.toDateString()
+                },
+                data: {
+                  //foreground payload
+                },
+                apns: {
+                  payload: {
+                    aps: {
+                      // Required for background/quit data-only messages on iOS
+                      // Note: iOS frequently will receive the message but decline to deliver it to your app.
+                      //           This is an Apple design choice to favor user battery life over data-only delivery
+                      //           reliability. It is not under app control, though you may see the behavior in device logs.
+                      'content-available': true,
+                      // Required for background/quit data-only messages on Android
+                      priority: 'high',
+                    },
+                  },
+                },
+              });
 
 
 
@@ -211,6 +246,41 @@ class timetableServices{
             const uid = await this.validateCRandGetID(token)
             await timetableDAO.deleteEventByID(uid, subjectID)
             io.emit("eventUpdate")
+
+            const studentsList =  await this.getCRsStudentsInSubject(uid, subjectID);
+            const eventInfo = await timetableDAO.getEventInfo(subjectID);
+            const tokensList = [];
+            for(let i of studentsList){
+                if(i.notification_device_token){
+                    for(let j of i.notification_device_token) tokensList.push(j);
+                }
+            }
+            console.log("TOKENS LIST: ", tokensList)
+            const startTime = new Date(eventInfo.start_time)
+            await admin.messaging().sendEachForMulticast({
+                tokens: tokensList,
+                notification: {
+                    title: eventInfo.event_name + eventInfo.event_type + "at" + startTime.toLocaleString('en-GB')  + " has been cancelled!",
+                    body: "Woohoo!"
+                },
+                data: {
+                  //foreground payload
+                },
+                apns: {
+                  payload: {
+                    aps: {
+                      // Required for background/quit data-only messages on iOS
+                      // Note: iOS frequently will receive the message but decline to deliver it to your app.
+                      //           This is an Apple design choice to favor user battery life over data-only delivery
+                      //           reliability. It is not under app control, though you may see the behavior in device logs.
+                      'content-available': true,
+                      // Required for background/quit data-only messages on Android
+                      priority: 'high',
+                    },
+                  },
+                },
+              });
+            
         } catch (error) {
             throw error;
         }
@@ -274,6 +344,10 @@ class timetableServices{
         } catch (error) {
             throw error;
         }
+    }
+    //call in main
+    async notifCronJob(){
+
     }
 }
 
