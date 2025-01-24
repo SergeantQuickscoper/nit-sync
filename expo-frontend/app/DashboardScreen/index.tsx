@@ -299,7 +299,7 @@ const DashboardScreen = () => {
         for(let i = 0; i < 8; i++){
             let currDate = new Date()
             let newDate = new Date();
-            //TODO fix this fucked up code
+            //TODO fix this messed up code
             newDate.setDate(currDate.getDate() + i + paginationOffset)
             if(newDate.toDateString() == date.toDateString()){
                 dateButtonArray.push(<Pressable className="mx-[0.6rem]  items-center" onPress={() => handelDateButtonPress(newDate)}>

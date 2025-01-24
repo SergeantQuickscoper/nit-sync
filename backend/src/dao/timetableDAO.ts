@@ -34,7 +34,7 @@ class timetableDAO{
         }
     }
 
-    //TODO potential security issues??? couldnt theoretically anyone who knows the ids join and delete whatever subject they like? somehow need to ensure that this stays fucking private
+    //TODO potential security issues??? couldnt theoretically anyone who knows the ids join and delete whatever subject they like? somehow need to ensure that this stays private
     async joinSubject(uid, subjectID){
         try {
             const check = await db.select('*').from('user_subject_selection').where("uid", uid).andWhere('subject_id', subjectID);
@@ -239,7 +239,7 @@ class timetableDAO{
 
     async getEventInfo(eventID){
         try {
-            const info = await db.select("event_name", "event_type", "start_time").from("events").where("event_id", eventID);
+            const info = await db.select("event_name", "event_type", "start_time", "subject_id").from("events").where("event_id", eventID);
             return info[0];
         } catch (error) {
             throw error;
@@ -260,7 +260,8 @@ class timetableDAO{
             const currTime = new Date();
             const rangeTime = new Date();
             rangeTime.setMinutes(currTime.getMinutes() + minutes)
-            const query = await db.select("*").from("events").whereBetween("start_time", [currTime, rangeTime]);
+            const query = await db.select("*").from("events").whereBetween("start_time", [currTime, rangeTime]).andWhere("notification_count", 0);
+            await db.table("events").update({notification_count : 1}).whereBetween("start_time", [currTime, rangeTime]).andWhere("notification_count", 0);
             return query;
         } catch (error) {
             throw error;

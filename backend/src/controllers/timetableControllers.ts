@@ -141,6 +141,10 @@ class timeTableControllers{
             const startTimeObj = new Date(startTime);
             const endTimeObj = new Date(endTime);
 
+            if(!jwt || !eventName || !description || !subjectID || !eventType || !startTime || !startTime || !endTime ){
+                throw Error("Please fill out all fields.")
+            }
+
             if(startTime >= endTime){
                 throw Error("Event end time cannot be before event start time.")
             }

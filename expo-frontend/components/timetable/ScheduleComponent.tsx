@@ -9,7 +9,7 @@ export default function ScheduleComponent({key, name, subjectID, description, st
     const startTimeConvert = startTime;
     const endTimeConvert = endTime;
     const baseMargin = 40;
-    const lineHeight = (Platform.OS == "ios") ? 21.4 : 24; //24 px is set in the other file but IOS is fucking weird and it doesnt work as well?
+    const lineHeight = (Platform.OS == "ios") ? 21.4 : 24; //24 px is set in the other file but IOS is weird and it doesnt work as well?
     const fontsize = 16;
     const startCoeff = (Number(startTimeConvert.split(":")[0]) + Number(startTimeConvert.split(":")[1])/60)
     const endCoeff = (Number(endTimeConvert.split(":")[0]) + Number(endTimeConvert.split(":")[1])/60)

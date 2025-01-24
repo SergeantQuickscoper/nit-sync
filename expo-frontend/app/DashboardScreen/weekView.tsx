@@ -112,7 +112,7 @@ export default function weekView() {
         else{
             console.log(data.reoccuringEvents)
 
-            //This is so fucking disgusting it makes me want to kms just improve
+            //This is so disgusting it makes me want to kms just improve
             const mondayEventsList : any = [];
             const tuesdayEventsList : any = [];
             const wednesdayEventsList : any = [];

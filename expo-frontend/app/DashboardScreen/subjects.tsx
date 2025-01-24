@@ -123,8 +123,6 @@ export default function subjects() {
     }
     
 
-    // this fucked up code needs fixing bad who knows how expensive this would be at scale
-
 
   }, []))
 

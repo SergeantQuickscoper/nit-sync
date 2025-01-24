@@ -130,7 +130,7 @@ class timetableServices{
             const studentsList =  await this.getCRsStudentsInSubject(uid, subjectID);
             const tokensList = [];
             for(let i of studentsList){
-                if(i.notification_device_token){
+                if(i && i.notification_device_token){
                     for(let j of i.notification_device_token) tokensList.push(j);
                 }
             }
@@ -140,7 +140,7 @@ class timetableServices{
                 tokens: tokensList,
                 notification: {
                     title: "New " + eventType + ": " + eventName,
-                    body: "On" + startDate.toDateString()
+                    body: "On " + startDate.toDateString()
                 },
                 data: {
                   //foreground payload
@@ -245,14 +245,17 @@ class timetableServices{
     async deleteEvent(token, subjectID){
         try {
             const uid = await this.validateCRandGetID(token)
+            const eventInfo = await timetableDAO.getEventInfo(subjectID);
+            console.log(eventInfo)
             await timetableDAO.deleteEventByID(uid, subjectID)
             io.emit("eventUpdate")
 
-            const studentsList =  await this.getCRsStudentsInSubject(uid, subjectID);
-            const eventInfo = await timetableDAO.getEventInfo(subjectID);
+            const studentsList =  await this.getCRsStudentsInSubject(uid, eventInfo.subject_id);  
+            console.log(studentsList);
+            
             const tokensList = [];
             for(let i of studentsList){
-                if(i.notification_device_token){
+                if(i && i.notification_device_token){
                     for(let j of i.notification_device_token) tokensList.push(j);
                 }
             }
@@ -261,7 +264,7 @@ class timetableServices{
             await admin.messaging().sendEachForMulticast({
                 tokens: tokensList,
                 notification: {
-                    title: eventInfo.event_name + eventInfo.event_type + "at" + startTime.toLocaleString('en-GB')  + " has been cancelled!",
+                    title: eventInfo.event_name + " " + eventInfo.event_type + " on " + startTime.toLocaleString('en-GB')  + " has been cancelled!",
                     body: "Woohoo!"
                 },
                 data: {
@@ -348,26 +351,28 @@ class timetableServices{
     }
     //call in main
     notifCronJob(){
-        cron.schedule("*/5 * * * *", async() => {
+        cron.schedule("*/1 * * * *", async() => {
+            console.log("NOTIFICATIONS FIRING")
             //query events and get events to send notifications for
-            const eventsList = await timetableDAO.getUpcomingEvents(5); //5 minutes for now
-
+            const eventsList = await timetableDAO.getUpcomingEvents(15); //15 minutes for now
+            console.log(eventsList);
             //for each event get users and send required notification
             for(let k of eventsList){
                 const studentsList =  await this.getCRsStudentsInSubject(k.created_by, k.subject_id);
+                console.log(studentsList)
                 const tokensList = [];
                 for(let i of studentsList){
-                    if(i.notification_device_token){
+                    if(i && i.notification_device_token){
                         for(let j of i.notification_device_token) tokensList.push(j);
                     }
                 }
                 //could do some math here to track how much time left until the class
-                const startDate = new Date(k.startTime)
+                const startDate = new Date(k.start_time)
                 console.log("TOKENS LIST: ", tokensList)
                 await admin.messaging().sendEachForMulticast({
                     tokens: tokensList,
                     notification: {
-                        title: "You have an upcoming class",
+                        title: "You have a class soon!",
                         body: k.event_name + " " + k.event_type +  " " + startDate.toTimeString().split(' ')[0]
                     },
                     data: {
