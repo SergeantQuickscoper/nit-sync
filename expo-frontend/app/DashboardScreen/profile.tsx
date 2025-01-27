@@ -41,8 +41,26 @@ export default function profile() {
   }, []))
 
   const handleLogout = async() => {
+    const token = AsyncStorage.getItem("jwt");
+    await fetch(process.env.EXPO_PUBLIC_AUTH_SERVER + '/unsubscribeNotif', {
+      method: 'POST', // Specifies a POST request
+      headers: {
+        'Content-Type': 'application/json', // Informs the server about the data format
+      },
+      body: JSON.stringify({jwt: token})
+    })
+    .then((res) => res.json())
+    .then(async(data) => {
+      if(data.success == false){
+          console.log(data.message)
+      }
+      else{
+          setUserData(data.userData);
+      }
+    })
     await AsyncStorage.removeItem("jwt")
     await AsyncStorage.removeItem("isCR")
+    //remove notification token
     router.push({ pathname: "/"});
   }
   return (

@@ -236,7 +236,7 @@ export default function weekView() {
 
   return (
     <View className='flex-1 bg-[#F7F7F7]'>
-      <View className="header mb-2 mt-14 flex-row justify-between mx-4 items-center">
+      <View className="header mb-2 mt-14 flex-row justify-between ml-4 mr-2 items-center">
         <NavigationBar />
          <Text className="font-bold ml-4">
             Weekly Timetable
