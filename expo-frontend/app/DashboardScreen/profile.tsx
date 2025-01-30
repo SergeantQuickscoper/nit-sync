@@ -42,6 +42,7 @@ export default function profile() {
 
   const handleLogout = async() => {
     const token = AsyncStorage.getItem("jwt");
+    /*
     await fetch(process.env.EXPO_PUBLIC_AUTH_SERVER + '/unsubscribeNotif', {
       method: 'POST', // Specifies a POST request
       headers: {
@@ -57,7 +58,7 @@ export default function profile() {
       else{
           setUserData(data.userData);
       }
-    })
+    })*/
     await AsyncStorage.removeItem("jwt")
     await AsyncStorage.removeItem("isCR")
     //remove notification token
