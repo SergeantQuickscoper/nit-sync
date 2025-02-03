@@ -172,7 +172,7 @@ class authDAO{
 
     async saveTokenToEmail(email, token){
         try {
-            const query = db.select('notification_device_token', token).from('user_auth').where("email", email);
+            const query = await db.select('notification_device_token', token).from('user_auth').where("email", email);
             console.log("IN DAO", token)
             let notArray = [];
             //some comparison logic to avoid pushing duplicate tokens into the array.
@@ -208,6 +208,21 @@ class authDAO{
 
             return studentsList;
 
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async unsubscribeNotif(email, token){
+        try {
+            const query = await db.select('notification_device_token', token).from('user_auth').where("email", email);
+            let notArray = [];
+            for(let i of query){
+                if(i.notification_device_token != token){
+                    notArray.push(i.notifDeviceToken);
+                }
+            }
+            await db.table("user_auth").update({notification_device_token: notArray}).where("email", email);
         } catch (error) {
             throw error;
         }

@@ -2,6 +2,7 @@ import authDAO from "../dao/authDAO";
 import crypto from "crypto"
 import jwt, {JwtPayload} from "jsonwebtoken"
 import transporter from "../utils/nodemailerTransporter";
+import { unsubscribe } from "diagnostics_channel";
 
 //TODO Throw all errors to the controller layer the way it is rn is ridiculous
 class authServices{
@@ -231,8 +232,18 @@ class authServices{
             throw error;
         }
     }
+
+    async unsubscribeNotif(token, notifDeviceToken){
+        try {
+            const decoded = jwt.verify(token, process.env.JWT_SECRET) as JwtPayload;
+            authDAO.unsubscribeNotif(decoded.email, notifDeviceToken);
+        } catch (error) {
+            
+        }
+    }
     
 }
+
 
 
 

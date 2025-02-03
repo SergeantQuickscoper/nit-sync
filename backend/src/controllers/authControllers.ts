@@ -297,6 +297,21 @@ class authControllers{
         }
     }
 
+    async unsubscribeNotif(req, res){
+        try {
+            const {jwt, notifDeviceToken} = req.body;
+            authServices.unsubscribeNotif(jwt, notifDeviceToken);
+            res.send({
+                success: true,
+                message: "Deleted notification token successfully",
+            })
+        } catch (error) {
+            res.status(400).send({
+                success: false, 
+                message: error.message
+            })
+        }
+    }
     
 
 }
