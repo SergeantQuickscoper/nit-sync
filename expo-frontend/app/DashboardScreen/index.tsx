@@ -76,7 +76,6 @@ const DashboardScreen = () => {
           })
     }
 
-    //Notification logic
     const requestUserPermission = async() =>{
         const authStatus = await messaging().requestPermission();
         const enabled =
@@ -85,11 +84,10 @@ const DashboardScreen = () => {
 
         if (enabled) {
             console.log('Authorization status:', authStatus);
+        }
     }
 
-    
 
-    }
     const checkAndMarkOverlap = (scheduleObj : any) => {
         let dailyEvents : any = [];
         for(let i in scheduleObj){

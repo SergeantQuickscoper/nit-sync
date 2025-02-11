@@ -29,7 +29,7 @@ const LoginScreen = () => {
                   .then((res) => {
                     clearTimeout(timeout)
                     if(!res.ok){
-                      throw new Error("Network error ");
+                      throw new Error("Network error")
                     }
                     return res.json();
                   })

@@ -2,9 +2,12 @@ import { View, Text, Pressable } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import NavigationBar from '@/components/timetable/NavigationBar'
 import { router, useFocusEffect } from 'expo-router'
+import { PermissionsAndroid } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import messaging from '@react-native-firebase/messaging';
 export default function profile() {
   const [userData, setUserData] : any = useState({});
+  
   useFocusEffect(React.useCallback(() =>{
     const getUserData = async() => {
       let token;
@@ -40,15 +43,28 @@ export default function profile() {
 
   }, []))
 
+  const requestUserPermission = async() =>{
+    const authStatus = await messaging().requestPermission();
+    const enabled =
+        authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+        authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+    if (enabled) {
+        console.log('Authorization status:', authStatus);
+    }
+  }
+
   const handleLogout = async() => {
     const token = AsyncStorage.getItem("jwt");
-    /*
+    PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
+    requestUserPermission();
+    const notifToken = await messaging().getToken();
+    console.log(notifToken);
     await fetch(process.env.EXPO_PUBLIC_AUTH_SERVER + '/unsubscribeNotif', {
-      method: 'POST', // Specifies a POST request
+      method: 'POST',
       headers: {
-        'Content-Type': 'application/json', // Informs the server about the data format
+        'Content-Type': 'application/json', 
       },
-      body: JSON.stringify({jwt: token})
+      body: JSON.stringify({jwt: token, notifDeviceToken: notifToken})
     })
     .then((res) => res.json())
     .then(async(data) => {
@@ -58,7 +74,7 @@ export default function profile() {
       else{
           setUserData(data.userData);
       }
-    })*/
+    })
     await AsyncStorage.removeItem("jwt")
     await AsyncStorage.removeItem("isCR")
     //remove notification token
