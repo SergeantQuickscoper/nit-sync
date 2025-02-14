@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc",
     "test": "nodemon dist/index.js",
-    "dev": "tsc && node dist/index.js"
+    "dev": "tsc && node dist/index.js",
+    "prod": "NODE_ENV=production tsc && NODE_ENV=production node dist/index.js"
   },
   "author": "Don Chacko",
   "license": "ISC",
