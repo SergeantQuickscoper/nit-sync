@@ -8,8 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
-const LoginScreen = () => {
-
+const LoginScreen = () => { 
     useEffect(() => {
         const checkToken = async() => {
             const controller = new AbortController();
