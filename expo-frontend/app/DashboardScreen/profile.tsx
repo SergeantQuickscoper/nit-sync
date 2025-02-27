@@ -71,13 +71,9 @@ export default function profile() {
       if(data.success == false){
           console.log(data.message)
       }
-      else{
-          setUserData(data.userData);
-      }
     })
     await AsyncStorage.removeItem("jwt")
     await AsyncStorage.removeItem("isCR")
-    //remove notification token
     router.push({ pathname: "/"});
   }
   return (
@@ -100,7 +96,7 @@ export default function profile() {
                     <Text className='text-lg'>Roll No: {userData?.roll_no}</Text>
                 </View>
                 <View className='items-center'>
-                    <Text className='text-lg'>Role: {String(userData.role).toUpperCase()}</Text>
+                    <Text className='text-lg'>Role: {String(userData?.role).toUpperCase()}</Text>
                 </View>
                 <View className='items-center'>
                     <View className='bg-white mb-6 mt-4 rounded-full w-1/4 items-center justify-center border'>
