@@ -2,7 +2,8 @@
   "expo": {
     "name": "NIT Sync",
     "slug": "NITSync",
-    "version": "1.0.0",
+    "version": "1.0.1",
+
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
@@ -20,7 +21,8 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.donchacko.nitsync"
+      "package": "com.donchacko.nitsync",
+      "versionCode": 3
     },
     "web": {
       "bundler": "metro",
@@ -33,6 +35,14 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "5067b268-020a-4520-b804-7a0d8dceb1d8"
+      }
     }
   }
 }
