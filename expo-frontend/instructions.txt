@@ -1,0 +1,9 @@
+since you like local compilation so much remember the following:
+keep consistent with ur keystrore usage in android,
+rebuild on new environment variables and dependencies,
+readd google-services when rebuilding 
+https://rnfirebase.io/
+
+you gotta copy the folder out to desktop, because of windows character limits. 
+
+ALSO VERSION CODE

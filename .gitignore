@@ -1,4 +1,3 @@
 expo-frontend/eas.json
-expo-frontend/eas.json
-expo-frontend/eas.json
-expo-frontend/app.json
+google-services.json
+*.keystore
