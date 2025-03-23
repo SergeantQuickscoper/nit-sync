@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 const SigninInput = ({recievedParams} : any) => {
     const params = recievedParams;
     const [isLocked, setIsLocked] = useState(true)
+    const [isLoading, setIsLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState("")
     const [isValidEmail, setIsValidEmail] = useState(true); //ONLY for checking email domain (empty email is considered valid)
     const [email, setEmail] = useState((params.registeredEmail ? params.registeredEmail.toString() : "" )); 
@@ -39,7 +40,7 @@ const SigninInput = ({recievedParams} : any) => {
         if(isLocked){
             return;
         }
-
+        setIsLoading(true);
        await fetch(process.env.EXPO_PUBLIC_AUTH_SERVER + '/signup', {
             method: 'POST', // Specifies a POST request
             headers: {
@@ -56,7 +57,7 @@ const SigninInput = ({recievedParams} : any) => {
                 router.push({ pathname: "/OTPScreen", params: { registeredEmail : email } });
             }
           })
-
+        setIsLoading(false);
 
         
     }    
@@ -83,9 +84,9 @@ const SigninInput = ({recievedParams} : any) => {
                     <LinearGradient   colors={["#15C020", "#00FF11"]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={{borderRadius: 9999}} >
                     <SafeAreaView className='flex-1 items-center w-[22rem] max-h-11 justify-center'>
                         {/*Add condiitionality for if institute email is valid or not*/}
-                         <Pressable className='flex items-center justify-center h-full w-full' onPress={() => handlePress()}>
+                         {!isLoading ? <Pressable className='flex items-center justify-center h-full w-full' onPress={() => handlePress()}>
                             <Text className='text-white font-bold text-lg'>Sign Up</Text>
-                        </Pressable>
+                        </Pressable> : <Text className="text-white text-xl h-full w-full text-center leading-tight align-middle">Please Wait...</Text> }
                     </SafeAreaView>
                     </LinearGradient>
                 </View>

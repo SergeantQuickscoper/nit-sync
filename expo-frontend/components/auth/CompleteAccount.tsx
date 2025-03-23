@@ -9,6 +9,7 @@ const CompleteAccount = ({recievedParams} : any) => {
     const email = recievedParams.registeredEmail.toString();
     const [isLocked, setIsLocked] = useState(true)
     const [errorMessage, setErrorMessage] = useState("")
+    const [isLoading, setIsLoading] = useState(false);
     const [passMatch, setPassMatch] = useState(false)
     const [password, setPass] = useState()
     const [confPassword, setConfPassword] = useState("")
@@ -48,7 +49,7 @@ const CompleteAccount = ({recievedParams} : any) => {
         if(isLocked){
             return;
         }
-
+        setIsLoading(true);
         await fetch(process.env.EXPO_PUBLIC_AUTH_SERVER + '/completeaccount', {
             method: 'POST', // Specifies a POST request
             headers: {
@@ -68,8 +69,7 @@ const CompleteAccount = ({recievedParams} : any) => {
                 router.push({ pathname: "/NewAccountWelcomeScreen", params: { registeredEmail : email, message: data.message } });
             }
           })
-
-
+          setIsLoading(false);
     }
 
     return(
@@ -100,9 +100,9 @@ const CompleteAccount = ({recievedParams} : any) => {
                 <View className='mt-12 rounded-full shadow-sm'>
                     <LinearGradient   colors={["#15C020", "#00FF11"]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={{borderRadius: 9999}} >
                     <SafeAreaView className='flex-1 items-center w-[22rem] max-h-11 justify-center'>
-                         <Pressable className='flex items-center justify-center h-full w-full' onPress={() => handleCompleteAccount()}>
+                        {!isLoading ? <Pressable className='flex items-center justify-center h-full w-full' onPress={() => handleCompleteAccount()}>
                             <Text className='text-white font-bold text-xl'>Create Account</Text>
-                        </Pressable>
+                        </Pressable> : <Text className="text-white text-xl h-full w-full text-center leading-tight align-middle">Please Wait...</Text>}
                     </SafeAreaView>
                     </LinearGradient>
                 </View>

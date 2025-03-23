@@ -5,6 +5,7 @@ import { useRef, useState } from "react";
 
 const OTPInput = ({recievedParams} : any) => {
     const email = recievedParams.registeredEmail.toString()
+    const [isLoading, setIsLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState("")
     const [otp, changeotp] = useState(["", "", "", "", "", ""])
     const inputRefs:any = useRef([])
@@ -49,6 +50,7 @@ const OTPInput = ({recievedParams} : any) => {
     }
 
     const handleVerifyPress = async() => {
+        setIsLoading(true);
         await fetch(process.env.EXPO_PUBLIC_AUTH_SERVER + '/verifyuser', {
             method: 'POST', // Specifies a POST request
             headers: {
@@ -65,6 +67,7 @@ const OTPInput = ({recievedParams} : any) => {
                 router.push({ pathname: "/CompleteAccountScreen", params: { registeredEmail : email } });
             }
           })
+          setIsLoading(false);
     }
 
     return(
@@ -107,9 +110,9 @@ const OTPInput = ({recievedParams} : any) => {
                     <LinearGradient   colors={["#15C020", "#00FF11"]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={{borderRadius: 9999}} >
                     <SafeAreaView className='flex-1 items-center w-[22rem] max-h-11 justify-center'>
                         {/*Add condiitionality for if institute email is valid or not*/}
-                         <Pressable className='flex items-center justify-center h-full w-full' onPress={() => handleVerifyPress()}>
+                         {!isLoading ? <Pressable className='flex items-center justify-center h-full w-full' onPress={() => handleVerifyPress()}>
                             <Text className='text-white font-bold text-lg'>Verify</Text>
-                        </Pressable>
+                        </Pressable> : <Text className="text-white text-xl h-full w-full text-center leading-tight align-middle">Please Wait...</Text>}
                     </SafeAreaView>
                     </LinearGradient>
                 </View>

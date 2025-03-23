@@ -7,6 +7,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const LoginInput = () => {
     const [email, setEmail] = useState("")
+    const [isLoading, setIsLoading] = useState(false);
     const [password, setPassword] = useState("")
     const [errorMessage, setErrorMessage] = useState("")
     const [isLocked, setIsLocked] = useState(true)
@@ -31,10 +32,12 @@ const LoginInput = () => {
     }, [email, password])
 
     const handleLoginPress = async() => {
-        
+        console.log(isLoading);
         if(isLocked){
             return;
         }
+        console.log("Loading");
+        setIsLoading(true);
         const controller = new AbortController();
         const timeout = setTimeout(() => controller.abort(), 5000);
         await fetch(process.env.EXPO_PUBLIC_AUTH_SERVER + '/login', {
@@ -73,7 +76,9 @@ const LoginInput = () => {
           })
           .catch((error) =>{
             setErrorMessage(error.message);
+            setIsLoading(false);
           })
+          setIsLoading(false);
     }
 
 
@@ -100,9 +105,9 @@ const LoginInput = () => {
                 <View className='mt-10 rounded-full shadow-sm max-h-11 min-h-11'>
                     <LinearGradient   colors={["#15C020", "#00FF11"]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={{borderRadius: 9999, height: 44}} >
                     <SafeAreaView className='flex-1 items-center w-[22rem] justify-center'>
-                         <Pressable className='flex items-center justify-center h-full w-full' onPress={() => handleLoginPress()}>
+                         {!isLoading ? <Pressable className='flex items-center justify-center h-full w-full' onPress={() => handleLoginPress()}>
                             <Text className='text-white font-bold text-xl'>Login</Text>
-                        </Pressable>
+                        </Pressable> : <Text className="text-white text-xl">Please Wait...</Text>}
                     </SafeAreaView>
                     </LinearGradient>
                 </View>

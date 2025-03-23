@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function SubjectComponent({subjectID, name, description, joined, cr, refresher}:any) {
   const [modalOpen, setModalOpen] = useState(false);
-  
+  const [isLoading, setIsLoading] = useState(false);
   const handleSubjectDeletion = async() => {
     let token;
       try {
@@ -38,6 +38,7 @@ export default function SubjectComponent({subjectID, name, description, joined, 
     }
 
     const handleJoinSubject = async() => {
+      setIsLoading(true);
         let token;
           try {
             token = await AsyncStorage.getItem('jwt');
@@ -65,9 +66,11 @@ export default function SubjectComponent({subjectID, name, description, joined, 
                 refresher((hello :any) => hello + 1);
             }
           })
+          setIsLoading(false);
         }
 
         const handleLeaveSubject = async() => {
+            setIsLoading(true);
             let token;
               try {
                 token = await AsyncStorage.getItem('jwt');
@@ -95,6 +98,7 @@ export default function SubjectComponent({subjectID, name, description, joined, 
                     refresher((hello :any) => hello + 1);
                 }
               })
+              setIsLoading(false);
             }
   
 
@@ -114,11 +118,11 @@ export default function SubjectComponent({subjectID, name, description, joined, 
                         <Text className='text-center mt-3'>{description}</Text>
                         <View className='bg-white mt-8 rounded-full'>
                         {
-                            !joined ? (<Pressable className="py-2 px-5" onPress={handleJoinSubject}>
+                            !isLoading ? (!joined ? (<Pressable className="py-2 px-5" onPress={handleJoinSubject}>
                                 <Text className='font-bold'>Join</Text>
                             </Pressable>) : (<Pressable className="py-2 px-5" onPress={handleLeaveSubject}>
                                 <Text className='font-bold text-green-500'>Joined</Text>
-                            </Pressable>)
+                            </Pressable>)) : <Text className="text-black text-base text-center leading-tight align-middle py-2 px-5">Please Wait...</Text>
                         }
                         
                         
