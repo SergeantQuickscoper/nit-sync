@@ -2,7 +2,7 @@
   "expo": {
     "name": "NIT Sync",
     "slug": "NITSync",
-    "version": "1.0.4",
+    "version": "1.0.5",
 
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -22,7 +22,7 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.donchacko.nitsync",
-      "versionCode": 4
+      "versionCode": 5
     },
     "web": {
       "bundler": "metro",
